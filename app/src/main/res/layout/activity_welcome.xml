@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vlimv.taxi.WelcomeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="40dp">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/welcome"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25sp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            />
+
+        <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/phone_input"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:background="@drawable/edit_text_number"
+            android:padding="10dp"
+            android:typeface="monospace"
+            mask:allowed_chars="1234567890"
+            mask:mask="+7 (###) ### - ## - ##"
+            android:hint="7777777777"
+            android:textSize="20sp"
+            app:keep_hint="true"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <Button
+            android:id="@+id/button"
+            android:background="@drawable/ripple_effect"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

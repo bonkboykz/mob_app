@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Taxi</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="next">Далее</string>
+    <string name="submit">Подтвердить</string>
+    <string name="ready">Готово</string>
+    <string name="code_sent">Код активации отправлен</string>
+    <string name="repeat">Получить еще раз</string>
+    <string name="choose_type">Для начала работы с приложением выберите тип аккаунта:</string>
+    <string name="driver">Водитель</string>
+    <string name="passenger">Пассажир</string>
+    <string name="invalid">Пассажир с инвалидностью</string>
+    <string name="spravka_1">Для подтверждения аккаунта, необходимо отправить справку об инвалидности.</string>
+    <string name="spravka_2">Данная операция необходима для заказа волонтерских поездок.</string>
+    <string name="spravka_3">Сфотографируйте или прикрепите справку.</string>
+    <string-array name="gender_array">
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
+    <string-array name="car_array">
+        <item>Toyota</item>
+        <item>Lexus</item>
+        <item>Mini</item>
+    </string-array>
+    <string-array name="car_model_array">
+        <item>Camry</item>
+        <item>неКамри</item>
+    </string-array>
+    <string-array name="car_type_array">
+        <item>Седан</item>
+        <item>Джип</item>
+        <item>Грузовичок</item>
+    </string-array>
+    <string name="title_activity_driver_main">DriverMainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
