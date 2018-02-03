@@ -24,7 +24,7 @@
         <activity
             android:name=".DriverMainActivity"
             android:label="@string/title_activity_driver_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

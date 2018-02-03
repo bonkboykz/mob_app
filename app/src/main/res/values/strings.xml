@@ -13,6 +13,16 @@
     <string name="spravka_1">Для подтверждения аккаунта, необходимо отправить справку об инвалидности.</string>
     <string name="spravka_2">Данная операция необходима для заказа волонтерских поездок.</string>
     <string name="spravka_3">Сфотографируйте или прикрепите справку.</string>
+    <string name="back">Назад</string>
+    <string name="accept">Принять</string>
+    <string name="completed">Выполненные</string>
+    <string name="orders">Заказы</string>
+    <string name="city">Город</string>
+    <string name="cabinet">Мой кабинет</string>
+    <string name="car_options">Опции авто</string>
+    <string name="support">Техподдержка</string>
+    <string name="settings">Настройки</string>
+    <string name="client_mode">Режим клиента</string>
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

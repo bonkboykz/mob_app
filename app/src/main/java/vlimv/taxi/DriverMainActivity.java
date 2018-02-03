@@ -1,160 +1,191 @@
 package vlimv.taxi;
 
-import android.content.Context;
+import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class DriverMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OrdersFragment.OnFragmentInteractionListener, CompletedFragment.OnFragmentInteractionListener {
-
+public class DriverMainActivity extends AppCompatActivity implements ContainerFragment.TabLayoutSetupCallback,
+        PageFragment.OnListItemClickListener, View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
+        NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout mDrawerLayout;
+    private TextView free, busy;
+    public static TabLayout tabLayout;
+    private NavigationView nvDrawer;
+    String status;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.flContent, new ContainerFragment());
+            transaction.commit();
+        }
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mActionBarDrawerToggle.syncState();
+        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        nvDrawer = findViewById(R.id.nav_view);
+        nvDrawer.setNavigationItemSelectedListener(this);
 
-        ViewPager vp_pages = (ViewPager) findViewById(R.id.vp_pages);
-        PagerAdapter pagerAdapter = new FragmentAdapter(getSupportFragmentManager());
-        vp_pages.setAdapter(pagerAdapter);
-
-        TabLayout tbl_pages = (TabLayout) findViewById(R.id.tbl_pages);
-        tbl_pages.setupWithViewPager(vp_pages);
-
+        free = findViewById(R.id.free);
+        busy = findViewById(R.id.busy);
+        free.setOnClickListener(this);
+        busy.setOnClickListener(this);
     }
-
-    static class FragmentAdapter extends FragmentPagerAdapter {
-
-        public FragmentAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new OrdersFragment();
-                case 1:
-                    return new CompletedFragment();
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Заказы";
-                case 1:
-                    return "Выполненные";
-                default:
-                    return null;
-            }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.free:
+                status = "free";
+                free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
+                free.setTextColor(Color.parseColor("#ffffff"));
+                free.setElevation(5.0f);
+                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white));
+                busy.setTextColor(Color.parseColor("#000000"));
+                busy.setElevation(0.0f);
+                Toast.makeText(
+                        getApplicationContext(), status, Toast.LENGTH_LONG
+                );
+                break;
+            case R.id.busy:
+                status = "busy";
+                free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white));
+                free.setTextColor(Color.parseColor("#000000"));
+                free.setElevation(0.0f);
+                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
+                busy.setTextColor(Color.parseColor("#ffffff"));
+                busy.setElevation(5.0f);
+                Toast.makeText(
+                        getApplicationContext(), status, Toast.LENGTH_LONG
+                );
+                break;
         }
     }
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
+    @Override
+    public void setupTabLayout(ViewPager viewPager) {
+        tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setVisibility(View.VISIBLE);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+    @Override
+    public void onListItemClick(String title) {
+        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+        Dialog_details dialog = new Dialog_details(this);
+        dialog.showDialog(this);
+    }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.driver_main, menu);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        Toast.makeText(getApplicationContext(), "listeneer", Toast.LENGTH_SHORT).show();
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        switch(item.getItemId()) {
+            case R.id.nav_city:
+                //fragmentClass = FragmentNavCity.class;
+                break;
+            case R.id.nav_cabinet:
+                //fragmentClass = SecondFragment.class;
+                break;
+            case R.id.nav_car_options:
+                Toast.makeText(getApplicationContext(), "CAR OPTIONS", Toast.LENGTH_SHORT).show();
+                fragmentClass = CarOptionsFragment.class;
+                break;
+            case R.id.nav_support:
+                //fragmentClass = ThirdFragment.class;
+                break;
+            case R.id.nav_settings:
+                //fragmentClass = ThirdFragment.class;
+                break;
+            case R.id.nav_client_mode:
+                //switch mode
+                break;
+            default:
+                //fragmentClass = FirstFragment.class;
+        }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
     }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+    public class Dialog_details extends android.app.Dialog {
+        public Dialog_details(Activity a) {
+            super(a);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+        public void showDialog(Activity activity){
+            final Dialog_details dialog = new Dialog_details(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_details);
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        //you can leave it empty
+            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
+            TextView text_accept = dialog.findViewById(R.id.text_accept);
+            text_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), "Заказ не беру.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            text_accept.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 }
