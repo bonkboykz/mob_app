@@ -75,16 +75,7 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/button"
-            android:background="@drawable/ripple_effect_square"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_alignParentBottom="true"
-            android:text="@string/ready"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:textColor="@android:color/white"/>
+
     </RelativeLayout>
 
 </FrameLayout>

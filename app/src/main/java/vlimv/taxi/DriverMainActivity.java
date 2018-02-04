@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
     private DrawerLayout mDrawerLayout;
     private TextView free, busy;
     public static TabLayout tabLayout;
+    public static Button next_btn;
     private NavigationView nvDrawer;
     String status;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -59,6 +61,8 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         nvDrawer = findViewById(R.id.nav_view);
         nvDrawer.setNavigationItemSelectedListener(this);
 
+        next_btn = findViewById(R.id.button);
+        next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);
         busy = findViewById(R.id.busy);
         free.setOnClickListener(this);

@@ -91,8 +91,8 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
         spinner_car_type.setAdapter(adapter_car_type);
         spinner_car_type.setOnItemSelectedListener(this);
 
-        Button next_btn = view.findViewById(R.id.button);
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        DriverMainActivity.next_btn.setVisibility(View.VISIBLE);
+        DriverMainActivity.next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), DriverMainActivity.class);

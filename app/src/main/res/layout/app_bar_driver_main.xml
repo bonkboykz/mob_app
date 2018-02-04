@@ -9,9 +9,6 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,16 +62,26 @@
                     app:tabMaxWidth="0dp"/>
 
             </android.support.design.widget.AppBarLayout>
-
-            <FrameLayout
-                android:id="@+id/flContent"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="?actionBarSize"
-                />
-        </RelativeLayout>
-
-
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <FrameLayout
+                    android:id="@+id/flContent"
+                    android:layout_width="match_parent"
+                    android:layout_above="@id/button"
+                    android:layout_height="match_parent"/>
+                <Button
+                    android:id="@+id/button"
+                    android:background="@drawable/ripple_effect_square"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ready"
+                    android:layout_alignParentBottom="true"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"/>
+            </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>

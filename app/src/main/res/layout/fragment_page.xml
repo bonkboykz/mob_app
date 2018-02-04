@@ -5,16 +5,13 @@
     android:orientation="vertical"
     tools:context="com.vlimv.taxi.DriverMainActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/main_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"/>
-    </ScrollView>
-
+            android:background="@android:color/white"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"/>
 
 
 </FrameLayout>
