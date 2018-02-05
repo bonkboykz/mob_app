@@ -1,18 +1,22 @@
 package vlimv.taxi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 public class DriverActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    SharedPreferences sPrefName;
+    EditText name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +49,21 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveName();
                 Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
                 startActivity(intent);
             }
         });
+        name = findViewById(R.id.name);
+    }
+
+    void saveName() {
+        sPrefName = getSharedPreferences("NAME", 0);
+        SharedPreferences.Editor ed = sPrefName.edit();
+        String name_text = name.getText().toString();
+        ed.putString("NAME", name.getText().toString());
+        ed.apply();
+        Toast.makeText(this, name_text, Toast.LENGTH_SHORT).show();
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -64,4 +79,5 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
+
 }

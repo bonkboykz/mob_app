@@ -1,6 +1,7 @@
 package vlimv.taxi;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,9 +33,10 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         CabinetFragment.OnFragmentInteractionListener, SupportFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
-    private TextView free, busy;
+    public static TextView free, busy;
     public static TabLayout tabLayout;
     public static Button next_btn;
+    public static Toolbar toolbar;
     private NavigationView nvDrawer;
     String status;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -42,9 +44,9 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle("");
 
 
         if (savedInstanceState == null) {
@@ -62,11 +64,15 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         nvDrawer = findViewById(R.id.nav_view);
         nvDrawer.setNavigationItemSelectedListener(this);
-
+        View navHeader = nvDrawer.getHeaderView(0);
+        TextView name = navHeader.findViewById(R.id.name);
+        name.setText(loadName());
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);
+        free.setVisibility(View.VISIBLE);
         busy = findViewById(R.id.busy);
+        busy.setVisibility(View.VISIBLE);
         free.setOnClickListener(this);
         busy.setOnClickListener(this);
     }
@@ -122,8 +128,6 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        Toast.makeText(getApplicationContext(), "listeneer", Toast.LENGTH_SHORT).show();
         Fragment fragment = null;
         Class fragmentClass = null;
         switch(item.getItemId()) {
@@ -161,10 +165,15 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
+    }
+    String loadName() {
+        SharedPreferences name = getSharedPreferences("NAME", 0);
+        String name_text = name.getString("NAME", "bongo bongo");
+        Toast.makeText(getApplicationContext(), name_text, Toast.LENGTH_SHORT).show();
+        return name_text;
     }
     public class Dialog_details extends android.app.Dialog {
         public Dialog_details(Activity a) {

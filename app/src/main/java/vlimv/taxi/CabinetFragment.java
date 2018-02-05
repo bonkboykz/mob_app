@@ -1,9 +1,11 @@
 package vlimv.taxi;
 
 import android.content.Context;
+import android.drm.DrmUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,10 @@ public class CabinetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cabinet, container, false);
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
+        DriverMainActivity.next_btn.setVisibility(View.GONE);
+        DriverMainActivity.free.setVisibility(View.GONE);
+        DriverMainActivity.busy.setVisibility(View.GONE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.cabinet);
         return view;
     }
 

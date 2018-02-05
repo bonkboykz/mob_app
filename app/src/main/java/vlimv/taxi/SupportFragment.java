@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -82,6 +83,8 @@ public class SupportFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.setOnItemTapListener(mListItemClickListener);
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
+        DriverMainActivity.free.setVisibility(View.GONE);
+        DriverMainActivity.busy.setVisibility(View.GONE);
         return view;
     }
 

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +101,9 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
             }
         });
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
+        DriverMainActivity.free.setVisibility(View.GONE);
+        DriverMainActivity.busy.setVisibility(View.GONE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.car_options);
         return view;
 
     }
