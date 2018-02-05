@@ -23,6 +23,17 @@
     <string name="support">Техподдержка</string>
     <string name="settings">Настройки</string>
     <string name="client_mode">Режим клиента</string>
+    <string name="account">Лицевой счет: </string>
+    <string name="balance">Баланс: </string>
+    <string name="paid_until">Оплачено до: </string>
+    <string name="add_money">Пополнить счет</string>
+    <string name="not_active">Смена не активирована</string>
+    <string name="start_work">Активировать смену</string>
+    <string name="end_work">Закончить смену</string>
+
+    <string name="wrong_address">Клиент указал неверный адрес</string>
+    <string name="payment_not_accepted">Платеж не был принят</string>
+    <string name="other">Другое</string>
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

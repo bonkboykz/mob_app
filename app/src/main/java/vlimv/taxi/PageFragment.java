@@ -38,7 +38,7 @@ public class PageFragment extends Fragment {
                              Bundle savedInstanceState) {
 // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_page, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.main_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);

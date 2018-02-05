@@ -10,15 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by HP on 03.02.2018.
+ * Created by HP on 05.02.2018.
  */
 
-public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.ViewHolder> {
-
+public class SupportRecyclerAdapter extends RecyclerView.Adapter<SupportRecyclerAdapter.ViewHolder>{
     private List<String> mItemsList;
-    private PageFragment.OnListItemClickListener mListItemClickListener;
+    private SupportFragment.OnListItemClickListener mListItemClickListener;
 
-    public SimpleRecyclerAdapter(List<String> itemsList) {
+    public SupportRecyclerAdapter(List<String> itemsList) {
         mItemsList = itemsList == null ? new ArrayList<String>() : itemsList;
     }
 
@@ -26,7 +25,7 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view by inflating the row item xml.
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_item_order, parent, false);
+                .inflate(R.layout.recycler_item_support, parent, false);
 
         // Set the view to the ViewHolder
         return new ViewHolder(v);
@@ -53,9 +52,9 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
          */
         public ViewHolder(View v) {
             super(v);
-
-            pointA = v.findViewById(R.id.pointA);
-            details = v.findViewById(R.id.details);
+//
+//            pointA = v.findViewById(R.id.pointA);
+//            details = v.findViewById(R.id.details);
             v.setOnClickListener(this);
         }
 
@@ -70,7 +69,7 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         }
     }
 
-    public void setOnItemTapListener(PageFragment.OnListItemClickListener itemClickListener) {
+    public void setOnItemTapListener(SupportFragment.OnListItemClickListener itemClickListener) {
         mListItemClickListener = itemClickListener;
     }
 }

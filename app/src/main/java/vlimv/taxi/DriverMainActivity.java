@@ -27,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DriverMainActivity extends AppCompatActivity implements ContainerFragment.TabLayoutSetupCallback,
-        PageFragment.OnListItemClickListener, View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
+        PageFragment.OnListItemClickListener, SupportFragment.OnListItemClickListener,
+        View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
+        CabinetFragment.OnFragmentInteractionListener, SupportFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private TextView free, busy;
@@ -129,14 +131,14 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 //fragmentClass = FragmentNavCity.class;
                 break;
             case R.id.nav_cabinet:
-                //fragmentClass = SecondFragment.class;
+                fragmentClass = CabinetFragment.class;
                 break;
             case R.id.nav_car_options:
                 Toast.makeText(getApplicationContext(), "CAR OPTIONS", Toast.LENGTH_SHORT).show();
                 fragmentClass = CarOptionsFragment.class;
                 break;
             case R.id.nav_support:
-                //fragmentClass = ThirdFragment.class;
+                fragmentClass = SupportFragment.class;
                 break;
             case R.id.nav_settings:
                 //fragmentClass = ThirdFragment.class;
@@ -145,6 +147,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 //switch mode
                 break;
             default:
+                break;
                 //fragmentClass = FirstFragment.class;
         }
         try {
