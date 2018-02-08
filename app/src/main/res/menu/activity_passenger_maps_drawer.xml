@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_city"
+            android:title="@string/city" />
+        <item
+            android:id="@+id/nav_favorites"
+            android:title="@string/favorites" />
+        <item
+            android:id="@+id/nav_trips"
+            android:title="@string/trips" />
+        <item
+            android:id="@+id/nav_support"
+            android:title="@string/support" />
+        <item
+            android:id="@+id/nav_settings"
+            android:title="@string/settings" />
+    </group>
+</menu>

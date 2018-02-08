@@ -52,7 +52,7 @@ public class ContainerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_container, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ItemsPagerAdapter(getChildFragmentManager(), mTabNamesList));
         mToolbarSetupCallback.setupTabLayout(viewPager);
 
