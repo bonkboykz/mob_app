@@ -3,6 +3,7 @@ package vlimv.taxi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,7 +48,7 @@ import com.google.android.gms.tasks.Task;
  * Use the {@link PassengerMapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PassengerMapsFragment extends Fragment implements OnMapReadyCallback {
+public class PassengerMapsFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -83,6 +85,9 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
 
     View view;
     private OnFragmentInteractionListener mListener;
+
+    //Layouts
+    RelativeLayout layout_to, layout_from, layout_price;
 
     public PassengerMapsFragment() {
         // Required empty public constructor
@@ -133,7 +138,20 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        layout_to = view.findViewById(R.id.layout_to);
+        layout_to.setOnClickListener(this);
         return view;
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout_to:
+                Intent intent = new Intent(getActivity(), FromAddressActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

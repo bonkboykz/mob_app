@@ -40,7 +40,16 @@
     <string name="phone_number">Номер телефона</string>
     <string name="politics">Политика конфиденциальности</string>
     <string name="notifications">Уведомления</string>
-    <string name="log_out">Выйти из аккаунты</string>
+    <string name="log_out">Выйти из аккаунта</string>
+
+    <string name="order_taxi">Заказать такси</string>
+    <string name="from">Откуда</string>
+    <string name="to">Куда</string>
+    <string name="price">Цена</string>
+
+    <string name="where_to">Куда вы едете?</string>
+    <string name="show_on_map">Указать на карте</string>
+    <string name="where_from">Где вы находитесь?</string>
 
     <string name="wrong_address">Клиент указал неверный адрес</string>
     <string name="payment_not_accepted">Платеж не был принят</string>
