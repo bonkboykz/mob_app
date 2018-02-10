@@ -1,5 +1,6 @@
 package vlimv.taxi;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,20 +8,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -29,6 +35,7 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -58,7 +65,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     private String mParam1;
     private String mParam2;
 
-    private GoogleMap map;
+    public static GoogleMap map;
     SupportMapFragment mapFragment;
     GeoDataClient mGeoDataClient;
     PlaceDetectionClient mPlaceDetectionClient;
@@ -138,6 +145,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
         layout_to = view.findViewById(R.id.layout_to);
         layout_to.setOnClickListener(this);
         return view;
@@ -154,6 +162,28 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         }
     }
 
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -279,31 +309,40 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
          */
-        try {
-            if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        } else {
-                            Log.d("TAG", "Current location is null. Using defaults.");
-                            Log.e("TAG", "Exception: %s", task.getException());
-                            map.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            map.getUiSettings().setMyLocationButtonEnabled(false);
+        if(isLocationEnabled(getContext())) {
+            try {
+                if (mLocationPermissionGranted) {
+                    Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                    locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.isSuccessful()) {
+                                // Set the map's camera position to the current location of the device.
+                                mLastKnownLocation = task.getResult();
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            } else {
+                                Log.d("TAG", "Current location is null. Using defaults.");
+                                Log.e("TAG", "Exception: %s", task.getException());
+                                map.moveCamera(CameraUpdateFactory
+                                        .newLatLngZoom(new LatLng(43.238949, 76.889709), DEFAULT_ZOOM));
+                                map.getUiSettings().setMyLocationButtonEnabled(false);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            } catch (SecurityException e)  {
+                Log.e("Exception: %s", e.getMessage());
             }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
         }
+        else {
+            DialogLocation d = new DialogLocation(getActivity());
+            d.showDialog(getActivity());
+            Toast.makeText(getContext(), "location service disabled", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 
@@ -479,6 +518,37 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+    public class DialogLocation extends android.app.Dialog {
+        public DialogLocation(Activity a) {
+            super(a);
+        }
+
+        public void showDialog(Activity activity) {
+            final DialogLocation dialog = new DialogLocation(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_location);
+
+            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
+            TextView text_turn_on = dialog.findViewById(R.id.text_turn_on);
+            text_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    map.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(new LatLng(43.238949, 76.889709), DEFAULT_ZOOM));
+                }
+            });
+            text_turn_on.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 }

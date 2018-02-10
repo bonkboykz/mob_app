@@ -4,9 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,6 +35,7 @@ public class FavoritesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private OnListItemClickListener mListItemClickListener;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -64,7 +72,20 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.favorites);
+        RecyclerView recyclerView = view.findViewById(R.id.main_recycler);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            list.add("Item " + i);
+        }
+        FavoritesRecyclerAdapter adapter = new FavoritesRecyclerAdapter(list);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemTapListener(mListItemClickListener);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,12 +104,19 @@ public class FavoritesFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+//        try {
+//            mListItemClickListener = (OnListItemClickListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(context.toString()
+//                    + " must implement OnListItemClickListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mListItemClickListener = null;
     }
 
     /**
@@ -104,5 +132,69 @@ public class FavoritesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public interface OnListItemClickListener {
+        void onListItemClick(String title);
+    }
+}
+
+class FavoritesRecyclerAdapter extends RecyclerView.Adapter<FavoritesRecyclerAdapter.ViewHolder>{
+    private List<String> mItemsList;
+    private FavoritesFragment.OnListItemClickListener mListItemClickListener;
+
+    public FavoritesRecyclerAdapter(List<String> itemsList) {
+        mItemsList = itemsList == null ? new ArrayList<String>() : itemsList;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Create a new view by inflating the row item xml.
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycler_item_favorites, parent, false);
+
+        // Set the view to the ViewHolder
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        //final String itemTitle = mItemsList.get(position);
+        //holder.title.setText(itemTitle);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItemsList.size();
+    }
+
+    // Create the ViewHolder class to keep references to your views
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView pointA, details;
+
+        /**
+         * Constructor
+         * @param v The container view which holds the elements from the row item xml
+         */
+        public ViewHolder(View v) {
+            super(v);
+//
+//            pointA = v.findViewById(R.id.pointA);
+//            details = v.findViewById(R.id.details);
+            v.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            if (null != mListItemClickListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()));
+            }
+        }
+    }
+
+    public void setOnItemTapListener(FavoritesFragment.OnListItemClickListener itemClickListener) {
+        mListItemClickListener = itemClickListener;
     }
 }

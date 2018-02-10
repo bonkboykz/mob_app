@@ -55,7 +55,9 @@
         <activity
             android:name=".PassengerMapsActivity"
             android:label="@string/title_activity_passenger_maps" />
-        <activity android:name=".FromAddressActivity"></activity>
+        <activity
+            android:name=".FromAddressActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

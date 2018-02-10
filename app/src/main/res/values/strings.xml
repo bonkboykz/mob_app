@@ -51,9 +51,16 @@
     <string name="show_on_map">Указать на карте</string>
     <string name="where_from">Где вы находитесь?</string>
 
+    <string name="add_place">Добавить место</string>
+
     <string name="wrong_address">Клиент указал неверный адрес</string>
     <string name="payment_not_accepted">Платеж не был принят</string>
     <string name="other">Другое</string>
+
+    <string name="enable_location">Пожалуйста включите доступ к местоположению телефона для продолжения работы с приложением.</string>
+    <string name="turn_on">Включить</string>
+    <string name="cancel">Отмена</string>
+
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>
