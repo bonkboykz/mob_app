@@ -42,7 +42,7 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
                     intent = new Intent(getApplicationContext(), DriverActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Must choose a type", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG);
                 }
             }
         });

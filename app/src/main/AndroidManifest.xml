@@ -15,7 +15,7 @@
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"></uses-feature>
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -56,8 +56,8 @@
             android:name=".PassengerMapsActivity"
             android:label="@string/title_activity_passenger_maps" />
         <activity
-            android:name=".FromAddressActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:name=".FromAddressActivity"/>
+        <activity android:name=".AddressFromMapActivity"></activity>
     </application>
 
 </manifest>

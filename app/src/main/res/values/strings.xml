@@ -58,6 +58,8 @@
     <string name="other">Другое</string>
 
     <string name="enable_location">Пожалуйста включите доступ к местоположению телефона для продолжения работы с приложением.</string>
+    <string name="tap_to_choose">Нажмите на карту чтобы выбрать место</string>
+
     <string name="turn_on">Включить</string>
     <string name="cancel">Отмена</string>
 

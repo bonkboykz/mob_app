@@ -10,6 +10,7 @@
         <item name="android:colorButtonNormal">#25d485</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">#616161</item>
+        <item name="android:disabledAlpha">0.5</item>
     </style>
 
     <style name="MyButton" parent="Widget.AppCompat.Button.Colored">
