@@ -46,6 +46,7 @@
     <string name="from">Откуда</string>
     <string name="to">Куда</string>
     <string name="price">Цена</string>
+    <string name="enter_price">Введите цену</string>
 
     <string name="where_to">Куда вы едете?</string>
     <string name="show_on_map">Указать на карте</string>

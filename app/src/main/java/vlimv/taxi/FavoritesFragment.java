@@ -169,12 +169,6 @@ class FavoritesRecyclerAdapter extends RecyclerView.Adapter<FavoritesRecyclerAda
 
     // Create the ViewHolder class to keep references to your views
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView pointA, details;
-
-        /**
-         * Constructor
-         * @param v The container view which holds the elements from the row item xml
-         */
         public ViewHolder(View v) {
             super(v);
 //

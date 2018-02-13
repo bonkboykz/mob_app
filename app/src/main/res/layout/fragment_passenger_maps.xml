@@ -29,26 +29,29 @@
             android:layout_height="match_parent"
             android:id="@+id/layout_from">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
                 android:id="@+id/imagePointA"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:src="@drawable/ic_blue_marker"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_toRightOf="@id/imagePointA"
+                android:layout_toEndOf="@id/imagePointA"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="16dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/from"
-                    android:textSize="12sp"/>
+                    android:textSize="13sp"/>
                 <TextView
                     android:id="@+id/pointA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Абая, 70"
+                    android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
         </RelativeLayout>
@@ -63,26 +66,29 @@
             android:layout_height="match_parent"
             android:id="@+id/layout_to">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
                 android:id="@+id/imagePointB"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:src="@drawable/ic_green_marker" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_toRightOf="@id/imagePointB"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/imagePointB"
                 android:layout_marginStart="16dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/to"
-                    android:textSize="12sp"/>
+                    android:textSize="13sp"/>
                 <TextView
                     android:id="@+id/pointB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Абая, 70"
+                    android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
         </RelativeLayout>
@@ -97,10 +103,12 @@
             android:layout_height="match_parent"
             android:id="@+id/layout_price">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:scaleType="fitCenter"
+                android:layout_height="30dp"
                 android:id="@+id/imagePrice"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_tenge"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,12 +119,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/price"
-                    android:textSize="12sp"/>
+                    android:textSize="13sp"/>
                 <TextView
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="500"
+                    android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
         </RelativeLayout>

@@ -2,6 +2,7 @@ package vlimv.taxi;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
@@ -95,7 +99,13 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     private OnFragmentInteractionListener mListener;
 
     //Layouts
-    RelativeLayout layout_to, layout_from, layout_price;
+    RelativeLayout layout_from, layout_to, layout_price;
+    //TextViews
+    static TextView price, pointA, pointB;
+    //Places
+    static Place from, to;
+    //Markers
+    static Marker markerFrom, markerTo;
 
     public PassengerMapsFragment() {
         // Required empty public constructor
@@ -148,15 +158,32 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         layout_to = view.findViewById(R.id.layout_to);
+        layout_from = view.findViewById(R.id.layout_from);
+        layout_price = view.findViewById(R.id.layout_price);
         layout_to.setOnClickListener(this);
+        layout_from.setOnClickListener(this);
+        layout_price.setOnClickListener(this);
+
+        price = view.findViewById(R.id.price);
+        pointA = view.findViewById(R.id.pointA);
+        pointB = view.findViewById(R.id.pointB);
+
         return view;
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.layout_from:
+                Intent intentFrom = new Intent(getActivity(), FromAddressActivity.class);
+                startActivity(intentFrom);
+                break;
             case R.id.layout_to:
-                Intent intent = new Intent(getActivity(), FromAddressActivity.class);
-                startActivity(intent);
+                Intent intentTo = new Intent(getActivity(), ToAddressActivity.class);
+                startActivity(intentTo);
+                break;
+            case R.id.layout_price:
+                DialogPrice d = new DialogPrice(getActivity());
+                d.showDialog(getActivity());
                 break;
             default:
                 break;
@@ -525,6 +552,29 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                 public void onClick(View v) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+    }
+    public class DialogPrice extends Dialog {
+        public DialogPrice(Activity a) {
+            super(a);
+        }
+
+        public void showDialog(Activity activity) {
+            final DialogPrice dialog = new DialogPrice(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_price);
+            Button btn_ready = dialog.findViewById(R.id.btn_ready);
+            final EditText price_edit = dialog.findViewById(R.id.price);
+            btn_ready.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String price_text = price_edit.getText().toString();
+                    PassengerMapsFragment.price.setText(price_text);
                     dialog.dismiss();
                 }
             });
