@@ -26,10 +26,10 @@
             android:layout_height="match_parent"
             android:layout_marginTop="8dp">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:id="@+id/imageShowOnMap"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:src="@drawable/ic_marker"/>
 
             <TextView
                 android:id="@+id/showOnMap"
@@ -47,10 +47,10 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:id="@+id/imageFavorites"
-                app:srcCompat="@android:drawable/btn_star" />
+                android:src="@drawable/ic_heart"/>
 
             <TextView
                 android:id="@+id/favorites"
