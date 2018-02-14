@@ -64,6 +64,15 @@
     <string name="turn_on">Включить</string>
     <string name="cancel">Отмена</string>
 
+
+    <string name="car_type">Тип машины</string>
+    <string name="with_accompany">С сопровождением</string>
+    <string name="wheelchair">На коляске</string>
+    <string name="commentary">Комментарии </string>
+
+    <string name="voluntary">Волонтерская поездка</string>
+    <string name="order_accepted">Заявка принята</string>
+
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

@@ -1,6 +1,7 @@
 package vlimv.taxi;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DriverMainActivity extends AppCompatActivity implements ContainerFragment.TabLayoutSetupCallback,
-        PageFragment.OnListItemClickListener, SupportFragment.OnListItemClickListener,
+        PageFragment.OnListItemClickListener, SettingsFragment.OnFragmentInteractionListener,
         View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
         CabinetFragment.OnFragmentInteractionListener, SupportFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
@@ -125,7 +126,6 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         Dialog_details dialog = new Dialog_details(this);
         dialog.showDialog(this);
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -136,24 +136,35 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 break;
             case R.id.nav_cabinet:
                 fragmentClass = CabinetFragment.class;
+                switchFragment(fragmentClass, fragment);
                 break;
             case R.id.nav_car_options:
-                Toast.makeText(getApplicationContext(), "CAR OPTIONS", Toast.LENGTH_SHORT).show();
                 fragmentClass = CarOptionsFragment.class;
+                switchFragment(fragmentClass, fragment);
                 break;
             case R.id.nav_support:
                 fragmentClass = SupportFragment.class;
+                switchFragment(fragmentClass, fragment);
                 break;
             case R.id.nav_settings:
-                //fragmentClass = ThirdFragment.class;
+                fragment = new SettingsFragment();
+                switchFragment(fragmentClass, fragment);
                 break;
             case R.id.nav_client_mode:
                 //switch mode
                 break;
             default:
                 break;
-                //fragmentClass = FirstFragment.class;
         }
+
+        return true;
+    }
+    @Override
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
+    }
+
+    void switchFragment(Class fragmentClass, Fragment fragment) {
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -161,20 +172,22 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
         mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //you can leave it empty
-    }
+
     String loadName() {
         SharedPreferences name = getSharedPreferences("NAME", 0);
         String name_text = name.getString("NAME", "bongo bongo");
         Toast.makeText(getApplicationContext(), name_text, Toast.LENGTH_SHORT).show();
         return name_text;
     }
+
+    void startOrder() {
+        Intent intent = new Intent(this, DriverOrderActivity.class);
+        startActivity(intent);
+
+    }
+
     public class Dialog_details extends android.app.Dialog {
         public Dialog_details(Activity a) {
             super(a);
@@ -198,6 +211,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
             text_accept.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast.makeText(getApplicationContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
+                    startOrder();
                     dialog.dismiss();
                 }
             });

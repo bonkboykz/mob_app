@@ -88,13 +88,6 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    // Used for selecting the current place.
-    private static final int M_MAX_ENTRIES = 5;
-    private String[] mLikelyPlaceNames;
-    private String[] mLikelyPlaceAddresses;
-    private String[] mLikelyPlaceAttributions;
-    private LatLng[] mLikelyPlaceLatLngs;
-
     View view;
     private OnFragmentInteractionListener mListener;
 
@@ -106,6 +99,10 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     static Place from, to;
     //Markers
     static Marker markerFrom, markerTo;
+    //
+    Button order_btn;
+
+    static boolean isInvalid = true;
 
     public PassengerMapsFragment() {
         // Required empty public constructor
@@ -160,13 +157,39 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         layout_to = view.findViewById(R.id.layout_to);
         layout_from = view.findViewById(R.id.layout_from);
         layout_price = view.findViewById(R.id.layout_price);
+        price = view.findViewById(R.id.price);
+
+        order_btn = view.findViewById(R.id.button);
+
+        if (isInvalid) {
+            price.setText(getString(R.string.voluntary));
+            price.setTextColor(getResources().getColor(R.color.colorPrimary));
+            order_btn.setText(getString(R.string.next));
+        } else {
+            layout_price.setOnClickListener(this);
+        }
         layout_to.setOnClickListener(this);
         layout_from.setOnClickListener(this);
-        layout_price.setOnClickListener(this);
 
-        price = view.findViewById(R.id.price);
         pointA = view.findViewById(R.id.pointA);
         pointB = view.findViewById(R.id.pointB);
+
+        order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isInvalid) {
+                    Intent intentInvalid = new Intent(getActivity(), OrderTaxiActivity.class);
+                    String address = pointA.getText().toString() + " – " + pointB.getText().toString();
+                    Toast.makeText(getContext(), address, Toast.LENGTH_SHORT).show();
+                    intentInvalid.putExtra("ADDRESS", address);
+                    startActivity(intentInvalid);
+                } else {
+
+                }
+
+            }
+        });
+
 
         return view;
     }

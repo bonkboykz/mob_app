@@ -10,6 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +40,11 @@ public class SupportFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    ArrayList<String> list = new ArrayList<>();
+    ListViewAdapter adapter;
+
     private OnFragmentInteractionListener mListener;
-    private OnListItemClickListener mListItemClickListener;
+    //private OnListItemClickListener mListItemClickListener;
 
     public SupportFragment() {
         // Required empty public constructor
@@ -71,23 +81,25 @@ public class SupportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_support, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.main_recycler);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            list.add("Item " + i);
-        }
-        SupportRecyclerAdapter adapter = new SupportRecyclerAdapter(list);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemTapListener(mListItemClickListener);
+
+        fillData();
+        ListView lvMain = view.findViewById(R.id.lvMain);
+        lvMain.setAdapter(new SupportAdapter(list, getContext()));
+
+        DriverMainActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.support);
+
         return view;
     }
 
+    void fillData() {
+        list.add(getResources().getString(R.string.wrong_address));
+        list.add(getResources().getString(R.string.payment_not_accepted));
+        list.add(getResources().getString(R.string.other));
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -104,19 +116,12 @@ public class SupportFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        try {
-            mListItemClickListener = (OnListItemClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnListItemClickListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mListItemClickListener = null;
     }
 
     /**
@@ -133,7 +138,52 @@ public class SupportFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    public interface OnListItemClickListener {
-        void onListItemClick(String title);
+}
+class SupportAdapter extends BaseAdapter implements ListAdapter {
+    private ArrayList<String> list = new ArrayList<String>();
+    private Context context;
+
+    public SupportAdapter(ArrayList<String> list, Context context) {
+        this.list = list;
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int pos) {
+        return list.get(pos);
+    }
+
+    @Override
+    public long getItemId(int pos) {
+        return pos;
+        //just return 0 if your list items do not have an Id variable.
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.recycler_item_support, null);
+        }
+
+        final TextView itemText = view.findViewById(R.id.item_text);
+        itemText.setText(list.get(position));
+        RelativeLayout listItem = view.findViewById(R.id.list_item);
+
+        listItem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, itemText.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return view;
     }
 }

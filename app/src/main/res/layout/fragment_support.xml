@@ -2,14 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context="vlimv.taxi.SupportFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler"
+    <ListView
+        android:id="@+id/lvMain"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false"/>
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
 
 </FrameLayout>

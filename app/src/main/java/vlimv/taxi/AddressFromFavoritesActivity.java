@@ -40,8 +40,6 @@ public class AddressFromFavoritesActivity extends AppCompatActivity {
             places.add("abay 130");
         }
     }
-
-
 }
 
 
