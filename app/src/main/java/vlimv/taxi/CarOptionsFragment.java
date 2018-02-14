@@ -2,6 +2,8 @@ package vlimv.taxi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -16,6 +18,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
 
 /**
@@ -100,10 +104,22 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
                 startActivity(intent);
             }
         });
+
+        DriverOrderActivity.next_btn.setVisibility(View.VISIBLE);
+        DriverOrderActivity.next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), DriverOrderActivity.class);
+                startActivity(intent);
+            }
+        });
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.car_options);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#ffffff")));
+        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
         return view;
 
     }

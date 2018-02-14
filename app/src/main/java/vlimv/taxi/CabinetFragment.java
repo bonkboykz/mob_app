@@ -2,6 +2,8 @@ package vlimv.taxi;
 
 import android.content.Context;
 import android.drm.DrmUtils;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
 
 /**
@@ -71,7 +75,12 @@ public class CabinetFragment extends Fragment {
         DriverMainActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.cabinet);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#ffffff")));
+        DriverOrderActivity.next_btn.setVisibility(View.GONE);
+        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
         return view;
     }
 

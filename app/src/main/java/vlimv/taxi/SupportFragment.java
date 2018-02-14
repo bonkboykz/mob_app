@@ -1,6 +1,8 @@
 package vlimv.taxi;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
 
 /**
@@ -86,6 +90,11 @@ public class SupportFragment extends Fragment {
         ListView lvMain = view.findViewById(R.id.lvMain);
         lvMain.setAdapter(new SupportAdapter(list, getContext()));
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#ffffff")));
+        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+
+        DriverOrderActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);

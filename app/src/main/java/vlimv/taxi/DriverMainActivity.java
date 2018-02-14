@@ -7,9 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,7 +82,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
                 free.setTextColor(Color.parseColor("#ffffff"));
                 free.setElevation(5.0f);
-                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white));
+                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white_stroke));
                 busy.setTextColor(Color.parseColor("#000000"));
                 busy.setElevation(0.0f);
                 Toast.makeText(
@@ -94,7 +91,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 break;
             case R.id.busy:
                 status = "busy";
-                free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white));
+                free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white_stroke));
                 free.setTextColor(Color.parseColor("#000000"));
                 free.setElevation(0.0f);
                 busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
