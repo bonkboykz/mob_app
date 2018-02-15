@@ -31,7 +31,7 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(getApplicationContext(), type, Toast.LENGTH_LONG).show();
                 Intent intent;
                 if (type == null) {
-                    Toast.makeText(getApplicationContext(), "Must choose a type", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG).show();
                 } else if (type.equals("Пассажир")) {
                     intent = new Intent(getApplicationContext(), PassengerActivity.class);
                     startActivity(intent);

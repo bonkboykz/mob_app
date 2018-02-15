@@ -76,6 +76,12 @@
     <string name="voluntary">Волонтерская поездка</string>
     <string name="order_accepted">Заявка принята</string>
 
+    <string name="change_price">Изменить цену</string>
+
+    <string name="car">Машина</string>
+    <string name="car_number">Номер машины</string>
+    <string name="rating">Рейтинг</string>
+
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

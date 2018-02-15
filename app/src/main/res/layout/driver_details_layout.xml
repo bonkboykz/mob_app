@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/rounded_white"
+    android:elevation="5dp"
+    android:layout_alignParentBottom="true">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_expand_less_black_24dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:text="@string/car" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Тойота Камри, черная"
+        android:textSize="16sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:text="@string/car_number" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="666 BK 02"
+        android:textSize="16sp"/>=
+
+</LinearLayout>

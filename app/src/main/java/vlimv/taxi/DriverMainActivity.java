@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static vlimv.taxi.DriverActivity.driver;
+
 public class DriverMainActivity extends AppCompatActivity implements ContainerFragment.TabLayoutSetupCallback,
         PageFragment.OnListItemClickListener, SettingsFragment.OnFragmentInteractionListener,
         View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
@@ -64,7 +66,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         nvDrawer.setNavigationItemSelectedListener(this);
         View navHeader = nvDrawer.getHeaderView(0);
         TextView name = navHeader.findViewById(R.id.name);
-        name.setText(loadName());
+        name.setText(Driver.name + " " + Driver.surname);
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);

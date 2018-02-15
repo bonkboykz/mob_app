@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_layout"
     tools:context="vlimv.taxi.PassengerMapsFragment">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -95,6 +95,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:id="@+id/horizontal_view"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="@android:color/darker_gray"/>
@@ -141,6 +142,4 @@
         android:textSize="18sp"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"/>
-
-
 </RelativeLayout>

@@ -64,7 +64,7 @@ public class PassengerMapsActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     public static Toolbar toolbar;
     private NavigationView nvDrawer;
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    static ActionBarDrawerToggle mActionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

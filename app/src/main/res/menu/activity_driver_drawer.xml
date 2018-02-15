@@ -25,6 +25,7 @@
             android:id="@+id/nav_client_mode"
             android:title="@string/client_mode"
             app:actionLayout="@layout/action_view_switch"
+            android:checkable="false"
             />
     </group>
 </menu>

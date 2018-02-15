@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -16,8 +18,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +34,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,10 +107,14 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     static Place from, to;
     //Markers
     static Marker markerFrom, markerTo;
-    //
-    Button order_btn;
+    TextView finalPrice, leftBtn, rightBtn;
 
-    static boolean isInvalid = true;
+    Button order_btn;
+    View horView, linLayout, topLayout, addressLayout;
+
+    static boolean isInvalid = false;
+
+    RelativeLayout mainLayout;
 
     public PassengerMapsFragment() {
         // Required empty public constructor
@@ -140,6 +152,9 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_passenger_maps, container, false);
+        mainLayout = view.findViewById(R.id.parent_layout);
+        linLayout = view.findViewById(R.id.linear_layout);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment == null) {
@@ -174,6 +189,8 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         pointA = view.findViewById(R.id.pointA);
         pointB = view.findViewById(R.id.pointB);
 
+        horView = view.findViewById(R.id.horizontal_view);
+
         order_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,12 +203,78 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                 } else {
 
                 }
+                searchDriver();
+            }
+        });
+        return view;
+    }
 
+    void searchDriver() {
+        LayoutInflater inflater = getLayoutInflater();
+        topLayout = inflater.inflate(R.layout.top_layout, mainLayout, false);
+        addressLayout = inflater.inflate(R.layout.address_layout, mainLayout, false);
+
+        topLayout.setBackground(getResources().getDrawable(R.drawable.gradient_vertical));
+        finalPrice = topLayout.findViewById(R.id.final_price);
+        finalPrice.setText(PassengerMapsFragment.price.getText());
+        finalPrice.setTextSize(36.0f);
+
+        leftBtn = topLayout.findViewById(R.id.left_btn);
+        rightBtn = topLayout.findViewById(R.id.right_btn);
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogPrice d = new DialogPrice(getActivity());
+                d.showDialog(getActivity());
             }
         });
 
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                waitDriver();
+            }
+        });
 
-        return view;
+        mainLayout.removeView(linLayout);
+        mainLayout.addView(topLayout);
+        mainLayout.addView(addressLayout);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(getResources()
+                .getDrawable(R.drawable.gradient_vertical));
+        Spannable text = new SpannableString("Ищем водителя");
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
+
+        PassengerMapsActivity.mActionBarDrawerToggle.getDrawerArrowDrawable()
+                .setColor(getResources().getColor(R.color.white));
+        layout_price.setVisibility(View.GONE);
+        horView.setVisibility(View.GONE);
+
+
+        order_btn.setVisibility(View.GONE);
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(to.getLatLng(), DEFAULT_ZOOM));
+    }
+
+    void waitDriver() {
+        LayoutInflater inflater = getLayoutInflater();
+        View detailsLayout = inflater.inflate(R.layout.driver_details_layout, mainLayout, false);
+        topLayout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+        mainLayout.removeView(addressLayout);
+        mainLayout.addView(detailsLayout);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#08aeea")));
+        Spannable text = new SpannableString("Водитель в пути");
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
+        finalPrice.setText("Приедет через" + "\n8 минут");
+        finalPrice.setTextSize(18.0f);
+        rightBtn.setVisibility(View.GONE);
+        leftBtn.setGravity(Gravity.CENTER);
+
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(from.getLatLng(), DEFAULT_ZOOM));
     }
 
     public void onClick(View v) {
@@ -295,32 +378,6 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         map.setLatLngBoundsForCameraTarget(new LatLngBounds(new LatLng(43.143121, 76.691608),
                 new LatLng(43.396356, 77.134495)));
         map.setMinZoomPreference(12.0f);
-        // Use a custom info window adapter to handle multiple lines of text in the
-        // info window contents.
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            // Return null here, so that getInfoContents() is called next.
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                // Inflate the layouts for the info window, title and snippet.
-                View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
-                        (FrameLayout) view.findViewById(R.id.map), false);
-
-                TextView title = (infoWindow.findViewById(R.id.title));
-                title.setText(marker.getTitle());
-
-                TextView snippet = (infoWindow.findViewById(R.id.snippet));
-                snippet.setText(marker.getSnippet());
-
-                return infoWindow;
-            }
-        });
-
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -415,119 +472,6 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         }
         updateLocationUI();
     }
-
-    /**
-     * Prompts the user to select the current place from a list of likely places, and shows the
-     * current place on the map - provided the user has granted location permission.
-     */
-//    private void showCurrentPlace() {
-//        if (map == null) {
-//            return;
-//        }
-//
-//        if (mLocationPermissionGranted) {
-//            // Get the likely places - that is, the businesses and other points of interest that
-//            // are the best match for the device's current location.
-//            @SuppressWarnings("MissingPermission") final
-//            Task<PlaceLikelihoodBufferResponse> placeResult =
-//                    mPlaceDetectionClient.getCurrentPlace(null);
-//            placeResult.addOnCompleteListener
-//                    (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-//                            if (task.isSuccessful() && task.getResult() != null) {
-//                                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-//
-//                                // Set the count, handling cases where less than 5 entries are returned.
-//                                int count;
-//                                if (likelyPlaces.getCount() < M_MAX_ENTRIES) {
-//                                    count = likelyPlaces.getCount();
-//                                } else {
-//                                    count = M_MAX_ENTRIES;
-//                                }
-//
-//                                int i = 0;
-//                                mLikelyPlaceNames = new String[count];
-//                                mLikelyPlaceAddresses = new String[count];
-//                                mLikelyPlaceAttributions = new String[count];
-//                                mLikelyPlaceLatLngs = new LatLng[count];
-//
-//                                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-//                                    // Build a list of likely places to show the user.
-//                                    mLikelyPlaceNames[i] = (String) placeLikelihood.getPlace().getName();
-//                                    mLikelyPlaceAddresses[i] = (String) placeLikelihood.getPlace()
-//                                            .getAddress();
-//                                    mLikelyPlaceAttributions[i] = (String) placeLikelihood.getPlace()
-//                                            .getAttributions();
-//                                    mLikelyPlaceLatLngs[i] = placeLikelihood.getPlace().getLatLng();
-//
-//                                    i++;
-//                                    if (i > (count - 1)) {
-//                                        break;
-//                                    }
-//                                }
-//
-//                                // Release the place likelihood buffer, to avoid memory leaks.
-//                                likelyPlaces.release();
-//
-//                                // Show a dialog offering the user the list of likely places, and add a
-//                                // marker at the selected place.
-//                                openPlacesDialog();
-//
-//                            } else {
-//                                Log.e("TAG", "Exception: %s", task.getException());
-//                            }
-//                        }
-//                    });
-//        } else {
-//            // The user has not granted permission.
-//            Log.i("TAG", "The user did not grant location permission.");
-//
-//            // Add a default marker, because the user hasn't selected a place.
-//            map.addMarker(new MarkerOptions()
-//                    .title("def title")
-//                    .position(mDefaultLocation)
-//                    .snippet("def snippet"));
-//
-//            // Prompt the user for permission.
-//            getLocationPermission();
-//        }
-//    }
-
-    /**
-     * Displays a form allowing the user to select a place from a list of likely places.
-     */
-//    private void openPlacesDialog() {
-//        // Ask the user to choose the place where they are now.
-//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // The "which" argument contains the position of the selected item.
-//                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-//                String markerSnippet = mLikelyPlaceAddresses[which];
-//                if (mLikelyPlaceAttributions[which] != null) {
-//                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-//                }
-//
-//                // Add a marker for the selected place, with an info window
-//                // showing information about that place.
-//                map.addMarker(new MarkerOptions()
-//                        .title(mLikelyPlaceNames[which])
-//                        .position(markerLatLng)
-//                        .snippet(markerSnippet));
-//
-//                // Position the map's camera at the location of the marker.
-//                map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-//                        DEFAULT_ZOOM));
-//            }
-//        };
-//
-//        // Display the dialog.
-//        AlertDialog dialog = new AlertDialog.Builder(getContext())
-//                .setTitle("pick place")
-//                .setItems(mLikelyPlaceNames, listener)
-//                .show();
-//    }
 
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.

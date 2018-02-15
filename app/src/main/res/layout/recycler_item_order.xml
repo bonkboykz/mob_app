@@ -13,12 +13,13 @@
     android:layout_marginStart="16dp">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="3dp"
             android:id="@+id/imagePointA"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_blue_marker" />
 
         <TextView
             android:id="@+id/pointA"
@@ -26,17 +27,19 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
+            android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagePointA"
             android:text="Абая, 70" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="3dp"
             android:id="@+id/imagePointB"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_green_marker" />
 
         <TextView
             android:id="@+id/pointB"
@@ -44,17 +47,19 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
+            android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagePointB"
             android:text="Абая, 70" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="5dp"
             android:id="@+id/imageSum"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_tenge"/>
 
         <TextView
             android:id="@+id/sum"
@@ -62,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
+            android:textColor="@color/black"
             android:layout_toEndOf="@+id/imageSum"
             android:text="900" />
         <TextView
@@ -72,6 +78,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:text="Детали"
+            android:textColor="@color/colorPrimary"
             android:textAllCaps="true"
             android:layout_marginEnd="16dp"/>
     </RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/top_layout"
+    android:background="@color/colorAccent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/final_price"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:padding="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_layout"
+        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingBottom="8dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:id="@+id/left_btn"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_price"
+            android:id="@+id/right_btn"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+    </LinearLayout>
+</LinearLayout>

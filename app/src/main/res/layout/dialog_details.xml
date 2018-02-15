@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:id="@+id/imagePointA"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:padding="3dp"
+            android:src="@drawable/ic_blue_marker"/>
 
         <TextView
             android:id="@+id/pointA"
@@ -28,10 +29,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="3dp"
             android:id="@+id/imagePointB"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_green_marker"/>
 
         <TextView
             android:id="@+id/pointB"
@@ -46,10 +48,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="5dp"
             android:id="@+id/imageSum"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:src="@drawable/ic_tenge"/>
 
         <TextView
             android:id="@+id/sum"
