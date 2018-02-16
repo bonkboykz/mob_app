@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="5dp"
-    android:padding="8dp"
+    android:elevation="@dimen/normal_elevation"
+    android:padding="@dimen/small_padding"
     android:background="@drawable/rounded_white"
     android:orientation="vertical">
     <RelativeLayout
@@ -12,8 +12,8 @@
         android:layout_height="match_parent"
         android:id="@+id/layout_from">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
             android:layout_centerVertical="true"
             android:id="@+id/imagePointA"
             android:src="@drawable/ic_blue_marker"/>
@@ -23,34 +23,34 @@
             android:orientation="vertical"
             android:layout_toEndOf="@id/imagePointA"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="@dimen/normal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                android:textSize="13sp"/>
+                android:textSize="@dimen/xsmall_text"/>
             <TextView
                 android:id="@+id/pointA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Абая, 70"
-                android:textSize="16sp"
+                android:textSize="@dimen/small_text"
                 android:textColor="@color/black"/>
         </LinearLayout>
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        android:layout_marginBottom="@dimen/xsmall_margin"
         android:background="@android:color/darker_gray"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout_to">
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
             android:layout_centerVertical="true"
             android:id="@+id/imagePointB"
             android:src="@drawable/ic_green_marker" />
@@ -60,18 +60,18 @@
             android:orientation="vertical"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/imagePointB"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="@dimen/normal_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/to"
-                android:textSize="13sp"/>
+                android:textSize="@dimen/xsmall_text"/>
             <TextView
                 android:id="@+id/pointB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Абая, 70"
-                android:textSize="16sp"
+                android:textSize="@dimen/small_text"
                 android:textColor="@color/black"/>
         </LinearLayout>
     </RelativeLayout>

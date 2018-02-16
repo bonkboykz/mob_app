@@ -4,44 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:padding="@dimen/small_padding"
+    android:layout_marginStart="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/normal_margin"
     android:background="@drawable/rounded_white"
-    android:elevation="5dp"
+    android:elevation="@dimen/normal_elevation"
     android:layout_alignParentBottom="true">
-    <ImageView
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_more"
         android:tint="@color/colorPrimary"
         android:layout_gravity="center"
+        android:background="@null"
         android:src="@drawable/ic_expand_less_black_24dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
-        android:text="@string/car" />
+        android:text="@string/car"
+        android:textSize="@dimen/xsmall_text"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:text="Тойота Камри, черная"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/small_text"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:background="@android:color/darker_gray"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
-        android:text="@string/car_number" />
+        android:text="@string/car_number"
+        android:textSize="@dimen/xsmall_text"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:text="666 BK 02"
-        android:textSize="16sp"/>=
+        android:textSize="@dimen/small_text"/>
 
 </LinearLayout>

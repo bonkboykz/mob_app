@@ -1,0 +1,25 @@
+<resources>
+	<dimen name="normal_elevation">6.2dp</dimen>
+	<dimen name="fab_size">70dp</dimen>
+	<dimen name="xxsmall_padding">3.8dp</dimen>
+	<dimen name="min_support_item_height">112.5dp</dimen>
+	<dimen name="normal_padding">20dp</dimen>
+	<dimen name="small_elevation">3.8dp</dimen>
+	<dimen name="min_dialog_width">312.5dp</dimen>
+	<dimen name="xsmall_margin">6.2dp</dimen>
+	<dimen name="small_padding">10dp</dimen>
+	<dimen name="xsmall_padding">6.2dp</dimen>
+	<dimen name="small_icon">30dp</dimen>
+	<dimen name="large_margin">30dp</dimen>
+	<dimen name="normal_icon">40dp</dimen>
+	<dimen name="fab_padding">20dp</dimen>
+	<dimen name="small_margin">10dp</dimen>
+	<dimen name="xlarge_margin">40dp</dimen>
+	<dimen name="large_space">50dp</dimen>
+	<dimen name="normal_margin">20dp</dimen>
+	<dimen name="small_text">20sp</dimen>
+	<dimen name="xlarge_text">32.5sp</dimen>
+	<dimen name="xsmall_text">16.2sp</dimen>
+	<dimen name="normal_text">22.5sp</dimen>
+	<dimen name="large_text">27.5sp</dimen>
+</resources>

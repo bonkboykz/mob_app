@@ -9,8 +9,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/new_favorite"
         android:layout_below="@id/main_recycler"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,14 +25,14 @@
             android:layout_toRightOf="@+id/imageAdd"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="@dimen/small_margin"/>
 
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/normal_padding"
         android:clipToPadding="false"/>
     
 

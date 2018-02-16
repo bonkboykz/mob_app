@@ -7,11 +7,11 @@
 
     <ListView
         android:id="@+id/lvMain"
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/normal_padding"
         android:clipToPadding="false"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"

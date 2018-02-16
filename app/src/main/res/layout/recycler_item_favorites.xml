@@ -5,30 +5,30 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/ripple_effect_white"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginStart="16dp">
+    android:layout_marginTop="@dimen/small_margin"
+    android:layout_marginEnd="@dimen/normal_margin"
+    android:layout_marginStart="@dimen/normal_margin">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="проспект Достык, 1"
         android:id="@+id/address"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:textSize="16sp"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:textSize="@dimen/small_text"
         android:textColor="@color/black"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
         android:id="@+id/description"
         android:text="Работа"
-        android:textSize="14sp"
+        android:textSize="@dimen/xsmall_text"
         android:textColor="@android:color/darker_gray"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="@dimen/xsmall_margin"/>
 </LinearLayout>

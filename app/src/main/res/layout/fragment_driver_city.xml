@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="vlimv.taxi.DriverCityFragment">
-
     <include
         layout="@layout/map_content"/>
     <LinearLayout
@@ -19,16 +18,16 @@
             android:id="@+id/time"
             android:textColor="@color/white"
             android:textAlignment="center"
-            android:textSize="22sp"
-            android:padding="16dp"/>
+            android:textSize="@dimen/large_text"
+            android:padding="@dimen/normal_padding"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/text_layout"
             android:orientation="horizontal"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:paddingBottom="8dp">
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:paddingBottom="@dimen/small_padding">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,8 +35,8 @@
                 android:id="@+id/cancel_order"
                 android:textColor="@color/white"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:padding="8dp"/>
+                android:textSize="@dimen/normal_text"
+                android:padding="@dimen/small_padding"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,8 +45,8 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:padding="8dp"/>
+                android:textSize="@dimen/normal_text"
+                android:padding="@dimen/small_padding"/>
         </LinearLayout>
     </LinearLayout>
     <include
@@ -55,16 +54,16 @@
         android:id="@+id/choose_time"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
         android:layout_gravity="bottom"/>
     <include
         layout="@layout/layout_show_address"
         android:id="@+id/show_address"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
         android:layout_gravity="bottom"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -74,7 +73,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/fab_padding"
         android:src="@drawable/ic_call_white_24dp"
         android:tint="@color/white"/>
 

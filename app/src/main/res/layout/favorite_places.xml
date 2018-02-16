@@ -13,22 +13,22 @@
         android:background="@null"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/favorites"
-        android:textSize="18sp"
+        android:textSize="@dimen/normal_text"
         android:textColor="@color/black"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="@dimen/small_margin"/>
     <ListView
         android:id="@+id/lvMain"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
         android:layout_width="match_parent"
         android:layout_below="@id/back_button"
         android:layout_height="wrap_content">
@@ -38,8 +38,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/new_favorite"
         android:layout_below="@id/lvMain"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,8 +54,8 @@
             android:layout_toEndOf="@+id/imageAdd"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_marginStart="8dp"/>
+            android:textSize="@dimen/normal_text"
+            android:layout_marginStart="@dimen/small_margin"/>
 
     </RelativeLayout>
 </RelativeLayout>

@@ -11,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="40dp">
+        android:layout_margin="@dimen/large_space">
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/xlarge_margin"
             android:text="@string/welcome"
             android:layout_gravity="center_horizontal"
-            android:textSize="25sp"
-            android:textColor="#000000"/>
+            android:textSize="@dimen/xlarge_text"
+            android:textColor="@color/black"/>
 
         <ImageView
             android:id="@+id/imageView"
@@ -28,22 +28,22 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/xlarge_margin"
             />
 
         <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/phone_input"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/normal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:background="@drawable/edit_text_number"
-            android:padding="10dp"
+            android:padding="@dimen/small_padding"
             android:typeface="monospace"
             mask:allowed_chars="1234567890"
             mask:mask="+7 (###) ### - ## - ##"
             android:hint="7777777777"
-            android:textSize="20sp"
+            android:textSize="@dimen/large_text"
             app:keep_hint="true"
             android:layout_gravity="center_horizontal"
             />
@@ -51,13 +51,13 @@
         <Button
             android:id="@+id/button"
             android:background="@drawable/ripple_effect"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/normal_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/next"
             android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textColor="#ffffff"
+            android:textSize="@dimen/normal_text"
+            android:textColor="@color/white"
             />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

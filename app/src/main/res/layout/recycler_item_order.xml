@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:elevation="3dp"
+    android:elevation="@dimen/small_elevation"
     android:background="@drawable/ripple_effect_square_white_stroke"
-    android:padding="8dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginStart="16dp">
+    android:padding="@dimen/small_padding"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/normal_margin"
+    android:layout_marginStart="@dimen/normal_margin">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="3dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xxsmall_padding"
             android:id="@+id/imagePointA"
             android:src="@drawable/ic_blue_marker" />
 
@@ -26,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagePointA"
             android:text="Абая, 70" />
@@ -35,9 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="3dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xxsmall_padding"
             android:id="@+id/imagePointB"
             android:src="@drawable/ic_green_marker" />
 
@@ -46,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imagePointB"
             android:text="Абая, 70" />
@@ -55,9 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="5dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xsmall_padding"
             android:id="@+id/imageSum"
             android:src="@drawable/ic_tenge"/>
 
@@ -66,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:textColor="@color/black"
             android:layout_toEndOf="@+id/imageSum"
             android:text="900" />
@@ -76,10 +75,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:text="Детали"
             android:textColor="@color/colorPrimary"
             android:textAllCaps="true"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="@dimen/normal_margin"/>
     </RelativeLayout>
 </LinearLayout>

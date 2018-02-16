@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/rounded_white"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:elevation="5dp">
+    android:paddingTop="@dimen/small_padding"
+    android:paddingBottom="@dimen/small_padding"
+    android:elevation="@dimen/normal_elevation">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,8 +15,8 @@
         android:background="@drawable/ripple_effect_square_white"
         android:clickable="true"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:textSize="@dimen/normal_text"
+        android:padding="@dimen/small_padding"
         android:textColor="@color/colorPrimary"/>
     <TextView
         android:layout_width="match_parent"
@@ -24,8 +24,8 @@
         android:text="10 минут"
         android:id="@+id/min_10"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:textSize="@dimen/normal_text"
+        android:padding="@dimen/small_padding"
         android:background="@drawable/ripple_effect_square_white"
         android:clickable="true"
         android:textColor="@color/colorPrimary"/>
@@ -35,8 +35,8 @@
         android:text="15 минут"
         android:id="@+id/min_15"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:textSize="@dimen/normal_text"
+        android:padding="@dimen/small_padding"
         android:background="@drawable/ripple_effect_square_white"
         android:clickable="true"
         android:textColor="@color/colorPrimary"/>
@@ -46,8 +46,8 @@
         android:text="20 минут"
         android:id="@+id/min_20"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:textSize="@dimen/normal_text"
+        android:padding="@dimen/small_padding"
         android:background="@drawable/ripple_effect_square_white"
         android:clickable="true"
         android:textColor="@color/colorPrimary"/>
@@ -61,8 +61,8 @@
         android:text="@string/cancel"
         android:id="@+id/cancel"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:paddingTop="8dp"
+        android:textSize="@dimen/normal_text"
+        android:paddingTop="@dimen/small_padding"
         android:clickable="true"
         android:textColor="@color/black"/>
 

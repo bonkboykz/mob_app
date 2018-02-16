@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:minWidth="250dp"
+    android:minWidth="@dimen/min_dialog_width"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <TextView
@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:textSize="21sp"
-        android:layout_marginTop="16dp"
+        android:textSize="@dimen/large_text"
+        android:layout_marginTop="@dimen/normal_margin"
         android:text="@string/enter_price"
         android:textAlignment="center"/>
     <EditText
@@ -23,8 +23,8 @@
         android:textColor="@color/black"
         android:hint="Цена"
         android:inputType="number"
-        android:layout_marginTop="8dp"
-        android:textSize="20sp"
+        android:layout_marginTop="@dimen/small_margin"
+        android:textSize="@dimen/large_text"
         android:textAlignment="center"/>
     <Button
         android:layout_width="match_parent"
@@ -32,9 +32,9 @@
         android:background="@drawable/ripple_effect_square"
         android:text="@string/ready"
         android:id="@+id/btn_ready"
-        android:textSize="18sp"
+        android:textSize="@dimen/normal_text"
         android:layout_below="@id/price"
         android:textColor="@color/white"
         android:textAllCaps="false"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="@dimen/normal_margin"/>
 </RelativeLayout>

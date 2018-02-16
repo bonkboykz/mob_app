@@ -27,13 +27,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:padding="8dp"
-                        android:textSize="18sp"
+                        android:padding="@dimen/small_padding"
+                        android:textSize="@dimen/normal_text"
                         android:singleLine="true"
                         android:textAllCaps="false"
                         android:text="Свободен"
                         android:textColor="@color/white"
-                        android:elevation="5dp"
+                        android:elevation="@dimen/normal_elevation"
                         android:gravity="center"
                         android:foregroundGravity="center"
                         android:background="@drawable/ripple_effect_square"/>
@@ -42,8 +42,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:padding="8dp"
-                        android:textSize="18sp"
+                        android:padding="@dimen/small_padding"
+                        android:textSize="@dimen/normal_text"
                         android:singleLine="true"
                         android:textAllCaps="false"
                         android:gravity="center"
@@ -82,7 +82,7 @@
                     android:text="@string/ready"
                     android:layout_alignParentBottom="true"
                     android:textAllCaps="false"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/normal_text"
                     android:textColor="@android:color/white"/>
             </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>

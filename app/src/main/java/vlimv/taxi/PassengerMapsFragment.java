@@ -34,6 +34,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -201,14 +202,15 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                     intentInvalid.putExtra("ADDRESS", address);
                     startActivity(intentInvalid);
                 } else {
-
+                    searchDriver();
                 }
-                searchDriver();
+
             }
         });
         return view;
     }
 
+    //called after user orders taxi
     void searchDriver() {
         LayoutInflater inflater = getLayoutInflater();
         topLayout = inflater.inflate(R.layout.top_layout, mainLayout, false);
@@ -256,10 +258,31 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(to.getLatLng(), DEFAULT_ZOOM));
     }
 
+    //called when user waits for driver
     void waitDriver() {
         LayoutInflater inflater = getLayoutInflater();
-        View detailsLayout = inflater.inflate(R.layout.driver_details_layout, mainLayout, false);
+        final View detailsLayout = inflater.inflate(R.layout.driver_details_layout, mainLayout, false);
+        final View expandedDetailsLayout = inflater.inflate(R.layout.driver_details_expanded, mainLayout, false);
         topLayout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+        ImageButton btn_more = detailsLayout.findViewById(R.id.btn_more);
+        ImageButton btn_less = expandedDetailsLayout.findViewById(R.id.btn_less);
+
+        btn_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainLayout.removeView(detailsLayout);
+                mainLayout.addView(expandedDetailsLayout);
+            }
+        });
+
+        btn_less.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainLayout.removeView(expandedDetailsLayout);
+                mainLayout.addView(detailsLayout);
+            }
+        });
 
         mainLayout.removeView(addressLayout);
         mainLayout.addView(detailsLayout);
@@ -273,9 +296,50 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         finalPrice.setTextSize(18.0f);
         rightBtn.setVisibility(View.GONE);
         leftBtn.setGravity(Gravity.CENTER);
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                arrivedDriver();
+            }
+        });
 
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(from.getLatLng(), DEFAULT_ZOOM));
     }
+
+    //called when driver arrived
+    void arrivedDriver() {
+        topLayout.setBackgroundColor(getResources().getColor(R.color.yellow));
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#f7ce68")));
+        Spannable text = new SpannableString("Водитель приехал");
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
+        finalPrice.setText("Водитель ожидает вас");
+        finalPrice.setTextSize(18.0f);
+        rightBtn.setVisibility(View.VISIBLE);
+        leftBtn.setGravity(Gravity.START);
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                duringDrive();
+            }
+        });
+    }
+
+    //called when the drive starts
+    void duringDrive() {
+        topLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#25d485")));
+        Spannable text = new SpannableString("Вы в пути");
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
+        finalPrice.setText(price.getText() + "\nдо проспекта Достык, 188");
+        finalPrice.setTextSize(18.0f);
+        rightBtn.setVisibility(View.GONE);
+        leftBtn.setVisibility(View.GONE);
+    }
+
 
     public void onClick(View v) {
         switch (v.getId()) {

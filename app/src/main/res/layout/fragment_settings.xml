@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,73 +18,73 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/small_margin"
             android:background="@android:color/darker_gray"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/normal_margin"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Василий"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            android:textSize="@dimen/normal_text"
+            android:layout_marginTop="@dimen/small_margin"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/surname"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/normal_margin"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Иванов"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            android:textSize="@dimen/normal_text"
+            android:layout_marginTop="@dimen/small_margin"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phone_number"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/normal_margin"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+7 777 777 77 77"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="4dp"/>
+            android:textSize="@dimen/normal_text"
+            android:layout_marginTop="@dimen/small_margin"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/normal_margin"
             android:background="@android:color/darker_gray"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/politics"
-            android:textSize="18sp"
+            android:textSize="@dimen/normal_text"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/normal_margin"/>
         <Switch
             android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/notifications"
-            android:layout_marginTop="8dp"
-            android:textSize="18sp"/>
+            android:layout_marginTop="@dimen/small_margin"
+            android:textSize="@dimen/normal_text"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/log_out"
-            android:textSize="18sp"
+            android:textSize="@dimen/normal_text"
             android:textColor="@color/black"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/small_margin"/>
     </LinearLayout>
 
 

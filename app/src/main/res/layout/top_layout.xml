@@ -12,16 +12,16 @@
         android:id="@+id/final_price"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="22sp"
-        android:padding="16dp"/>
+        android:textSize="@dimen/large_text"
+        android:padding="@dimen/normal_padding"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/text_layout"
         android:orientation="horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:paddingBottom="8dp">
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:paddingBottom="@dimen/small_padding">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,8 +29,8 @@
             android:id="@+id/left_btn"
             android:textColor="@color/white"
             android:layout_weight="1"
-            android:textSize="18sp"
-            android:padding="8dp"/>
+            android:textSize="@dimen/normal_text"
+            android:padding="@dimen/small_padding"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:gravity="end"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:padding="8dp"/>
+            android:textSize="@dimen/normal_text"
+            android:padding="@dimen/small_padding"/>
     </LinearLayout>
 </LinearLayout>

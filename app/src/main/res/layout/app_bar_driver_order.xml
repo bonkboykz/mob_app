@@ -43,7 +43,7 @@
                 android:text="@string/ready"
                 android:layout_alignParentBottom="true"
                 android:textAllCaps="false"
-                android:textSize="18sp"
+                android:textSize="@dimen/normal_text"
                 android:textColor="@android:color/white"/>
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>

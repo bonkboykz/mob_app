@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="16dp">
+    android:layout_margin="@dimen/normal_margin">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
             android:id="@+id/imagePointA"
-            android:padding="3dp"
+            android:padding="@dimen/xxsmall_padding"
             android:src="@drawable/ic_blue_marker"/>
 
         <TextView
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:layout_toEndOf="@+id/imagePointA"
             android:text="Абая, 70" />
     </RelativeLayout>
@@ -29,9 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="3dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xxsmall_padding"
             android:id="@+id/imagePointB"
             android:src="@drawable/ic_green_marker"/>
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:layout_toEndOf="@+id/imagePointB"
             android:text="Абая, 70" />
     </RelativeLayout>
@@ -48,9 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="5dp"
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xsmall_padding"
             android:id="@+id/imageSum"
             android:src="@drawable/ic_tenge"/>
 
@@ -59,22 +59,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:layout_toEndOf="@+id/imageSum"
             android:text="900" />
     </RelativeLayout>
     <TextView
         android:id="@+id/details"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/small_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="В этом длинном предложении я описываю детали заказа: например то, что я хочу белую машинку."
         android:textAllCaps="false"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="@dimen/normal_margin"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="@dimen/small_margin">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:id="@+id/text_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/normal_margin"
             android:layout_alignParentEnd="true"
             android:text="@string/accept"
             android:textColor="@color/colorPrimary"
