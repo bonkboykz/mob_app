@@ -58,7 +58,9 @@
                     android:ems="10"
                     android:hint="Дата рождения"
                     android:layout_marginTop="@dimen/small_margin"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:focusableInTouchMode="false"
+                    android:longClickable="false"/>
             </android.support.design.widget.TextInputLayout>
 
             <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner

@@ -92,9 +92,9 @@ public class SupportFragment extends Fragment {
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
-        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+//         mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
 
-        DriverOrderActivity.next_btn.setVisibility(View.GONE);
+//        DriverOrderActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.tabLayout.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);

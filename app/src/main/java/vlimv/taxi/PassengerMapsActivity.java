@@ -58,7 +58,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 public class PassengerMapsActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, FavoritesFragment.OnFragmentInteractionListener,
-        PassengerMapsFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
+        PassengerMapsFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
+        SupportFragment.OnFragmentInteractionListener{
 
     //drawer variables
     private DrawerLayout mDrawerLayout;
@@ -117,7 +118,6 @@ public class PassengerMapsActivity extends AppCompatActivity implements
                 fragment = new FavoritesFragment();
                 break;
             case R.id.nav_trips:
-                Toast.makeText(getApplicationContext(), "CAR OPTIONS", Toast.LENGTH_SHORT).show();
                 fragment = new CarOptionsFragment();
                 break;
             case R.id.nav_support:

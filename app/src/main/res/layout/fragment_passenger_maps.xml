@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_layout"
     tools:context="vlimv.taxi.PassengerMapsFragment">
 
@@ -133,6 +134,19 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_call_white_24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:tint="@color/white"
+        app:borderWidth="0dp"
+        android:layout_margin="@dimen/normal_margin"
+        app:fabSize="normal" />
     <Button
         android:id="@+id/button"
         android:background="@drawable/ripple_effect_square"

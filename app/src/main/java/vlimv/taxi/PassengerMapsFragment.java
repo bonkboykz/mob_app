@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -113,6 +114,8 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     Button order_btn;
     View horView, linLayout, topLayout, addressLayout;
 
+    FloatingActionButton fabCall;
+
     static boolean isInvalid = false;
 
     RelativeLayout mainLayout;
@@ -177,6 +180,9 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
 
         order_btn = view.findViewById(R.id.button);
 
+        fabCall = view.findViewById(R.id.fab);
+        fabCall.setVisibility(View.GONE);
+
         if (isInvalid) {
             price.setText(getString(R.string.voluntary));
             price.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -200,7 +206,8 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                     String address = pointA.getText().toString() + " – " + pointB.getText().toString();
                     Toast.makeText(getContext(), address, Toast.LENGTH_SHORT).show();
                     intentInvalid.putExtra("ADDRESS", address);
-                    startActivity(intentInvalid);
+                    //startActivity(intentInvalid);
+                    startActivityForResult(intentInvalid, 1);
                 } else {
                     searchDriver();
                 }
@@ -262,7 +269,9 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     void waitDriver() {
         LayoutInflater inflater = getLayoutInflater();
         final View detailsLayout = inflater.inflate(R.layout.driver_details_layout, mainLayout, false);
-        final View expandedDetailsLayout = inflater.inflate(R.layout.driver_details_expanded, mainLayout, false);
+        final View expandedDetailsLayout = inflater.inflate(R.layout.driver_details_expanded,
+                mainLayout, false);
+
         topLayout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
         ImageButton btn_more = detailsLayout.findViewById(R.id.btn_more);
@@ -296,6 +305,17 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         finalPrice.setTextSize(18.0f);
         rightBtn.setVisibility(View.GONE);
         leftBtn.setGravity(Gravity.CENTER);
+
+        fabCall.setVisibility(View.VISIBLE);
+        fabCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String telNumber = "tel:+77078199809";
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(telNumber));
+                startActivity(intent);
+            }
+        });
         leftBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -336,8 +356,15 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
         finalPrice.setText(price.getText() + "\nдо проспекта Достык, 188");
         finalPrice.setTextSize(18.0f);
-        rightBtn.setVisibility(View.GONE);
+        //rightBtn.setVisibility(View.GONE);
         leftBtn.setVisibility(View.GONE);
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent rateIntent = new Intent(getContext(), RateActivity.class);
+                startActivity(rateIntent);
+            }
+        });
     }
 
 
@@ -358,6 +385,12 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
             default:
                 break;
         }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        String s = data.getStringExtra("COMMENT");
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     public static boolean isLocationEnabled(Context context) {
@@ -558,6 +591,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
     public class DialogLocation extends android.app.Dialog {
         public DialogLocation(Activity a) {
             super(a);

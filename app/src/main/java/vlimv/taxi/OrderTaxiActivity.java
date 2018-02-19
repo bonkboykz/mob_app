@@ -1,10 +1,12 @@
 package vlimv.taxi;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,17 @@ public class OrderTaxiActivity extends AppCompatActivity implements AdapterView.
 
         address_from_to = findViewById(R.id.address_from_to);
         address_from_to.setText(address);
+
+        Button order_btn = findViewById(R.id.button_order);
+        order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("COMMENT", "this is comment");
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
     }
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Toast.makeText (getApplicationContext(), "Selected: " +

@@ -77,7 +77,8 @@
         </provider>
 
         <activity android:name=".OrderTaxiActivity" />
-        <activity android:name=".DriverOrderActivity"></activity>
+        <activity android:name=".DriverOrderActivity" />
+        <activity android:name=".RateActivity"></activity>
     </application>
 
 </manifest>

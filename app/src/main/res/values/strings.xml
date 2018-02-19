@@ -82,6 +82,10 @@
     <string name="car_number">Номер машины</string>
     <string name="rating">Рейтинг</string>
 
+    <string name="arrived2">Приехали!</string>
+    <string name="how_do_you_rate">Как вы оцените поездку?</string>
+    <string name="write_comment">Напишите отзыв</string>
+
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

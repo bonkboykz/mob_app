@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vlimv.taxi.RateActivity"
+    android:background="@drawable/gradient">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_above="@+id/button">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/xlarge_text"
+            android:text="@string/arrived2"
+            android:textColor="@color/white"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/driver_image"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_marginTop="@dimen/xlarge_margin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/driver_name"
+            android:textSize="@dimen/small_text"
+            android:text="Алишер Марков"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/small_margin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/normal_text"
+            android:text="@string/how_do_you_rate"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/large_margin"/>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:theme="@style/MyRatingBar"
+            android:stepSize="1.0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/write_comment"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:hint="@string/write_comment"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"/>
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:background="@drawable/ripple_effect_square_white"
+        android:layout_alignParentBottom="true"
+        android:text="@string/ready"
+        android:textColor="@color/colorAccent"
+        android:textAllCaps="false"
+        android:textSize="@dimen/normal_text"/>
+</RelativeLayout>
