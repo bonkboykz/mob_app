@@ -61,9 +61,11 @@ public class DriverOrderActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         nvDrawer = findViewById(R.id.nav_view);
         nvDrawer.setNavigationItemSelectedListener(this);
+
         View navHeader = nvDrawer.getHeaderView(0);
         TextView name = navHeader.findViewById(R.id.name);
         name.setText(Driver.name + " "  + Driver.surname);
+
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
         displaySelectedScreen(R.id.nav_city);

@@ -19,9 +19,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import java.util.Calendar;
 
 public class DriverActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -29,6 +32,7 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
     EditText name, surname, date, carNumber, carYear;
     String nameText, surnameText, birthDateText, genderText, carText, carModelText, carTypeText, carNumberText, carYearText;
     static Driver driver;
+    int age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,10 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
                                         (datePicker.getMonth() + 1) + "." +
                                         datePicker.getYear();
                                 date.setText(birthDate);
+                                int birthYear = datePicker.getYear();
+                                int birthMonth = datePicker.getMonth();
+                                int birthDay = datePicker.getDayOfMonth();
+                                calculateAge(birthYear, birthMonth, birthDay);
                             }
                         });
                 builder.create();
@@ -100,6 +108,7 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
             }
         });
         final Button next_btn = findViewById(R.id.button);
+
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,13 +124,24 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
                         && carNumberText != null && carYearText != null) {
                     next_btn.setEnabled(true);
 
-                    driver = new Driver(nameText, surnameText, birthDateText, genderText, carText, carModelText,
-                            carTypeText, carNumberText, carYearText);
+//                    driver = new Driver(nameText, surnameText, birthDateText, genderText, carText, carModelText,
+//                    driver = new Driver(nameText, surnameText, birthDateText, genderText, carText, carModelText,
+//                            carTypeText, carNumberText, carYearText);
                 }
 
+                ServerRequest.getInstance(getBaseContext()).createUser(nameText, surnameText, age, genderText,
+                        "driver", "+77779998877");
 
                 Intent intent = new Intent(getApplicationContext(), DriverMainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        ImageButton back_btn = findViewById(R.id.back_button);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -158,5 +178,22 @@ public class DriverActivity extends AppCompatActivity implements AdapterView.OnI
     //checks whether edittext is empty or not
     private boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
+    }
+
+    //function to calculate user's age from its birth date
+    public void calculateAge(int birthYear, int birthMonth, int birthDay) {
+        Calendar calendar = Calendar.getInstance();
+        int curYear = calendar.get(Calendar.YEAR);
+        int age = curYear - birthYear;
+        int curMonth = calendar.get(Calendar.MONTH);
+        if (birthMonth > curMonth) {
+            age--;
+        } else if (curMonth == birthMonth) {
+            int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+            if (birthDay > curDay) {
+                age--;
+            }
+        }
+        this.age = age;
     }
 }

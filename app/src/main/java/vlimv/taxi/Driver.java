@@ -7,6 +7,9 @@ package vlimv.taxi;
 public class Driver {
     static String name, surname, birthDate, carType, carModel, car, carNumber, phoneNumber, gender,
             carYear;
+//    static {
+//
+//    }
     public Driver (String n, String sn, String bd, String g, String c, String cm,
                    String ct, String cn, String cy) {
         name = n;
@@ -18,5 +21,10 @@ public class Driver {
         carModel = cm;
         carNumber = cn;
         carYear = cy;
+    }
+
+    public Driver (String n, String sn) {
+        name = n;
+        surname = sn;
     }
 }

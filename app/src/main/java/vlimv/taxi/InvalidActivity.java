@@ -48,6 +48,14 @@ public class InvalidActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton back_btn = findViewById(R.id.back_button);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         ImageButton btn_load = findViewById(R.id.button_load);
         ImageButton btn_camera = findViewById(R.id.button_camera);
         image = findViewById(R.id.image);

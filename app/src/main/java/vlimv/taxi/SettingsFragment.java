@@ -73,9 +73,10 @@ public class SettingsFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
-        DriverOrderActivity.next_btn.setVisibility(View.GONE);
+        if (DriverOrderActivity.next_btn != null)
+            DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
-        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+//        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
         return view;
     }
 

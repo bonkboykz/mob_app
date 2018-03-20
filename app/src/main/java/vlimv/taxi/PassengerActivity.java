@@ -2,12 +2,8 @@ package vlimv.taxi;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,13 +13,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-public class PassengerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    EditText birthdate;
-    Button btn;
+import java.util.Calendar;
+
+public class PassengerActivity extends AppCompatActivity {
+    EditText birthDate, name, surname;
+    Button next_btn;
+    int age;
+    String nameText, surnameText, genderText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,19 +35,19 @@ public class PassengerActivity extends AppCompatActivity implements AdapterView.
         ArrayAdapter<CharSequence> adapter_gender = ArrayAdapter.createFromResource(this, R.array.gender_array, android.R.layout.simple_spinner_dropdown_item);
         adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_gender.setAdapter(adapter_gender);
-        spinner_gender.setOnItemSelectedListener(this);
-
-        btn = findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
+        spinner_gender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PassengerMapsActivity.class);
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                genderText = adapterView.getItemAtPosition(position).toString();
             }
         });
 
-        birthdate = findViewById(R.id.birthdate);
-        birthdate.setOnClickListener(new View.OnClickListener() {
+        //Initializing edit texts
+        name = findViewById(R.id.name);
+        surname = findViewById(R.id.surname);
+
+        birthDate = findViewById(R.id.birthdate);
+        birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -70,7 +71,12 @@ public class PassengerActivity extends AppCompatActivity implements AdapterView.
                                 String birthDate = datePicker.getDayOfMonth() + "." +
                                         (datePicker.getMonth() + 1) + "." +
                                         datePicker.getYear();
-                                birthdate.setText(birthDate);
+                                PassengerActivity.this.birthDate.setText(birthDate);
+
+                                int birthYear = datePicker.getYear();
+                                int birthMonth = datePicker.getMonth();
+                                int birthDay = datePicker.getDayOfMonth();
+                                calculateAge(birthYear, birthMonth, birthDay);
                             }
                         });
                 builder.create();
@@ -78,11 +84,48 @@ public class PassengerActivity extends AppCompatActivity implements AdapterView.
             }
         });
 
+
+        next_btn = findViewById(R.id.button);
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), age + "", Toast.LENGTH_SHORT).show();
+                nameText = name.getText().toString();
+                surnameText = surname.getText().toString();
+                ServerRequest.getInstance(getBaseContext()).createUser(nameText, surnameText, age, genderText,
+                        "passenger", "+77779998877");
+                Intent intent = new Intent(getApplicationContext(), PassengerMapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton back_btn = findViewById(R.id.back_button);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Toast.makeText (getApplicationContext(), "Selected: " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
-        String gender = parent.getItemAtPosition(pos).toString();
+
+    //function to calculate user's age from its birth date
+    public void calculateAge(int birthYear, int birthMonth, int birthDay) {
+        Calendar calendar = Calendar.getInstance();
+        int curYear = calendar.get(Calendar.YEAR);
+        int age = curYear - birthYear;
+        int curMonth = calendar.get(Calendar.MONTH);
+        if (birthMonth > curMonth) {
+            age--;
+        } else if (curMonth == birthMonth) {
+            int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+            if (birthDay > curDay) {
+                age--;
+            }
+        }
+        this.age = age;
     }
+
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }

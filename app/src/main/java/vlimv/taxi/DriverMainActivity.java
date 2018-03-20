@@ -27,19 +27,19 @@ import android.widget.Toast;
 
 import static vlimv.taxi.DriverActivity.driver;
 
-public class DriverMainActivity extends AppCompatActivity implements ContainerFragment.TabLayoutSetupCallback,
-        PageFragment.OnListItemClickListener, SettingsFragment.OnFragmentInteractionListener,
-        View.OnClickListener, CarOptionsFragment.OnFragmentInteractionListener,
+public class DriverMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        SettingsFragment.OnFragmentInteractionListener, CarOptionsFragment.OnFragmentInteractionListener,
         CabinetFragment.OnFragmentInteractionListener, SupportFragment.OnFragmentInteractionListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        DriverTakeOrderFragment.OnFragmentInteractionListener, View.OnClickListener {
     private DrawerLayout mDrawerLayout;
-    public static TextView free, busy;
-    public static TabLayout tabLayout;
-    public static Button next_btn;
     public static Toolbar toolbar;
     private NavigationView nvDrawer;
-    String status;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
+
+    public static Button next_btn;
+    public static TextView free, busy;
+    String status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +48,6 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-
-        if (savedInstanceState == null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.flContent, new ContainerFragment());
-            transaction.commit();
-        }
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,8 +57,10 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         nvDrawer = findViewById(R.id.nav_view);
         nvDrawer.setNavigationItemSelectedListener(this);
         View navHeader = nvDrawer.getHeaderView(0);
+
         TextView name = navHeader.findViewById(R.id.name);
         name.setText(Driver.name + " " + Driver.surname);
+
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);
@@ -75,7 +69,62 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
         busy.setVisibility(View.VISIBLE);
         free.setOnClickListener(this);
         busy.setOnClickListener(this);
+        displaySelectedScreen(R.id.nav_city);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        displaySelectedScreen(item.getItemId());
+        return true;
+    }
+    @Override
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
+    }
+
+    private void displaySelectedScreen(int itemId) {
+
+        //creating fragment object
+        Fragment fragment = null;
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.nav_city:
+                fragment = new DriverTakeOrderFragment();
+                break;
+            case R.id.nav_cabinet:
+                fragment = new CabinetFragment();
+                break;
+            case R.id.nav_car_options:
+                fragment = new CarOptionsFragment();
+                break;
+            case R.id.nav_support:
+                fragment = new SupportFragment();
+                break;
+            case R.id.nav_settings:
+                fragment = new SettingsFragment();
+                break;
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flContent, fragment);
+            ft.commit();
+        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -87,9 +136,7 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white_stroke));
                 busy.setTextColor(Color.parseColor("#000000"));
                 busy.setElevation(0.0f);
-                Toast.makeText(
-                        getApplicationContext(), status, Toast.LENGTH_LONG
-                );
+                Toast.makeText(this, status, Toast.LENGTH_LONG).show();
                 break;
             case R.id.busy:
                 status = "busy";
@@ -99,122 +146,9 @@ public class DriverMainActivity extends AppCompatActivity implements ContainerFr
                 busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
                 busy.setTextColor(Color.parseColor("#ffffff"));
                 busy.setElevation(5.0f);
-                Toast.makeText(
-                        getApplicationContext(), status, Toast.LENGTH_LONG
-                );
+                Toast.makeText(this, status, Toast.LENGTH_LONG).show();
                 break;
         }
     }
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-    @Override
-    public void setupTabLayout(ViewPager viewPager) {
-        tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.setVisibility(View.VISIBLE);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-    @Override
-    public void onListItemClick(String title) {
-        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-        Dialog_details dialog = new Dialog_details(this);
-        dialog.showDialog(this);
-    }
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        switch(item.getItemId()) {
-            case R.id.nav_city:
-                //fragmentClass = FragmentNavCity.class;
-                break;
-            case R.id.nav_cabinet:
-                fragmentClass = CabinetFragment.class;
-                switchFragment(fragmentClass, fragment);
-                break;
-            case R.id.nav_car_options:
-                fragmentClass = CarOptionsFragment.class;
-                switchFragment(fragmentClass, fragment);
-                break;
-            case R.id.nav_support:
-                fragmentClass = SupportFragment.class;
-                switchFragment(fragmentClass, fragment);
-                break;
-            case R.id.nav_settings:
-                fragment = new SettingsFragment();
-                switchFragment(fragmentClass, fragment);
-                break;
-            case R.id.nav_client_mode:
-                //switch mode
-                break;
-            default:
-                break;
-        }
 
-        return true;
-    }
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //you can leave it empty
-    }
-
-    void switchFragment(Class fragmentClass, Fragment fragment) {
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    String loadName() {
-        SharedPreferences name = getSharedPreferences("NAME", 0);
-        String name_text = name.getString("NAME", "bongo bongo");
-        Toast.makeText(getApplicationContext(), name_text, Toast.LENGTH_SHORT).show();
-        return name_text;
-    }
-
-    void startOrder() {
-        Intent intent = new Intent(this, DriverOrderActivity.class);
-        startActivity(intent);
-
-    }
-
-    public class Dialog_details extends android.app.Dialog {
-        public Dialog_details(Activity a) {
-            super(a);
-        }
-
-        public void showDialog(Activity activity){
-            final Dialog_details dialog = new Dialog_details(activity);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setCancelable(true);
-            dialog.setContentView(R.layout.dialog_details);
-
-            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
-            TextView text_accept = dialog.findViewById(R.id.text_accept);
-            text_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Заказ не беру.", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            });
-            text_accept.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
-                    startOrder();
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-        }
-    }
 }

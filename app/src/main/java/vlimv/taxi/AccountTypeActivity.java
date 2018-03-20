@@ -28,7 +28,6 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {;
-                Toast.makeText(getApplicationContext(), type, Toast.LENGTH_LONG).show();
                 Intent intent;
                 if (type == null) {
                     Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG).show();
@@ -42,7 +41,7 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
                     intent = new Intent(getApplicationContext(), DriverActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG).show();
                 }
             }
         });

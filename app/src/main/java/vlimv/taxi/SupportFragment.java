@@ -96,7 +96,7 @@ public class SupportFragment extends Fragment {
 
 //        DriverOrderActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.next_btn.setVisibility(View.GONE);
-        DriverMainActivity.tabLayout.setVisibility(View.GONE);
+        //DriverMainActivity.tabLayout.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.support);

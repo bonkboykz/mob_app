@@ -52,17 +52,7 @@
                         android:background="@drawable/ripple_effect_square_white_stroke"/>
                 </android.support.v7.widget.Toolbar>
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:tabMode="fixed"
-                    app:tabIndicatorColor="@color/colorPrimary"
-                    android:background="@color/white"
-                    app:tabSelectedTextColor="@color/colorPrimary"
-                    app:tabTextColor="@color/black"
-                    app:tabGravity="fill"
-                    app:tabMaxWidth="0dp"/>
+
 
             </android.support.design.widget.AppBarLayout>
             <RelativeLayout

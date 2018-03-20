@@ -1,10 +1,12 @@
 package vlimv.taxi;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
 public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.ViewHolder> {
 
     private List<String> mItemsList;
-    private PageFragment.OnListItemClickListener mListItemClickListener;
+    private OrdersFragment.OnListItemClickListener mListItemClickListener;
 
     public SimpleRecyclerAdapter(List<String> itemsList) {
         mItemsList = itemsList == null ? new ArrayList<String>() : itemsList;
@@ -66,11 +68,12 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
                 mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()));
+                //Log.d("TAG", "item " + view.)
             }
         }
     }
 
-    public void setOnItemTapListener(PageFragment.OnListItemClickListener itemClickListener) {
+    public void setOnItemTapListener(OrdersFragment.OnListItemClickListener itemClickListener) {
         mListItemClickListener = itemClickListener;
     }
 }

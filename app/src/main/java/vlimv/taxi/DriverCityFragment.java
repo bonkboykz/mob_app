@@ -129,7 +129,7 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
 
         chooseTime = view.findViewById(R.id.choose_time);
         fab = view.findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
+//        fab.setVisibility(View.VISIBLE);
         chooseTime.setVisibility(View.VISIBLE);
         textLayout = view.findViewById(R.id.text_layout);
         showAddress = view.findViewById(R.id.show_address);
