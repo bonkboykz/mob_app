@@ -2,6 +2,7 @@
     <string name="app_name">Taxi</string>
     <string name="welcome">Добро пожаловать</string>
     <string name="next">Далее</string>
+    <string name="loading">Идет загрузка...</string>
     <string name="submit">Подтвердить</string>
     <string name="ready">Готово</string>
     <string name="code_sent">Код активации отправлен</string>

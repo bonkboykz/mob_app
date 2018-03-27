@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +19,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 import java.util.Calendar;
 
-public class PassengerActivity extends AppCompatActivity {
+public class PassengerActivity extends AppCompatActivity implements ServerRequest.NextActivity{
     EditText birthDate, name, surname;
     Button next_btn;
     int age;
@@ -86,16 +89,22 @@ public class PassengerActivity extends AppCompatActivity {
 
 
         next_btn = findViewById(R.id.button);
+        final DilatingDotsProgressBar progressBar = findViewById(R.id.progress);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), age + "", Toast.LENGTH_SHORT).show();
                 nameText = name.getText().toString();
                 surnameText = surname.getText().toString();
-                ServerRequest.getInstance(getBaseContext()).createUser(nameText, surnameText, age, genderText,
-                        "passenger", "+77779998877");
-                Intent intent = new Intent(getApplicationContext(), PassengerMapsActivity.class);
-                startActivity(intent);
+                next_btn.setVisibility(View.GONE);
+
+                String phone = SharedPref.loadNumber(view.getContext());
+                progressBar.showNow();
+                goNext();
+
+//                ServerRequest.getInstance(getBaseContext()).createPassenger(nameText, surnameText, age, genderText,
+//                        "passenger", phone, view.getContext());
+
             }
         });
 
@@ -124,6 +133,12 @@ public class PassengerActivity extends AppCompatActivity {
             }
         }
         this.age = age;
+    }
+
+    @Override
+    public void goNext() {
+        Intent intent = new Intent(getApplicationContext(), PassengerMapsActivity.class);
+        startActivity(intent);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {

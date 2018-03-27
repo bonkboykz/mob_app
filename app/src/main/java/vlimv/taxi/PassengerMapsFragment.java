@@ -1,17 +1,14 @@
 package vlimv.taxi;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -27,16 +24,12 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +39,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,7 +47,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -98,6 +87,8 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
+    final double DEF_LAT = 43.143121;
+    final double DEF_LNG = 76.889709;
     View view;
     private OnFragmentInteractionListener mListener;
 
@@ -119,6 +110,10 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     static boolean isInvalid = false;
 
     RelativeLayout mainLayout;
+
+    public static final int REQUEST_CODE_FROM = 1;
+    public static final int REQUEST_CODE_TO = 2;
+    public static final int REQUEST_CODE_COMMENT = 3;
 
     public PassengerMapsFragment() {
         // Required empty public constructor
@@ -207,7 +202,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                     Toast.makeText(getContext(), address, Toast.LENGTH_SHORT).show();
                     intentInvalid.putExtra("ADDRESS", address);
                     //startActivity(intentInvalid);
-                    startActivityForResult(intentInvalid, 1);
+                    startActivityForResult(intentInvalid, REQUEST_CODE_COMMENT);
                 } else {
                     searchDriver();
                 }
@@ -372,6 +367,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
         switch (v.getId()) {
             case R.id.layout_from:
                 Intent intentFrom = new Intent(getActivity(), FromAddressActivity.class);
+
                 startActivity(intentFrom);
                 break;
             case R.id.layout_to:
@@ -389,8 +385,22 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {return;}
-        String s = data.getStringExtra("COMMENT");
-        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_COMMENT:
+                    String comment = data.getStringExtra("COMMENT");
+                    break;
+                case REQUEST_CODE_FROM:
+                    double lat = data.getDoubleExtra("LAT", DEF_LAT);
+                    double lng = data.getDoubleExtra("LNG", DEF_LAT);
+                    String address = data.getStringExtra("ADDRESS");
+                    pointA.setText(address);
+                    break;
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+        // some stuff that will happen if there's no result
+        }
     }
 
     public static boolean isLocationEnabled(Context context) {
@@ -601,7 +611,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
             final DialogLocation dialog = new DialogLocation(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
-            dialog.setContentView(R.layout.dialog_location);
+            dialog.setContentView(R.layout.dialog);
 
             TextView text_cancel = dialog.findViewById(R.id.text_cancel);
             TextView text_turn_on = dialog.findViewById(R.id.text_turn_on);
@@ -610,7 +620,7 @@ public class PassengerMapsFragment extends Fragment implements OnMapReadyCallbac
                 public void onClick(View v) {
                     dialog.dismiss();
                     map.moveCamera(CameraUpdateFactory
-                            .newLatLngZoom(new LatLng(43.238949, 76.889709), DEFAULT_ZOOM));
+                            .newLatLngZoom(new LatLng(DEF_LAT, DEF_LNG), DEFAULT_ZOOM));
                 }
             });
             text_turn_on.setOnClickListener(new View.OnClickListener() {

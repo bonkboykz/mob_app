@@ -8,7 +8,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +28,8 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -64,14 +60,22 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+    String origin = "FROM";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_from_map);
+
+//        Intent intent = getIntent();
+//        Bundle bundle = intent.getExtras();
+//        if (bundle != null){
+//            origin = bundle.getString("KEY");
+//        }
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment == null) {
-            Log.d("MAPGRAFMENT", "null");
+            Log.d("MAPFRAFMENT", "null");
         }
         geocoder = new Geocoder(this, Locale.getDefault());
         mapFragment.getMapAsync(this);
@@ -100,6 +104,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                 } catch (IllegalArgumentException illegalArgumentException) {
                     // Catch invalid latitude or longitude values.
                     errorMessage = "Invalid latlong values";
+                    Toast.makeText(view.getContext(), "Неправильный адрес. Попробуйте еще раз", Toast.LENGTH_LONG).show();
                     Log.e("Location ERROR", errorMessage + ". " +
                             "Latitude = " + latLng.latitude +
                             ", Longitude = " +
@@ -109,6 +114,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                 // Handle case where no address was found.
                 if (addresses == null || addresses.size()  == 0) {
                     if (errorMessage.isEmpty()) {
+                        Toast.makeText(view.getContext(), "Неправильный адрес. Попробуйте еще раз", Toast.LENGTH_LONG).show();
                         errorMessage = "No address found";
                         Log.e("Location ERROR", errorMessage);
                     }
@@ -124,6 +130,12 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
 //                            TextUtils.join(System.getProperty("line.separator"),
 //                                    addressFragments));
                 }
+                Intent intent = new Intent();
+                intent.putExtra("LAT", latLng.latitude);
+                intent.putExtra("LNG", latLng.longitude);
+                intent.putExtra("ADDRESS", address_text);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
 
                 Toast.makeText(getApplicationContext(), address_text, Toast.LENGTH_SHORT).show();
             }
@@ -285,7 +297,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
             final DialogLocation dialog = new DialogLocation(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
-            dialog.setContentView(R.layout.dialog_location);
+            dialog.setContentView(R.layout.dialog);
 
             TextView text_cancel = dialog.findViewById(R.id.text_cancel);
             TextView text_turn_on = dialog.findViewById(R.id.text_turn_on);

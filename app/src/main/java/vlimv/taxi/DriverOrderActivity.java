@@ -77,7 +77,8 @@ public class DriverOrderActivity extends AppCompatActivity implements
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            DialogQuitApp d = new DialogQuitApp(this);
+            d.showDialog(this);
         }
     }
     @Override
@@ -97,18 +98,23 @@ public class DriverOrderActivity extends AppCompatActivity implements
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_city:
+                mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
                 fragment = new DriverCityFragment();
                 break;
             case R.id.nav_cabinet:
+                mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
                 fragment = new CabinetFragment();
                 break;
             case R.id.nav_car_options:
+                mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
                 fragment = new CarOptionsFragment();
                 break;
             case R.id.nav_support:
+                mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
                 fragment = new SupportFragment();
                 break;
             case R.id.nav_settings:
+                mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
                 fragment = new SettingsFragment();
                 break;
             default:

@@ -95,7 +95,8 @@ public class PassengerMapsActivity extends AppCompatActivity implements
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            DialogQuitApp d = new DialogQuitApp(this);
+            d.showDialog(this);
         }
     }
 
@@ -117,9 +118,9 @@ public class PassengerMapsActivity extends AppCompatActivity implements
             case R.id.nav_favorites:
                 fragment = new FavoritesFragment();
                 break;
-            case R.id.nav_trips:
-                fragment = new CarOptionsFragment();
-                break;
+//            case R.id.nav_trips:
+//                fragment = new CarOptionsFragment();
+//                break;
             case R.id.nav_support:
                 fragment = new SupportFragment();
                 break;

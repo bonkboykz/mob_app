@@ -28,6 +28,7 @@
             android:layout_marginTop="@dimen/normal_margin"/>
         <TextView
             android:layout_width="wrap_content"
+            android:id="@+id/name"
             android:layout_height="wrap_content"
             android:text="Василий"
             android:textColor="@color/black"
@@ -42,6 +43,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/surname"
             android:text="Иванов"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_text"
@@ -55,6 +57,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/phoneNumber"
             android:text="+7 777 777 77 77"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_text"
@@ -68,6 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/politics"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingBottom="@dimen/small_padding"
             android:textSize="@dimen/normal_text"
             android:textColor="@color/black"
             android:layout_marginTop="@dimen/normal_margin"/>
@@ -77,6 +82,8 @@
             android:layout_height="wrap_content"
             android:text="@string/notifications"
             android:layout_marginTop="@dimen/small_margin"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingBottom="@dimen/small_padding"
             android:textSize="@dimen/normal_text"/>
         <TextView
             android:layout_width="wrap_content"
@@ -84,7 +91,9 @@
             android:text="@string/log_out"
             android:textSize="@dimen/normal_text"
             android:textColor="@color/black"
-            android:layout_marginTop="@dimen/small_margin"/>
+            android:layout_marginTop="@dimen/small_margin"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingBottom="@dimen/small_padding"/>
     </LinearLayout>
 
 

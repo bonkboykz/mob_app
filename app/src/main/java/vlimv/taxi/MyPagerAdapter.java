@@ -24,7 +24,7 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
                 OrdersFragment tab1 = new OrdersFragment();
                 return tab1;
             case 1:
-                SupportFragment tab2 = new SupportFragment();
+                OrdersFragment tab2 = new OrdersFragment();
                 return tab2;
             default:
                 return null;

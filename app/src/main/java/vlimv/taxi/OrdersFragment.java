@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class OrdersFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
         rootView.setTag(TAG);
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
         mRecyclerView = rootView.findViewById(R.id.main_recycler);
 
         // LinearLayoutManager is used here, this will layout the elements in a similar fashion

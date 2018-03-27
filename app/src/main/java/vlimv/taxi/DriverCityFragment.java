@@ -9,6 +9,9 @@ import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,7 +147,17 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
         min_20.setOnClickListener(this);
         time = view.findViewById(R.id.time);
 
+        if (DriverOrderActivity.next_btn != null) {
+            DriverOrderActivity.next_btn.setVisibility(View.GONE);
+        }
+
         if (DriverOrderActivity.orderState.equals("new")) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                    Color.parseColor("#08aeea")));
+            Spannable text = new SpannableString(getResources().getString(R.string.order_accepted));
+            text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
+
             time.setText(getResources().getString(R.string.time));
             textLayout.setVisibility(View.GONE);
             showAddress.setVisibility(View.GONE);

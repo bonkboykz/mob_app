@@ -46,7 +46,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_driver_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -77,7 +77,8 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            DialogQuitApp d = new DialogQuitApp(this);
+            d.showDialog(this);
         }
     }
 

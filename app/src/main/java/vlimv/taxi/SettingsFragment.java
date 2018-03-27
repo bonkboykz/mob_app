@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
@@ -33,6 +34,8 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    TextView name, surname, phoneNumber;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -73,10 +76,23 @@ public class SettingsFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
+        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
+            DriverMainActivity.next_btn.setVisibility(View.GONE);
+            DriverMainActivity.free.setVisibility(View.GONE);
+            DriverMainActivity.busy.setVisibility(View.GONE);
+        }
+
         if (DriverOrderActivity.next_btn != null)
             DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
-//        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+        name = view.findViewById(R.id.name);
+        surname = view.findViewById(R.id.surname);
+        phoneNumber = view.findViewById(R.id.phoneNumber);
+
+        name.setText(Driver.name);
+        surname.setText(Driver.surname);
+        phoneNumber.setText(SharedPref.loadNumber(getContext()));
+
         return view;
     }
 

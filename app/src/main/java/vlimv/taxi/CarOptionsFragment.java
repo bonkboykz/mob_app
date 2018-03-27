@@ -104,6 +104,8 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
                 startActivity(intent);
             }
         });
+        DriverMainActivity.free.setVisibility(View.GONE);
+        DriverMainActivity.busy.setVisibility(View.GONE);
 
         if (DriverOrderActivity.next_btn != null) {
             DriverOrderActivity.next_btn.setVisibility(View.VISIBLE);
@@ -116,9 +118,6 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
             });
         }
 
-        //DriverMainActivity.tabLayout.setVisibility(View.GONE);
-        DriverMainActivity.free.setVisibility(View.GONE);
-        DriverMainActivity.busy.setVisibility(View.GONE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.car_options);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));

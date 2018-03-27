@@ -71,18 +71,19 @@ public class CabinetFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cabinet, container, false);
-        //DriverMainActivity.tabLayout.setVisibility(View.GONE);
-        DriverMainActivity.next_btn.setVisibility(View.GONE);
-        DriverMainActivity.free.setVisibility(View.GONE);
-        DriverMainActivity.busy.setVisibility(View.GONE);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.cabinet);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
-                Color.parseColor("#ffffff")));
+        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
+            DriverMainActivity.next_btn.setVisibility(View.GONE);
+            DriverMainActivity.free.setVisibility(View.GONE);
+            DriverMainActivity.busy.setVisibility(View.GONE);
+        }
 
         if (DriverOrderActivity.next_btn != null)
             DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.cabinet);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#ffffff")));
         //mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
         return view;
     }

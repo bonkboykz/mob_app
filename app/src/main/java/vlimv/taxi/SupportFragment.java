@@ -94,11 +94,17 @@ public class SupportFragment extends Fragment {
                 Color.parseColor("#ffffff")));
 //         mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
 
-//        DriverOrderActivity.next_btn.setVisibility(View.GONE);
-        DriverMainActivity.next_btn.setVisibility(View.GONE);
-        //DriverMainActivity.tabLayout.setVisibility(View.GONE);
-        DriverMainActivity.free.setVisibility(View.GONE);
-        DriverMainActivity.busy.setVisibility(View.GONE);
+
+        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
+            DriverMainActivity.next_btn.setVisibility(View.GONE);
+            DriverMainActivity.free.setVisibility(View.GONE);
+            DriverMainActivity.busy.setVisibility(View.GONE);
+        }
+
+        if (DriverOrderActivity.next_btn != null) {
+            DriverOrderActivity.next_btn.setVisibility(View.GONE);
+        }
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.support);
 
         return view;

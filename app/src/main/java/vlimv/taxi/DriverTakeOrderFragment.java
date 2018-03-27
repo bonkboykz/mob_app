@@ -1,25 +1,16 @@
 package vlimv.taxi;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,9 +73,13 @@ public class DriverTakeOrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_driver_take_order, container, false);
 
+        DriverMainActivity.next_btn.setVisibility(View.GONE);
+        DriverMainActivity.free.setVisibility(View.VISIBLE);
+        DriverMainActivity.busy.setVisibility(View.VISIBLE);
+
         tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
+        tabLayout.addTab(tabLayout.newTab().setText("ЗАКАЗЫ"));
+        tabLayout.addTab(tabLayout.newTab().setText("ВЫПОЛНЕННЫЕ"));
 
         final ViewPager viewPager = view.findViewById(R.id.pager);
         final MyPagerAdapter adapter = new MyPagerAdapter
