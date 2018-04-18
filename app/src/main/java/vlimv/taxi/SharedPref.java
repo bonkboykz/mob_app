@@ -2,21 +2,21 @@ package vlimv.taxi;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 /**
  * Created by HP on 22-Mar-18.
  */
 
 public class SharedPref {
-    static SharedPreferences sharedPreferences;
-    static String tagIsReg = "ISREGISTERED";
-    static String tagNumber = "NUMBER";
-    static String tagId = "ID";
-    static String tagUserType = "USERTYPE";
-    static String tagToken ="TOKEN";
+    private static SharedPreferences sharedPreferences;
+    private static String tagIsReg = "IS_REGISTERED";
+    private static String tagNumber = "NUMBER";
+    private static String tagId = "ID";
+    private static String tagUserType = "USER_TYPE";
+    private static String tagToken ="TOKEN";
+    private static String tagUserSurname = "USER_SURNAME";
+    private static String tagUserName = "USER_NAME";
     public static void saveNumber(Context context, String number) {
-//        SharedPreferences sharedPref = context.getDefaultSharedPreferences(Context.MODE_PRIVATE);
         sharedPreferences = context.getSharedPreferences(tagNumber, 0);
         SharedPreferences.Editor ed = sharedPreferences.edit();
         ed.putString(tagNumber, number);
@@ -28,17 +28,17 @@ public class SharedPref {
         return number;
     }
 
-//    public static void saveIsReg(Context context, boolean isReg) {
-//        sharedPreferences = context.getSharedPreferences(tagIsReg, 0);
-//        SharedPreferences.Editor ed = sharedPreferences.edit();
-//        ed.putBoolean(tagIsReg, isReg);
-//        ed.apply();
-//    }
-//    public static boolean isRegistered(Context context) {
-//        sharedPreferences = context.getSharedPreferences(tagIsReg, Context.MODE_PRIVATE);
-//        boolean isReg = sharedPreferences.getBoolean(tagIsReg, false);
-//        return isReg;
-//    }
+    public static void saveIsReg(Context context, boolean isReg) {
+        sharedPreferences = context.getSharedPreferences(tagIsReg, 0);
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putBoolean(tagIsReg, isReg);
+        ed.apply();
+    }
+    public static boolean loadIsRegistered(Context context) {
+        sharedPreferences = context.getSharedPreferences(tagIsReg, Context.MODE_PRIVATE);
+        boolean isReg = sharedPreferences.getBoolean(tagIsReg, false);
+        return isReg;
+    }
 
     public static void saveUserId(Context context, String userId) {
         sharedPreferences = context.getSharedPreferences(tagId, 0);
@@ -74,5 +74,29 @@ public class SharedPref {
         sharedPreferences = context.getSharedPreferences(tagToken, Context.MODE_PRIVATE);
         String userType = sharedPreferences.getString(tagToken, "");
         return userType;
+    }
+
+    public static void saveUserSurname(Context context, String userSurname) {
+        sharedPreferences = context.getSharedPreferences(tagUserSurname, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putString(tagUserSurname, userSurname);
+        ed.apply();
+    }
+    public static String loadUserSurname(Context context) {
+        sharedPreferences = context.getSharedPreferences(tagUserSurname, Context.MODE_PRIVATE);
+        String userSurname = sharedPreferences.getString(tagUserSurname, "");
+        return userSurname;
+    }
+    public static void saveUserName(Context context, String userName) {
+        sharedPreferences = context.getSharedPreferences(tagUserName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putString(tagUserName, userName);
+        ed.apply();
+    }
+
+    public static String loadUserName(Context context) {
+        sharedPreferences = context.getSharedPreferences(tagUserName, Context.MODE_PRIVATE);
+        String userName = sharedPreferences.getString(tagUserName, "");
+        return userName;
     }
 }

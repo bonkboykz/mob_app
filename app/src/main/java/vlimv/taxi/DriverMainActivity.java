@@ -18,14 +18,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+
 import android.widget.Toast;
 
-import static vlimv.taxi.DriverActivity.driver;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
 
 public class DriverMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         SettingsFragment.OnFragmentInteractionListener, CarOptionsFragment.OnFragmentInteractionListener,
@@ -39,10 +43,18 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
     public static Button next_btn;
     public static TextView free, busy;
     String status;
+    private Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO sockets connection
+//        ServerSocket.getInstance(getBaseContext()).getOnline();
+//        ServerSocket.getInstance(getBaseContext()).getActiveTrips();
+        TaxiApplication app = (TaxiApplication) this.getApplication();
+        mSocket = app.getSocket();
+        mSocket.on("hello", onHello);
+        mSocket.connect();
         setContentView(R.layout.activity_driver_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,7 +71,8 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         View navHeader = nvDrawer.getHeaderView(0);
 
         TextView name = navHeader.findViewById(R.id.name);
-        name.setText(Driver.name + " " + Driver.surname);
+        String nameText = SharedPref.loadUserName(this) + " " + SharedPref.loadUserSurname(this);
+        name.setText(nameText);
 
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
@@ -69,7 +82,34 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         busy.setVisibility(View.VISIBLE);
         free.setOnClickListener(this);
         busy.setOnClickListener(this);
+
         displaySelectedScreen(R.id.nav_city);
+    }
+    public void getActiveTrips() {
+        Log.d("getActiveTrips", "Emitting active_trips");
+        mSocket.emit("active_trips");
+    }
+
+    public void getOnline() {
+        Log.d("getOnline", "Emitting online_user");
+        mSocket.emit("online_user", SharedPref.loadUserId(this.getBaseContext()));
+        getActiveTrips();
+    }
+    private Emitter.Listener onHello = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            for (Object arg: args) {
+                Log.d("onHello", arg.toString());
+            }
+            getOnline();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        mSocket.off("hello", onHello);
+        mSocket.disconnect();
+        super.onDestroy();
     }
 
     @Override

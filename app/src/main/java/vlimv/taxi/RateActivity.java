@@ -25,7 +25,7 @@ public class RateActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RateActivity.this, PassengerMapsActivity.class);
+                Intent intent = new Intent(RateActivity.this, PassengerMainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
             }

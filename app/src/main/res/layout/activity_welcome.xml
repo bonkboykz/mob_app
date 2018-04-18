@@ -42,10 +42,25 @@
             android:typeface="monospace"
             mask:allowed_chars="1234567890"
             mask:mask="+7 (###) ### - ## - ##"
-            android:hint="7777777777"
+            android:hint="__________"
             android:textSize="@dimen/large_text"
             app:keep_hint="true"
             android:layout_gravity="center_horizontal"
+            />
+
+        <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/large_margin"
+            android:visibility="gone"
+            android:radius="5dp"
+            android:color="@color/colorPrimary"
+            app:dd_numDots="3"
+            app:dd_scaleMultiplier="1.5"
+            app:dd_animationDuration="500"
+            app:dd_horizontalSpacing="@dimen/small_margin"
             />
 
         <Button

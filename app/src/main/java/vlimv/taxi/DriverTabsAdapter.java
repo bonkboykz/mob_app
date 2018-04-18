@@ -8,10 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
+public class DriverTabsAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
-    public MyPagerAdapter(FragmentManager fm, int NumOfTabs) {
+    public DriverTabsAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
@@ -21,10 +21,10 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                OrdersFragment tab1 = new OrdersFragment();
+                NewOrdersFragment tab1 = new NewOrdersFragment();
                 return tab1;
             case 1:
-                OrdersFragment tab2 = new OrdersFragment();
+                CompletedOrdersFragment tab2 = new CompletedOrdersFragment();
                 return tab2;
             default:
                 return null;

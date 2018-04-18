@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +81,7 @@ public class DriverTakeOrderFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("ВЫПОЛНЕННЫЕ"));
 
         final ViewPager viewPager = view.findViewById(R.id.pager);
-        final MyPagerAdapter adapter = new MyPagerAdapter
+        final DriverTabsAdapter adapter = new DriverTabsAdapter
                 (getFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

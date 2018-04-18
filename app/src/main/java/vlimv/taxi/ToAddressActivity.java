@@ -1,30 +1,15 @@
 package vlimv.taxi;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -36,17 +21,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class ToAddressActivity extends AppCompatActivity implements View.OnClickListener {
     TextView showOnMap, favorites;
     String addressText;
     Place placeTo;
     PlaceAutocompleteFragment autocompleteFragment;
+
+    final double DEF_LAT = 45.017711;
+    final double DEF_LNG = 78.380442;
+    LatLng latLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +49,14 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
                 .build();
         autocompleteFragment.setFilter(typeFilter);
         autocompleteFragment.setHint("Куда вы едете?");
-        //здесь я ставлю ограничения по координатам
-        //первый латлнг юго-западный угол
-        //второй северо-восточный
-        autocompleteFragment.setBoundsBias(new LatLngBounds(
-                new LatLng(43.143121, 76.691608),
-                new LatLng(43.396356, 77.134495)));
+        latLng = new LatLng(DEF_LAT, DEF_LNG);
+//        autocompleteFragment.setBoundsBias(new LatLngBounds(
+//                new LatLng(43.143121, 76.691608),
+//                new LatLng(43.396356, 77.134495)));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
                 addressText = place.getName().toString();
                 placeTo = place;
                 Log.i("TAG", "Place: " + place.getName());
@@ -90,19 +71,34 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PassengerMapsFragment.pointB.setText(addressText);
-                PassengerMapsFragment.to = placeTo;
-                if(PassengerMapsFragment.markerTo != null) {
-                    PassengerMapsFragment.markerTo.setPosition(placeTo.getLatLng());
+                if (addressText != null)
+                    PassengerCityFragment.pointB.setText(addressText);
+                if (PassengerCityFragment.markerTo != null) {
+                    PassengerCityFragment.markerTo.setPosition(latLng);
                 } else {
-                    PassengerMapsFragment.markerTo = PassengerMapsFragment.map.
+                    PassengerCityFragment.markerTo = PassengerCityFragment.map.
                             addMarker(new MarkerOptions()
-                                    .position(placeTo.getLatLng())
+                                    .position(latLng)
                                     .title("Начальный адрес")
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker)));
                 }
-                PassengerMapsFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                        placeTo.getLatLng(), 17));
+                PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        latLng, 17));
+
+//                PassengerCityFragment.pointB.setText(addressText);
+//                PassengerCityFragment.to = placeTo;
+//                if(PassengerCityFragment.markerTo != null) {
+//                    PassengerCityFragment.markerTo.setPosition(placeTo.getLatLng());
+//                } else {
+//                    PassengerCityFragment.markerTo = PassengerCityFragment.map.
+//                            addMarker(new MarkerOptions()
+//\
+//                            .position(placeTo.getLatLng())
+//                                    .title("Начальный адрес")
+//                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker)));
+//                }
+//                PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+//                        placeTo.getLatLng(), 17));
                 finish();
             }
         });
@@ -112,7 +108,7 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.showOnMap:
                 Intent intentMap = new Intent(getApplicationContext(), AddressFromMapActivity.class);
-                startActivity(intentMap);
+                startActivityForResult(intentMap, 1);
                 break;
             case R.id.favorites:
                 Intent intentFav = new Intent (getApplicationContext(), AddressFromFavoritesActivity.class);
@@ -120,6 +116,32 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+            double lat = data.getDoubleExtra("LAT", DEF_LAT);
+            double lng = data.getDoubleExtra("LNG", DEF_LAT);
+            latLng  = new LatLng(lat, lng);
+            addressText = data.getStringExtra("ADDRESS");
+            PassengerCityFragment.pointB.setText(addressText);
+            if (PassengerCityFragment.markerTo != null) {
+                PassengerCityFragment.markerTo.setPosition(latLng);
+            } else {
+                PassengerCityFragment.markerTo = PassengerCityFragment.map.
+                        addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title("Конечный адрес")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker)));
+            }
+            PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, 17));
+            finish();
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            // some stuff that will happen if there's no result
         }
     }
 

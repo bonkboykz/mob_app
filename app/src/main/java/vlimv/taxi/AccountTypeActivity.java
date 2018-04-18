@@ -1,6 +1,5 @@
 package vlimv.taxi;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +23,14 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
         driver.setOnClickListener(this);
         passenger.setOnClickListener(this);
         invalid.setOnClickListener(this);
+        Log.d("acc type token", "acc type token:" + SharedPref.loadToken(this));
+        if (SharedPref.loadToken(this) == null && SharedPref.loadToken(this).isEmpty()) {
+            Intent i = new Intent(this, WelcomeActivity.class);
+            startActivity(i);
+        }
+        Log.d("user", "pas in acc type");
+
+
         final ImageButton next_btn = findViewById(R.id.button_next);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,13 +39,16 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
                 if (type == null) {
                     Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG).show();
                 } else if (type.equals("Пассажир")) {
-                    intent = new Intent(getApplicationContext(), PassengerActivity.class);
+                    intent = new Intent(getApplicationContext(), PassengerRegActivity.class);
+                    SharedPref.saveUserType(view.getContext(), "passenger");
                     startActivity(intent);
                 } else if (type.equals("Пассажир с инвалидностью")) {
-                    intent = new Intent(getApplicationContext(), InvalidActivity.class);
+                    intent = new Intent(getApplicationContext(), InvalidRegActivity.class);
+                    SharedPref.saveUserType(view.getContext(), "invalid");
                     startActivity(intent);
                 } else if (type.equals("Водитель")){
-                    intent = new Intent(getApplicationContext(), DriverActivity.class);
+                    intent = new Intent(getApplicationContext(), DriverRegActivity.class);
+                    SharedPref.saveUserType(view.getContext(), "driver");
                     startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(), "Выберите тип аккаунта", Toast.LENGTH_LONG).show();

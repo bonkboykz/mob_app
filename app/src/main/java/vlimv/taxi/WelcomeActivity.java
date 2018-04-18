@@ -1,6 +1,5 @@
 package vlimv.taxi;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,32 +11,45 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity implements ServerRequest.SaveCode {
+
+    DilatingDotsProgressBar progressBar;
+    Button next_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        // TODO sockets connection
+        // ServerSocket.getInstance(this).connect();
+
         final MaskedEditText phone = findViewById(R.id.phone_input);
-        final Button next_btn = findViewById(R.id.button);
-        Toast.makeText(this, SharedPref.loadToken(this), Toast.LENGTH_SHORT).show();
+        next_btn = findViewById(R.id.button);
+        progressBar = findViewById(R.id.progress);
+
+        Log.d("check token on welcome", "welcome token:" + SharedPref.loadToken(this));
+
+        ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this);
+
+        if (SharedPref.loadUserType(this).equals("driver")) {
+            Intent i = new Intent(this, DriverMainActivity.class);
+            startActivity(i);
+        } else if (SharedPref.loadUserType(this).equals("passenger")) {
+            Intent i = new Intent(this, PassengerMainActivity.class);
+            startActivity(i);
+        } else if (SharedPref.loadUserType(this).equals("invalid")) {
+            Intent i = new Intent(this, PassengerMainActivity.class);
+            startActivity(i);
+        }
+
+        next_btn.setVisibility(View.VISIBLE);
+
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,9 +57,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 number = number.replaceAll("[^0-9]", "");
                 number = "+" + number;
                 SharedPref.saveNumber(view.getContext(), number);
-                ServerRequest.getInstance(getBaseContext()).signUp(number);
-                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-                startActivity(intent);
+                next_btn.setVisibility(View.GONE);
+                progressBar.showNow();
+                //saveCode("4444");
+                ServerRequest.getInstance(getBaseContext()).signUp(number, view.getContext());
+
             }
         });
 
@@ -75,4 +89,49 @@ public class WelcomeActivity extends AppCompatActivity {
             alert.show();
         }
     }
+    @Override
+    public void onBackPressed() {
+        DialogQuitApp d = new DialogQuitApp(this);
+        d.showDialog(this);
+    }
+
+    @Override
+    public void saveCode (String code) {
+        next_btn.setVisibility(View.VISIBLE);
+        progressBar.hideNow();
+        String lname = SharedPref.loadUserSurname(this);
+        Log.d("saveCode", lname);
+        boolean isUserFilledInfo = !lname.isEmpty() && !lname.contains("default");
+        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+        intent.putExtra("CODE", code);
+        startActivity(intent);
+//        if (!isUserFilledInfo) {
+//
+//        } else {
+//            Intent intent;
+//            switch (SharedPref.loadUserType(this)) {
+//                case "invalid":
+//                case "passenger":
+//                    intent = new Intent(getApplicationContext(), PassengerMainActivity.class);
+//                    intent.putExtra("CODE", code);
+//                    startActivity(intent);
+//                    break;
+//                case "driver":
+//                    intent = new Intent(getApplicationContext(), DriverMainActivity.class);
+//                    intent.putExtra("CODE", code);
+//                    startActivity(intent);
+//                    break;
+//                default:
+//                    Log.e("saveCode", "No user type in saveCode");
+//            }
+//        }
+    }
+
+    @Override
+    public void tryAgain () {
+        Toast.makeText(this, "Что-то пошло не так. Попробуйте еще раз.", Toast.LENGTH_LONG).show();
+        next_btn.setVisibility(View.VISIBLE);
+        progressBar.hideNow();
+    }
+
 }

@@ -9,11 +9,12 @@ public class Car {
     int year;
     String id;
 
-    Car (String name, String model, String type, String gosNumber, int year) {
+    Car (String name, String model, String type, String gosNumber, int year, String id) {
         this.name = name;
         this.model = model;
         this.type = type;
         this.gosNumber = gosNumber;
         this.year = year;
+        this.id = id;
     }
 }

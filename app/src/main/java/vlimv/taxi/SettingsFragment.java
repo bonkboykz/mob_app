@@ -1,6 +1,8 @@
 package vlimv.taxi;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
@@ -35,7 +38,7 @@ public class SettingsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    TextView name, surname, phoneNumber;
+    TextView name, surname, phoneNumber, logOut;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -85,12 +88,22 @@ public class SettingsFragment extends Fragment {
         if (DriverOrderActivity.next_btn != null)
             DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
+        ServerRequest.getInstance(getContext()).getUser(SharedPref.loadToken(getContext()), getContext());
+
         name = view.findViewById(R.id.name);
         surname = view.findViewById(R.id.surname);
         phoneNumber = view.findViewById(R.id.phoneNumber);
+        logOut = view.findViewById(R.id.log_out);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogLogOut d = new DialogLogOut(getActivity());
+                d.showDialog(getActivity());
+            }
+        });
 
-        name.setText(Driver.name);
-        surname.setText(Driver.surname);
+        name.setText(SharedPref.loadUserName(getContext()));
+        surname.setText(SharedPref.loadUserSurname(getContext()));
         phoneNumber.setText(SharedPref.loadNumber(getContext()));
 
         return view;
@@ -133,5 +146,48 @@ public class SettingsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    void logOut() {
+        Context context = getContext();
+        SharedPref.saveNumber(context, "");
+        SharedPref.saveUserName(context, "");
+        SharedPref.saveUserSurname(context, "");
+        SharedPref.saveUserType(context, "");
+        SharedPref.saveUserId(context, "");
+        SharedPref.saveToken(context, "");
+        Intent intent = new Intent(context, WelcomeActivity.class);
+        startActivity(intent);
+    }
+    class DialogLogOut extends android.app.Dialog {
+        public DialogLogOut(Activity a) {
+            super(a);
+        }
+
+        public void showDialog(final Activity activity) {
+            final DialogLogOut dialog = new DialogLogOut(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog);
+
+            TextView textCancel = dialog.findViewById(R.id.text_cancel);
+            TextView textLogOut = dialog.findViewById(R.id.text_turn_on);
+            TextView textMain = dialog.findViewById(R.id.main_text);
+            textMain.setText("Вы уверены, что хотите выйти из аккаунта?");
+            textLogOut.setText("Выйти");
+            textCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            textLogOut.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    logOut();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 }

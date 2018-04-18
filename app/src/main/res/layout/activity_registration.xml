@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="vlimv.taxi.RegistrationActivity">
 
     <LinearLayout
@@ -13,14 +13,29 @@
         android:layout_margin="@dimen/large_space">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/code"
             android:layout_marginTop="@dimen/xlarge_margin"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="4"
             android:textAlignment="center"
             android:inputType="number"
+            />
+        <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/large_margin"
+            android:visibility="gone"
+            android:radius="5dp"
+            android:color="@color/colorPrimary"
+            app:dd_numDots="3"
+            app:dd_scaleMultiplier="1.5"
+            app:dd_animationDuration="500"
+            app:dd_horizontalSpacing="@dimen/small_margin"
             />
         <Button
             android:id="@+id/button"

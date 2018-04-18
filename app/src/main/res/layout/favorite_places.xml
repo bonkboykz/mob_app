@@ -54,7 +54,7 @@
             android:layout_toEndOf="@+id/imageAdd"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/normal_text"
+            android:textSize="@dimen/large_text"
             android:layout_marginStart="@dimen/small_margin"/>
 
     </RelativeLayout>

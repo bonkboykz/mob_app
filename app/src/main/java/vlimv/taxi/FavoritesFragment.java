@@ -1,5 +1,6 @@
 package vlimv.taxi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +78,7 @@ public class FavoritesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.favorites);
         RecyclerView recyclerView = view.findViewById(R.id.main_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
@@ -85,6 +91,15 @@ public class FavoritesFragment extends Fragment {
         FavoritesRecyclerAdapter adapter = new FavoritesRecyclerAdapter(list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemTapListener(mListItemClickListener);
+
+        RelativeLayout newFavorites = view.findViewById(R.id.new_favorite);
+        newFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogNewFavorites d = new DialogNewFavorites(getActivity());
+                d.showDialog(getActivity());
+            }
+        });
         return view;
     }
 
@@ -135,6 +150,39 @@ public class FavoritesFragment extends Fragment {
     }
     public interface OnListItemClickListener {
         void onListItemClick(String title);
+    }
+
+    public class DialogNewFavorites extends android.app.Dialog {
+        public DialogNewFavorites(Activity a) {
+            super(a);
+        }
+
+        public void showDialog(final Activity activity) {
+            final DialogNewFavorites dialog = new DialogNewFavorites(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_new_favorite);
+
+
+//            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
+//            TextView text_quit = dialog.findViewById(R.id.text_turn_on);
+//            TextView text_main = dialog.findViewById(R.id.main_text);
+//            text_main.setText("Вы уверены, что хотите выйти из приложения?");
+//            text_quit.setText("Выйти");
+//            text_cancel.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                }
+//            });
+//            text_quit.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                    activity.finishAffinity();
+//                }
+//            });
+            dialog.show();
+        }
     }
 }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +16,22 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by HP on 17-Mar-18.
+ * Created by HP on 16-Apr-18.
  */
 
-public class OrdersFragment extends Fragment {
+public class CompletedOrdersFragment extends Fragment {
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 15;
 
     private enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
         LINEAR_LAYOUT_MANAGER
     }
 
@@ -37,17 +39,18 @@ public class OrdersFragment extends Fragment {
 
     private OnListItemClickListener mListItemClickListener;
     protected RecyclerView mRecyclerView;
-    protected SimpleRecyclerAdapter mAdapter;
+    protected static CompletedOrdersAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected List<String> mDataset;
+    protected static List<JSONObject> trips = new ArrayList<>();
 
+    private static TextView emptyTV;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        initDataset();
+        Context context = this.getContext();
+        ServerRequest.getInstance(context).getUserTrips(SharedPref.loadToken(context),
+                SharedPref.loadUserId(context), context);
     }
 
     @Override
@@ -59,26 +62,22 @@ public class OrdersFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
         mRecyclerView = rootView.findViewById(R.id.main_recycler);
 
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
         mLayoutManager = new LinearLayoutManager(getActivity());
 
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
 
         if (savedInstanceState != null) {
-            // Restore saved layout manager type.
             mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                     .getSerializable(KEY_LAYOUT_MANAGER);
         }
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-        mAdapter = new SimpleRecyclerAdapter(mDataset);
-        // Set CustomAdapter as the adapter for RecyclerView.
+        mAdapter = new CompletedOrdersAdapter(trips);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemTapListener(mListItemClickListener);
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
 
+        emptyTV = rootView.findViewById(R.id.empty_text_view);
         return rootView;
     }
 
@@ -117,15 +116,14 @@ public class OrdersFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private void initDataset() {
-        mDataset = new ArrayList<String>();
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset.add("This is element #" + i);
+    public static void initArray(ArrayList<JSONObject> array) {
+        if (array.size() == 0)
+            emptyTV.setVisibility(View.VISIBLE);
+        for (int i = 0; i < array.size(); i++) {
+            trips.add(array.get(i));
+            Log.d("in completed orders", array.get(i).toString());
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -133,19 +131,11 @@ public class OrdersFragment extends Fragment {
         super.onAttach(context);
         mListItemClickListener = new OnListItemClickListener() {
             @Override
-            public void onListItemClick(String title) {
-                    Dialog_details dialog = new Dialog_details(getActivity());
-                    dialog.showDialog(getActivity());
-
+            public void onListItemClick(JSONObject trip) {
+                Dialog_details dialog = new Dialog_details(getActivity());
+                dialog.showDialog(getActivity(), trip);
             }
         };
-
-//        try {
-//            mListItemClickListener = (OnListItemClickListener) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(context.toString()
-//                    + " must implement OnListItemClickListener");
-//        }
     }
     @Override
     public void onDetach() {
@@ -154,7 +144,7 @@ public class OrdersFragment extends Fragment {
     }
 
     public interface OnListItemClickListener {
-        void onListItemClick(String title);
+        void onListItemClick(JSONObject trip);
     }
     void startOrder() {
         Intent intent = new Intent(getContext(), DriverOrderActivity.class);
@@ -167,12 +157,31 @@ public class OrdersFragment extends Fragment {
             super(a);
         }
 
-        public void showDialog(Activity activity){
+        public void showDialog(Activity activity, JSONObject trip){
             final Dialog_details dialog = new Dialog_details(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
             dialog.setContentView(R.layout.dialog_details);
 
+            TextView pointA = dialog.findViewById(R.id.pointA);
+            TextView pointB = dialog.findViewById(R.id.pointB);
+            TextView price = dialog.findViewById(R.id.price);
+
+            try {
+                pointA.setText(trip.getString("from"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                pointB.setText(trip.getString("to"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                price.setText(trip.getString("cost"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             TextView text_cancel = dialog.findViewById(R.id.text_cancel);
             TextView text_accept = dialog.findViewById(R.id.text_accept);
             text_cancel.setOnClickListener(new View.OnClickListener() {
@@ -193,4 +202,3 @@ public class OrdersFragment extends Fragment {
         }
     }
 }
-

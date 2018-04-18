@@ -2,6 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/main_recycler"
             android:layout_width="match_parent"
@@ -9,4 +10,12 @@
             android:background="@android:color/white"
             android:paddingBottom="@dimen/normal_padding"
             android:clipToPadding="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/empty_text_view"
+            android:layout_gravity="center"
+            android:text="@string/empty"
+            android:textSize="@dimen/normal_text"
+            android:visibility="gone"/>
 </FrameLayout>

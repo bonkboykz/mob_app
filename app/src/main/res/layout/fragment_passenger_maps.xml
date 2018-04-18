@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_layout"
-    tools:context="vlimv.taxi.PassengerMapsFragment">
+    tools:context="vlimv.taxi.PassengerCityFragment">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -157,4 +157,18 @@
         android:textSize="@dimen/normal_text"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"/>
+    <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:visibility="gone"
+        android:radius="5dp"
+        android:color="@color/colorPrimary"
+        app:dd_numDots="3"
+        app:dd_scaleMultiplier="1.5"
+        app:dd_animationDuration="500"
+        app:dd_horizontalSpacing="@dimen/small_margin" />
 </RelativeLayout>

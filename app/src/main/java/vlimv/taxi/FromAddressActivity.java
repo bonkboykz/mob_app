@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -28,8 +26,8 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
     TextView showOnMap, favorites;
     String addressText;
 
-    final double DEF_LAT = 43.143121;
-    final double DEF_LNG = 76.889709;
+    final double DEF_LAT = 45.017711;
+    final double DEF_LNG = 78.380442;
     LatLng latLng;
 
     @Override
@@ -42,8 +40,7 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
         favorites = findViewById(R.id.favorites);
         favorites.setOnClickListener(this);
         Button btn_next = findViewById(R.id.btn_next);
-        final Activity activity = this;
-        final Geocoder geocoder = new Geocoder(getBaseContext());
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
@@ -53,12 +50,9 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
         autocompleteFragment.setFilter(typeFilter);
         autocompleteFragment.setHint("Где вы находитесь?");
         latLng = new LatLng(DEF_LAT, DEF_LNG);
-        //здесь я ставлю ограничения по координатам
-        //первый латлнг юго-западный угол
-        //вторйо северо-восточный
-        autocompleteFragment.setBoundsBias(new LatLngBounds(
-                new LatLng(43.143121, 76.691608),
-                new LatLng(43.396356, 77.134495)));
+//        autocompleteFragment.setBoundsBias(new LatLngBounds(
+//                new LatLng(43.143121, 76.691608),
+//                new LatLng(43.396356, 77.134495)));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -80,17 +74,17 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 if (addressText != null)
-                    PassengerMapsFragment.pointA.setText(addressText);
-                if(PassengerMapsFragment.markerFrom != null) {
-                    PassengerMapsFragment.markerFrom.setPosition(latLng);
+                    PassengerCityFragment.pointA.setText(addressText);
+                if(PassengerCityFragment.markerFrom != null) {
+                    PassengerCityFragment.markerFrom.setPosition(latLng);
                 } else {
-                    PassengerMapsFragment.markerFrom = PassengerMapsFragment.map.
+                    PassengerCityFragment.markerFrom = PassengerCityFragment.map.
                             addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title("Начальный адрес")
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_marker)));
                 }
-                PassengerMapsFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         latLng, 17));
                 finish();
                 }
@@ -127,17 +121,17 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
             double lng = data.getDoubleExtra("LNG", DEF_LAT);
             latLng  = new LatLng(lat, lng);
             addressText = data.getStringExtra("ADDRESS");
-            PassengerMapsFragment.pointA.setText(addressText);
-            if (PassengerMapsFragment.markerFrom != null) {
-                PassengerMapsFragment.markerFrom.setPosition(latLng);
+            PassengerCityFragment.pointA.setText(addressText);
+            if (PassengerCityFragment.markerFrom != null) {
+                PassengerCityFragment.markerFrom.setPosition(latLng);
             } else {
-                PassengerMapsFragment.markerFrom = PassengerMapsFragment.map.
+                PassengerCityFragment.markerFrom = PassengerCityFragment.map.
                         addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title("Начальный адрес")
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_marker)));
             }
-            PassengerMapsFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+            PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     latLng, 17));
             finish();
         } else if (resultCode == Activity.RESULT_CANCELED) {
