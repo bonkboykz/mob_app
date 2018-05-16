@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_item"
     android:layout_width="match_parent"
+    android:minWidth="360dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="@dimen/normal_margin">
@@ -17,13 +18,13 @@
             android:src="@drawable/ic_blue_marker"/>
 
         <TextView
-            android:id="@+id/pointA"
+            android:id="@+id/dialogPointA"
             android:layout_width="wrap_content"
+            android:textColor="@color/black"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/normal_margin"
-            android:layout_toEndOf="@+id/imagePointA"
-            android:text="Абая, 70" />
+            android:layout_toEndOf="@+id/imagePointA" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,13 +37,13 @@
             android:src="@drawable/ic_green_marker"/>
 
         <TextView
-            android:id="@+id/pointB"
+            android:id="@+id/dialogPointB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/normal_margin"
-            android:layout_toEndOf="@+id/imagePointB"
-            android:text="Абая, 70" />
+            android:layout_toEndOf="@+id/imagePointB" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,20 +56,19 @@
             android:src="@drawable/ic_tenge"/>
 
         <TextView
-            android:id="@+id/price"
+            android:id="@+id/dialogPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/normal_margin"
-            android:layout_toEndOf="@+id/imageSum"
-            android:text="900" />
+            android:textColor="@color/black"
+            android:layout_toEndOf="@+id/imageSum" />
     </RelativeLayout>
     <TextView
         android:id="@+id/details"
         android:layout_marginTop="@dimen/small_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="В этом длинном предложении я описываю детали заказа: например то, что я хочу белую машинку."
         android:textAllCaps="false"
         android:layout_marginEnd="@dimen/normal_margin"/>
     <RelativeLayout

@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Тойота Камри, черная"
+        android:id="@+id/vehicleInfoExpanded"
         android:textSize="@dimen/small_text"/>
     <View
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="666 BK 02"
+        android:id="@+id/vehicleNumberExpanded"
         android:textSize="@dimen/small_text"/>
     <View
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="Алишер"
+                android:id="@+id/driverNameExpanded"
                 android:textSize="@dimen/small_text"/>
         </LinearLayout>
         <LinearLayout
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="3.3"
+                android:id="@+id/ratingExpanded"
                 android:textSize="@dimen/small_text"/>
         </LinearLayout>
     </LinearLayout>
@@ -110,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="проспект Достык, 188"
+        android:id="@+id/fromExpanded"
         android:textSize="@dimen/small_text"/>
     <View
         android:layout_width="match_parent"
@@ -128,6 +128,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="улица Курмангазы, 165"
+        android:id="@+id/toExpanded"
         android:textSize="@dimen/small_text"/>
 </LinearLayout>

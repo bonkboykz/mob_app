@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vlimv.taxi.DriverRegActivity">
+
+
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete_fragment"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/small_margin">
+            <ImageView
+                android:layout_width="@dimen/normal_icon"
+                android:layout_height="@dimen/normal_icon"
+                android:id="@+id/imageShowOnMap"
+                android:src="@drawable/ic_marker"/>
+
+            <TextView
+                android:id="@+id/showOnMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_toEndOf="@+id/imageShowOnMap"
+                android:text="@string/show_on_map"
+                android:textSize="@dimen/normal_text"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/small_margin">
+            <ImageView
+                android:layout_width="@dimen/normal_icon"
+                android:layout_height="@dimen/normal_icon"
+                android:id="@+id/imageFavorites"
+                android:src="@drawable/ic_heart"/>
+
+            <TextView
+                android:id="@+id/favorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_toEndOf="@+id/imageFavorites"
+                android:text="@string/favorites"
+                android:textSize="@dimen/normal_text"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:background="@drawable/ripple_effect_square"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:textAllCaps="false"
+        android:textSize="@dimen/normal_text"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:background="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:src="@drawable/ic_clear_black_24dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

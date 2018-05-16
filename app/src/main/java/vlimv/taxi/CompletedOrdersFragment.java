@@ -3,11 +3,16 @@ package vlimv.taxi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +54,13 @@ public class CompletedOrdersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Context context = this.getContext();
-        ServerRequest.getInstance(context).getUserTrips(SharedPref.loadToken(context),
-                SharedPref.loadUserId(context), context);
+        if (SharedPref.loadUserType(context).equals("driver")) {
+            ServerRequest.getInstance(context).getDriverTrips(SharedPref.loadToken(context),
+                    SharedPref.loadUserId(context));
+        } else {
+            ServerRequest.getInstance(context).getUserTrips(SharedPref.loadToken(context),
+                    SharedPref.loadUserId(context));
+        }
     }
 
     @Override
@@ -59,7 +69,14 @@ public class CompletedOrdersFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_page, container, false);
         rootView.setTag(TAG);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+        if (SharedPref.loadUserType(getContext()).equals("driver")) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+        } else {
+            if (((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Поездки");
+            }
+        }
+
         mRecyclerView = rootView.findViewById(R.id.main_recycler);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -163,9 +180,9 @@ public class CompletedOrdersFragment extends Fragment {
             dialog.setCancelable(true);
             dialog.setContentView(R.layout.dialog_details);
 
-            TextView pointA = dialog.findViewById(R.id.pointA);
-            TextView pointB = dialog.findViewById(R.id.pointB);
-            TextView price = dialog.findViewById(R.id.price);
+            TextView pointA = dialog.findViewById(R.id.dialogPointA);
+            TextView pointB = dialog.findViewById(R.id.dialogPointB);
+            TextView price = dialog.findViewById(R.id.dialogPrice);
 
             try {
                 pointA.setText(trip.getString("from"));

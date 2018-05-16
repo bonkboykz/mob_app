@@ -110,7 +110,7 @@ public class PassengerRegActivity extends AppCompatActivity implements ServerReq
 
                     String id = SharedPref.loadUserId(view.getContext());
 
-                    ServerRequest.getInstance(getBaseContext()).updateUser(id, nameText, surnameText,
+                    ServerRequest.getInstance(view.getContext()).updateUser(id, nameText, surnameText,
                             age, genderText, SharedPref.loadUserType(view.getContext()), view.getContext());
                     //ServerRequest.getInstance(getBaseContext()).getUser(SharedPref.loadToken(view.getContext()), view.getContext());
                 }
@@ -154,8 +154,13 @@ public class PassengerRegActivity extends AppCompatActivity implements ServerReq
 
     @Override
     public void goNext() {
-        Intent intent = new Intent(getApplicationContext(), PassengerMainActivity.class);
-        startActivity(intent);
+        if (SharedPref.loadUserType(this).equals("invalid")) {
+            Intent intent = new Intent(getApplicationContext(), InvalidRegActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), PassengerMainActivity.class);
+            startActivity(intent);
+        }
     }
     @Override
     public void tryAgain() {

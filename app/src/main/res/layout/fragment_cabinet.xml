@@ -39,6 +39,7 @@
             android:elevation="@dimen/normal_elevation"
             android:background="@drawable/ripple_effect_blue"
             android:text="@string/add_money"
+            android:id="@+id/paymentButton"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/normal_text"

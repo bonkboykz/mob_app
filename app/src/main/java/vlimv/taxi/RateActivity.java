@@ -18,26 +18,21 @@ public class RateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
-
+        Intent intent = getIntent();
+        final String tripId = intent.getExtras().getString("TRIP_ID");
         writeComment = findViewById(R.id.write_comment);
         ratingBar = findViewById(R.id.ratingBar);
         button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ServerSocket.getInstance(view.getContext()).sendReportTrip(tripId, writeComment.getText().toString(), ratingBar.getRating());
+                Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RateActivity.this, PassengerMainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
             }
         });
-
-//        writeComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(RateActivity.this, WriteCommentActivity.class);
-//                startActivityForResult(intent);
-//            }
-//        });
 
     }
 }

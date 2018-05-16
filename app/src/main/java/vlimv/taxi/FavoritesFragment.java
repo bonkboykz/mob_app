@@ -1,7 +1,7 @@
 package vlimv.taxi;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,14 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -41,6 +40,10 @@ public class FavoritesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private OnListItemClickListener mListItemClickListener;
+
+    private int NEW_FAVORITE_REQUEST_CODE = 1;
+    FavoritePlacesAdapter adapter;
+    List<Address> list;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -81,27 +84,38 @@ public class FavoritesFragment extends Fragment {
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.favorites);
         RecyclerView recyclerView = view.findViewById(R.id.main_recycler);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            list.add("Item " + i);
-        }
-        FavoritesRecyclerAdapter adapter = new FavoritesRecyclerAdapter(list);
+        list = SharedPref.loadFavoritesArray(getContext());
+
+        adapter = new FavoritePlacesAdapter(list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemTapListener(mListItemClickListener);
 
-        RelativeLayout newFavorites = view.findViewById(R.id.new_favorite);
-        newFavorites.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout addFavorite = view.findViewById(R.id.add_favorite);
+        addFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogNewFavorites d = new DialogNewFavorites(getActivity());
-                d.showDialog(getActivity());
+                Intent addFavoritesIntent = new Intent(view.getContext(), AddFavoritePlaceActivity.class);
+                startActivityForResult(addFavoritesIntent, NEW_FAVORITE_REQUEST_CODE);
             }
         });
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_FAVORITE_REQUEST_CODE && resultCode == RESULT_OK) {
+            list.clear();
+            list.addAll(SharedPref.loadFavoritesArray(getContext()));
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getContext(), "Новое место успешно создано.", Toast.LENGTH_LONG).show();
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
+        }
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -119,6 +133,12 @@ public class FavoritesFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        mListItemClickListener = new OnListItemClickListener() {
+            @Override
+            public void onListItemClick(Address address) {
+                Toast.makeText(getView().getContext(), address.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
 //        try {
 //            mListItemClickListener = (OnListItemClickListener) context;
 //        } catch (ClassCastException e) {
@@ -145,98 +165,66 @@ public class FavoritesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
     public interface OnListItemClickListener {
-        void onListItemClick(String title);
+        void onListItemClick(Address address);
     }
-
-    public class DialogNewFavorites extends android.app.Dialog {
-        public DialogNewFavorites(Activity a) {
-            super(a);
-        }
-
-        public void showDialog(final Activity activity) {
-            final DialogNewFavorites dialog = new DialogNewFavorites(activity);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setCancelable(true);
-            dialog.setContentView(R.layout.dialog_new_favorite);
-
-
-//            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
-//            TextView text_quit = dialog.findViewById(R.id.text_turn_on);
-//            TextView text_main = dialog.findViewById(R.id.main_text);
-//            text_main.setText("Вы уверены, что хотите выйти из приложения?");
-//            text_quit.setText("Выйти");
-//            text_cancel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                }
-//            });
-//            text_quit.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                    activity.finishAffinity();
-//                }
-//            });
-            dialog.show();
-        }
-    }
+//    public interface OnListItemClickListener {
+//        void onListItemClick(Address address);
+//    }
 }
-
-class FavoritesRecyclerAdapter extends RecyclerView.Adapter<FavoritesRecyclerAdapter.ViewHolder>{
-    private List<String> mItemsList;
-    private FavoritesFragment.OnListItemClickListener mListItemClickListener;
-
-    public FavoritesRecyclerAdapter(List<String> itemsList) {
-        mItemsList = itemsList == null ? new ArrayList<String>() : itemsList;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Create a new view by inflating the row item xml.
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_item_favorites, parent, false);
-
-        // Set the view to the ViewHolder
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        //final String itemTitle = mItemsList.get(position);
-        //holder.title.setText(itemTitle);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItemsList.size();
-    }
-
-    // Create the ViewHolder class to keep references to your views
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ViewHolder(View v) {
-            super(v);
 //
-//            pointA = v.findViewById(R.id.pointA);
-//            details = v.findViewById(R.id.details);
-            v.setOnClickListener(this);
-        }
-
-
-        @Override
-        public void onClick(View view) {
-            if (null != mListItemClickListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()));
-            }
-        }
-    }
-
-    public void setOnItemTapListener(FavoritesFragment.OnListItemClickListener itemClickListener) {
-        mListItemClickListener = itemClickListener;
-    }
-}
+//class FavoritesRecyclerAdapter extends RecyclerView.Adapter<FavoritesRecyclerAdapter.ViewHolder>{
+//    private List<Address> mItemsList;
+//    private FavoritesFragment.OnListItemClickListener mListItemClickListener;
+//
+//    public FavoritesRecyclerAdapter(List<Address> itemsList) {
+//        mItemsList = itemsList == null ? new ArrayList<Address>() : itemsList;
+//    }
+//
+//    @Override
+//    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        // Create a new view by inflating the row item xml.
+//        View v = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.recycler_item_favorites, parent, false);
+//
+//        // Set the view to the ViewHolder
+//        return new ViewHolder(v);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(ViewHolder holder, int position) {
+////        final String itemTitle = mItemsList.get(position);
+////        holder.title.setText(itemTitle);
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return mItemsList.size();
+//    }
+//
+//    // Create the ViewHolder class to keep references to your views
+//    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//        public ViewHolder(View v) {
+//            super(v);
+//            TextView address = v.findViewById(R.id.address);
+//            TextView placeName = v.findViewById(R.id.place_name);
+//            v.setOnClickListener(this);
+//        }
+//
+//
+//        @Override
+//        public void onClick(View view) {
+//            if (null != mListItemClickListener) {
+//                // Notify the active callbacks interface (the activity, if the
+//                // fragment is attached to one) that an item has been selected.
+//                mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()));
+//            }
+//        }
+//    }
+//
+//    public void setOnItemTapListener(FavoritesFragment.OnListItemClickListener itemClickListener) {
+//        mListItemClickListener = itemClickListener;
+//    }
+//}

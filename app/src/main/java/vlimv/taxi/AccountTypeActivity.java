@@ -43,7 +43,7 @@ public class AccountTypeActivity extends AppCompatActivity implements View.OnCli
                     SharedPref.saveUserType(view.getContext(), "passenger");
                     startActivity(intent);
                 } else if (type.equals("Пассажир с инвалидностью")) {
-                    intent = new Intent(getApplicationContext(), InvalidRegActivity.class);
+                    intent = new Intent(getApplicationContext(), PassengerRegActivity.class);
                     SharedPref.saveUserType(view.getContext(), "invalid");
                     startActivity(intent);
                 } else if (type.equals("Водитель")){

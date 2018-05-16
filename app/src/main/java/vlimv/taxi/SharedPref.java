@@ -2,6 +2,15 @@ package vlimv.taxi;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.google.android.gms.location.places.Place;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by HP on 22-Mar-18.
@@ -16,6 +25,9 @@ public class SharedPref {
     private static String tagToken ="TOKEN";
     private static String tagUserSurname = "USER_SURNAME";
     private static String tagUserName = "USER_NAME";
+    private static String tagFavorites = "FAVORITES";
+    private static String favorite = "FAVORITE";
+
     public static void saveNumber(Context context, String number) {
         sharedPreferences = context.getSharedPreferences(tagNumber, 0);
         SharedPreferences.Editor ed = sharedPreferences.edit();
@@ -98,5 +110,50 @@ public class SharedPref {
         sharedPreferences = context.getSharedPreferences(tagUserName, Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString(tagUserName, "");
         return userName;
+    }
+
+    public static void saveFavoritesArray(Context context, ArrayList<Address> places) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(places);
+        prefsEditor.putString(tagFavorites, json);
+        prefsEditor.apply();
+
+    }
+
+    public static ArrayList<Address> loadFavoritesArray(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context.getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(tagFavorites, "");
+        ArrayList<LinkedTreeMap> places = gson.fromJson(json, ArrayList.class);
+        ArrayList<Address> addresses = new ArrayList<>();
+        for (LinkedTreeMap o: places) {
+            double lat = Double.parseDouble(o.get("lat").toString());
+            double lng = Double.parseDouble(o.get("lng").toString());
+            String name = o.get("name").toString();
+            String address = o.get("address").toString();
+            Address addressEntity = new Address(lat, lng, name, address);
+            addresses.add(addressEntity);
+        }
+        return addresses;
+    }
+
+    public static void addFavorite(Context context, Address address) {
+        ArrayList<Address> favorites = loadFavoritesArray(context);
+        if (favorites == null)
+            favorites = new ArrayList();
+        favorites.add(address);
+        saveFavoritesArray(context, favorites);
+    }
+
+    public static void removeFavorite(Context context, int position) {
+        ArrayList<Address> favorites = loadFavoritesArray(context);
+        if (favorites != null) {
+            favorites.remove(position);
+            saveFavoritesArray(context, favorites);
+        }
     }
 }

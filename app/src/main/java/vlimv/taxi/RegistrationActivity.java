@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
@@ -32,6 +33,16 @@ public class RegistrationActivity extends Activity implements ServerRequest.Next
 
         final EditText editTextCode = findViewById(R.id.code);
 
+        TextView tryAgain = findViewById(R.id.try_again);
+        tryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Новый код активации в пути.", Toast.LENGTH_LONG).show();
+                String number = SharedPref.loadNumber(view.getContext());
+                ServerRequest.getInstance(view.getContext()).signUp(number, view.getContext());
+            }
+        });
+
         progressBar = findViewById(R.id.progress);
 
         btn = findViewById(R.id.button);
@@ -51,16 +62,17 @@ public class RegistrationActivity extends Activity implements ServerRequest.Next
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        DialogQuitApp d = new DialogQuitApp(this);
-        d.showDialog(this);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        DialogQuitApp d = new DialogQuitApp(this);
+//        d.showDialog(this);
+//    }
 
     @Override
     public void goNext() {
         btn.setVisibility(View.VISIBLE);
         progressBar.hideNow();
+        Log.d("After verify | goNext", SharedPref.loadIsRegistered(this) + "");
         if (SharedPref.loadIsRegistered(this)) {
             String type = SharedPref.loadUserType(this);
             if (type.equals("driver")) {

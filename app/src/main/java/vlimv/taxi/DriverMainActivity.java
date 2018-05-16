@@ -29,21 +29,27 @@ import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
+
+import java.util.ArrayList;
 
 
 public class DriverMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         SettingsFragment.OnFragmentInteractionListener, CarOptionsFragment.OnFragmentInteractionListener,
         CabinetFragment.OnFragmentInteractionListener, SupportFragment.OnFragmentInteractionListener,
-        DriverTakeOrderFragment.OnFragmentInteractionListener, View.OnClickListener {
+        DriverTakeOrderFragment.OnFragmentInteractionListener, View.OnClickListener, ServerRequest.UpdateCarInfo,
+        ServerRequest.NextActivity {
     private DrawerLayout mDrawerLayout;
     public static Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
+    static DilatingDotsProgressBar progressBar;
 
     public static Button next_btn;
     public static TextView free, busy;
     String status;
-    private Socket mSocket;
+//    private Socket mSocket;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +57,10 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         // TODO sockets connection
 //        ServerSocket.getInstance(getBaseContext()).getOnline();
 //        ServerSocket.getInstance(getBaseContext()).getActiveTrips();
-        TaxiApplication app = (TaxiApplication) this.getApplication();
-        mSocket = app.getSocket();
-        mSocket.on("hello", onHello);
-        mSocket.connect();
+//        TaxiApplication app = (TaxiApplication) this.getApplication();
+//        mSocket = app.getSocket();
+//        mSocket.on("hello", onHello);
+//        mSocket.connect();
         setContentView(R.layout.activity_driver_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,6 +80,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         String nameText = SharedPref.loadUserName(this) + " " + SharedPref.loadUserSurname(this);
         name.setText(nameText);
 
+        progressBar = findViewById(R.id.progress);
         next_btn = findViewById(R.id.button);
         next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);
@@ -86,29 +93,31 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         displaySelectedScreen(R.id.nav_city);
     }
     public void getActiveTrips() {
-        Log.d("getActiveTrips", "Emitting active_trips");
-        mSocket.emit("active_trips");
+//        Log.d("getActiveTrips", "Emitting active_trips");
+//        mSocket.emit("active_trips");
+        ServerSocket.getInstance(getApplicationContext()).getActiveTrips();
     }
 
-    public void getOnline() {
-        Log.d("getOnline", "Emitting online_user");
-        mSocket.emit("online_user", SharedPref.loadUserId(this.getBaseContext()));
-        getActiveTrips();
-    }
-    private Emitter.Listener onHello = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            for (Object arg: args) {
-                Log.d("onHello", arg.toString());
-            }
-            getOnline();
-        }
-    };
+//    public void getOnline() {
+//        Log.d("getOnline", "Emitting online_user");
+//        mSocket.emit("online_user", SharedPref.loadUserId(this.getBaseContext()));
+//
+//        getActiveTrips();
+//    }
+//    private Emitter.Listener onHello = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            for (Object arg: args) {
+//                Log.d("onHello", arg.toString());
+//            }
+//            getOnline();
+//        }
+//    };
 
     @Override
     protected void onDestroy() {
-        mSocket.off("hello", onHello);
-        mSocket.disconnect();
+//        mSocket.off("hello", onHello);
+//        mSocket.disconnect();
         super.onDestroy();
     }
 
@@ -132,10 +141,20 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         //you can leave it empty
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("OnResume DriverMain", "here");
+        if (fragment instanceof CabinetFragment) {
+            ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this, 0);
+            Log.d("Cabinet Fragment", "here too");
+        }
+    }
+
     private void displaySelectedScreen(int itemId) {
 
         //creating fragment object
-        Fragment fragment = null;
+        fragment = null;
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_city:
@@ -190,6 +209,33 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(this, status, Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    @Override
+    public void updateCarInfo(String name, String model, String type, String gosNumber, int year) {
+        CarOptionsFragment fr = (CarOptionsFragment) fragment;
+        fr.spinner_car.setText(name);
+        fr.spinner_car_model.setText(model);
+        fr.spinner_car_type.setText(type);
+        fr.numberEditText.setText(gosNumber);
+        fr.yearEditText.setText(year + "");
+//        fr.spinner_car.setEnabled(true);
+//        fr.spinner_car_model.setEnabled(true);
+//        fr.spinner_car_type.setEnabled(true);
+    }
+
+    @Override
+    public void goNext() {
+        Toast.makeText(this, "Информация успешно обновлена.", Toast.LENGTH_LONG).show();
+//        progressBar.hideNow();
+//        next_btn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void tryAgain() {
+        Toast.makeText(this, "Прроизошла ошибка. Повторите попытку.", Toast.LENGTH_LONG).show();
+        progressBar.hideNow();
+        next_btn.setVisibility(View.VISIBLE);
     }
 
 }

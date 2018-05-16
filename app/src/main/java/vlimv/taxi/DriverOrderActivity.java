@@ -1,5 +1,6 @@
 package vlimv.taxi;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.CountDownTimer;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,11 +37,21 @@ public class DriverOrderActivity extends AppCompatActivity implements
     private NavigationView nvDrawer;
     static ActionBarDrawerToggle mActionBarDrawerToggle;
 
+    private String mTripId;
+    private String mTripPrice;
+    private String mTripTo;
+
     static String orderState = "new";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_order);
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        mTripId = extras.getString("TRIP_ID");
+        mTripPrice = extras.getString("TRIP_PRICE");
+        mTripTo = extras.getString("TRIP_TO");
+//        if (savedInstanceState != null) mTripId = savedInstanceState.getString("TRIP_ID");
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Spannable text = new SpannableString(toolbar.getTitle());
@@ -71,7 +83,6 @@ public class DriverOrderActivity extends AppCompatActivity implements
         displaySelectedScreen(R.id.nav_city);
     }
 
-
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -99,7 +110,16 @@ public class DriverOrderActivity extends AppCompatActivity implements
         switch (itemId) {
             case R.id.nav_city:
                 mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+                Bundle bundle = new Bundle();
+                bundle.putString("TRIP_ID", mTripId);
+                bundle.putString("TRIP_PRICE", mTripPrice);
+                bundle.putString("TRIP_TO", mTripTo);
+                Log.d("DriverOrderActivity", "tripId: " + mTripId);
+                Log.d("DriverOrderActivity", "tripPrice: " + mTripPrice);
+                Log.d("DriverOrderActivity", "tripTo: " + mTripTo);
+
                 fragment = new DriverCityFragment();
+                fragment.setArguments(bundle);
                 break;
             case R.id.nav_cabinet:
                 mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));

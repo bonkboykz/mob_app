@@ -2,14 +2,16 @@ package vlimv.taxi;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -18,7 +20,6 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class FromAddressActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,20 +27,28 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
     TextView showOnMap, favorites;
     String addressText;
 
-    final double DEF_LAT = 45.017711;
-    final double DEF_LNG = 78.380442;
+    private final double DEF_LAT = 45.017711;
+    private final double DEF_LNG = 78.380442;
     LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_from_address);
+        setContentView(R.layout.activity_choose_address);
 
         showOnMap = findViewById(R.id.showOnMap);
         showOnMap.setOnClickListener(this);
         favorites = findViewById(R.id.favorites);
         favorites.setOnClickListener(this);
         Button btn_next = findViewById(R.id.btn_next);
+        ImageButton btn_back = findViewById(R.id.back_button);
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -78,11 +87,18 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
                 if(PassengerCityFragment.markerFrom != null) {
                     PassengerCityFragment.markerFrom.setPosition(latLng);
                 } else {
-                    PassengerCityFragment.markerFrom = PassengerCityFragment.map.
-                            addMarker(new MarkerOptions()
-                                    .position(latLng)
-                                    .title("Начальный адрес")
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_marker)));
+                    try {
+                        PassengerCityFragment.markerFrom = PassengerCityFragment.map.
+                                addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title("Начальный адрес")
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_marker)));
+                    } catch (NullPointerException e) {
+                        Log.e("", e.getMessage());
+                        Toast.makeText(view.getContext(), "Пожалуйста, введите адрес", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                 }
                 PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         latLng, 17));
@@ -99,7 +115,8 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.favorites:
                 Intent intentFav = new Intent (getApplicationContext(), AddressFromFavoritesActivity.class);
-                startActivity(intentFav);
+                intentFav.putExtra("POINT", 1);
+                startActivityForResult(intentFav, 2);
                 break;
             default:
                 break;
@@ -117,6 +134,24 @@ public class FromAddressActivity extends AppCompatActivity implements View.OnCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {return;}
         if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+            double lat = data.getDoubleExtra("LAT", DEF_LAT);
+            double lng = data.getDoubleExtra("LNG", DEF_LAT);
+            latLng  = new LatLng(lat, lng);
+            addressText = data.getStringExtra("ADDRESS");
+            PassengerCityFragment.pointA.setText(addressText);
+            if (PassengerCityFragment.markerFrom != null) {
+                PassengerCityFragment.markerFrom.setPosition(latLng);
+            } else {
+                PassengerCityFragment.markerFrom = PassengerCityFragment.map.
+                        addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title("Начальный адрес")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_blue_marker)));
+            }
+            PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, 17));
+            finish();
+        } else if (resultCode == Activity.RESULT_OK && requestCode == 2) {
             double lat = data.getDoubleExtra("LAT", DEF_LAT);
             double lng = data.getDoubleExtra("LNG", DEF_LAT);
             latLng  = new LatLng(lat, lng);

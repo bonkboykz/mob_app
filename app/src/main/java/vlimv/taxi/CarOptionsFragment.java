@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
@@ -30,7 +31,7 @@ import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
  * Use the {@link CarOptionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class CarOptionsFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,6 +40,9 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    String carName, carModel, carType;
+    MaterialBetterSpinner spinner_car, spinner_car_model, spinner_car_type;
+    EditText numberEditText, yearEditText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -78,35 +82,10 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_car_options, container, false);
-        MaterialBetterSpinner spinner_car = view.findViewById(R.id.car);
-        ArrayAdapter<CharSequence> adapter_car = ArrayAdapter.createFromResource(getContext(), R.array.car_array, android.R.layout.simple_spinner_dropdown_item);
-        adapter_car.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_car.setAdapter(adapter_car);
-        spinner_car.setOnItemSelectedListener(this);
 
-        MaterialBetterSpinner spinner_car_model = view.findViewById(R.id.car_model);
-        ArrayAdapter<CharSequence> adapter_car_model = ArrayAdapter.createFromResource(getContext(), R.array.car_model_array, android.R.layout.simple_spinner_dropdown_item);
-        adapter_car_model.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_car_model.setAdapter(adapter_car_model);
-        spinner_car_model.setOnItemSelectedListener(this);
-
-        MaterialBetterSpinner spinner_car_type = view.findViewById(R.id.car_type);
-        ArrayAdapter<CharSequence> adapter_car_type = ArrayAdapter.createFromResource(getContext(), R.array.car_type_array, android.R.layout.simple_spinner_dropdown_item);
-        adapter_car_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_car_type.setAdapter(adapter_car_type);
-        spinner_car_type.setOnItemSelectedListener(this);
-
-        DriverMainActivity.next_btn.setVisibility(View.VISIBLE);
-        DriverMainActivity.next_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), DriverMainActivity.class);
-                startActivity(intent);
-            }
-        });
+        ServerRequest.getInstance(getContext()).getCar(SharedPref.loadUserId(getContext()), getContext());
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
-
         if (DriverOrderActivity.next_btn != null) {
             DriverOrderActivity.next_btn.setVisibility(View.VISIBLE);
             DriverOrderActivity.next_btn.setOnClickListener(new View.OnClickListener() {
@@ -117,26 +96,71 @@ public class CarOptionsFragment extends Fragment implements AdapterView.OnItemSe
                 }
             });
         }
-
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.car_options);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
-//        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+        //        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+
+        spinner_car = view.findViewById(R.id.car);
+        spinner_car.setEnabled(false);
+        ArrayAdapter<CharSequence> adapter_car = ArrayAdapter.createFromResource(getContext(), R.array.car_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter_car.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_car.setAdapter(adapter_car);
+        spinner_car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                carName = adapterView.getItemAtPosition(position).toString();
+            }
+        });
+        carName = spinner_car.getText().toString();
+
+        spinner_car_model = view.findViewById(R.id.car_model);
+        spinner_car_model.setEnabled(false);
+        ArrayAdapter<CharSequence> adapter_car_model = ArrayAdapter.createFromResource(getContext(), R.array.car_model_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter_car_model.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_car_model.setAdapter(adapter_car_model);
+        spinner_car_model.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                carModel = adapterView.getItemAtPosition(position).toString();
+            }
+        });
+        carModel = spinner_car_model.getText().toString();
+
+        spinner_car_type = view.findViewById(R.id.car_type);
+        spinner_car_type.setEnabled(false);
+        ArrayAdapter<CharSequence> adapter_car_type = ArrayAdapter.createFromResource(getContext(), R.array.car_type_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter_car_type.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_car_type.setAdapter(adapter_car_type);
+        spinner_car_type.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                carType = adapterView.getItemAtPosition(position).toString();
+            }
+        });
+        carType = spinner_car_type.getText().toString();
+
+        numberEditText = view.findViewById(R.id.car_number);
+        yearEditText = view.findViewById(R.id.car_year);
+
+        DriverMainActivity.next_btn.setVisibility(View.VISIBLE);
+        DriverMainActivity.next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DriverMainActivity.progressBar.showNow();
+                DriverMainActivity.next_btn.setVisibility(View.GONE);
+                String driverId = SharedPref.loadUserId(view.getContext());
+                String carNumber = numberEditText.getText().toString();
+                String carYear = yearEditText.getText().toString();
+                ServerRequest.getInstance(view.getContext()).updateCar(driverId, carName, carModel, carType,
+                        carNumber, carYear, view.getContext());
+//                Intent intent = new Intent(getActivity().getApplicationContext(), DriverMainActivity.class);
+//                startActivity(intent);
+            }
+        });
+
         return view;
 
-    }
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        switch(view.getId()) {
-            case R.id.gender:
-                String gender = parent.getItemAtPosition(pos).toString();
-                break;
-            case R.id.car:
-                String car = parent.getItemAtPosition(pos).toString();
-        }
-        Toast.makeText (getActivity().getApplicationContext(), "Selected: " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
-    }
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
     }
 
     // TODO: Rename method, update argument and hook method into UI event

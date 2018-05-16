@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Тойота Камри, черная"
+        android:id="@+id/vehicleInfo"
         android:textSize="@dimen/small_text"/>
     <View
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="666 BK 02"
+        android:id="@+id/vehicleNumber"
         android:textSize="@dimen/small_text"/>
 
 </LinearLayout>

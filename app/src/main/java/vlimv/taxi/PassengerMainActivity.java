@@ -1,6 +1,8 @@
 package vlimv.taxi;
 
+import android.content.Context;
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +35,11 @@ public class PassengerMainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            Log.d("Activity load fragment", "");
+            fragment = getSupportFragmentManager().getFragment(savedInstanceState, "PassengerCityFragment");
+        }
         setContentView(R.layout.activity_passenger_maps);
         //toolbar and nav drawer
         toolbar = findViewById(R.id.toolbar);
@@ -56,6 +65,21 @@ public class PassengerMainActivity extends AppCompatActivity implements
 
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Bundle outState = new Bundle();
+        getSupportFragmentManager().putFragment(outState, "PassengerCityFragment", fragment);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        Log.d("Activity onSaveInstance", outState.toString());
+        getSupportFragmentManager().putFragment(outState, "PassengerCityFragment", fragment);
+    }
     @Override
     public void tryAgain() {
         Toast.makeText(this, "Произошла ошибка. Попробуйте еще раз.", Toast.LENGTH_LONG).show();
@@ -81,6 +105,7 @@ public class PassengerMainActivity extends AppCompatActivity implements
             d.showDialog(this);
         }
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

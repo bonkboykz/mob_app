@@ -22,6 +22,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +52,12 @@ public class NewOrdersFragment extends Fragment {
 
     private static Activity activity;
 
-    private Socket mSocket;
+//    private Socket mSocket;
 
     private TextView emptyTV;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        //initDataset();
         activity = this.getActivity();
     }
 
@@ -91,54 +88,59 @@ public class NewOrdersFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemTapListener(mListItemClickListener);
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
-
-        TaxiApplication app = (TaxiApplication) getActivity().getApplication();
-        mSocket = app.getSocket();
-        mSocket.on("active_trips", onActiveTrips);
-        mSocket.connect();
+        ServerSocket.getInstance(getActivity().getApplicationContext()).getActiveTrips();
+//        TaxiApplication app = (TaxiApplication) getActivity().getApplication();
+//        mSocket = app.getSocket();
+//        mSocket.on("active_trips", onActiveTrips);
+//        mSocket.connect();
         return rootView;
-    }
-    private Emitter.Listener onActiveTrips = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            for (Object arg: args) {
-                Log.d("onActiveTrips", arg.toString());
-            }
-            try {
-                JSONArray arr = new JSONArray(args[0].toString());
-                final ArrayList<JSONObject> list = new ArrayList<>();
-                if (list.size() == 0)
-                    emptyTV.setVisibility(View.VISIBLE);
-                for (int i = 0; i < arr.length(); i++) {
-                    Log.d("onActiveTripsList", arr.getJSONObject(i).toString());
-                    list.add(arr.getJSONObject(i));
-                }
-                // TODO pass active trips to trips view
-//                OrdersFragment.initDataset(list);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("OrdersFragment", "request update list from ui thread");
-                        updateActiveTrips(list);
-                    }
-                });
-            } catch (JSONException e) {
-                Log.e("onActiveTripsListener", e.getMessage());
-            }
-        }
-    };
-    public void updateActiveTrips(ArrayList<JSONObject> list) {
-        // trips = list;
-        trips.clear();
-        trips.addAll(list);
-        mAdapter.notifyDataSetChanged();
-        Log.d("OrdersFragment", "Notified adapter");
     }
 
     @Override
+    public void onResume() {
+        ServerSocket.getInstance(getActivity().getApplicationContext()).getActiveTrips();
+
+        super.onResume();
+    }
+    //    private Emitter.Listener onActiveTrips = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            for (Object arg: args) {
+//                Log.d("onActiveTrips", arg.toString());
+//            }
+//            try {
+//                JSONArray arr = new JSONArray(args[0].toString());
+//                final ArrayList<JSONObject> list = new ArrayList<>();
+//                for (int i = 0; i < arr.length(); i++) {
+//                    Log.d("onActiveTripsList", arr.getJSONObject(i).toString());
+//                    list.add(arr.getJSONObject(i));
+//                }
+//                // TODO pass active trips to trips view
+////                OrdersFragment.initDataset(list);
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Log.d("OrdersFragment", "request update list from ui thread");
+//                        updateActiveTrips(list);
+//                    }
+//                });
+//            } catch (JSONException e) {
+//                Log.e("onActiveTripsListener", e.getMessage());
+//            }
+//        }
+//    };
+//    public void updateActiveTrips(ArrayList<JSONObject> list) {
+//        // trips = list;
+//        trips.clear();
+//        trips.addAll(list);
+//        mAdapter.notifyDataSetChanged();
+//        Log.d("OrdersFragment", "Notified adapter");
+//    }
+
+    @Override
     public void onDestroy() {
-        mSocket.off("active_trips", onActiveTrips);
-        mSocket.disconnect();
+//        mSocket.off("active_trips", onActiveTrips);
+//        mSocket.disconnect();
         super.onDestroy();
     }
 
@@ -181,21 +183,23 @@ public class NewOrdersFragment extends Fragment {
      * Generates Strings for RecyclerView's adapter. This data would usually come
      * from a local content provider or remote server.
      */
-    public static void initDataset(ArrayList<JSONObject> array) {
-        trips = array;
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-
-        Log.d("TRIPS", "trips in initdataset");
-        for (int i = 0; i < trips.size(); i++) {
-            Log.d("TRIPS", trips.get(i).toString());
-            //trips.add("This is element #" + i);
+    public static void initDataset(final ArrayList<JSONObject> list) {
+        // trips = array;
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    trips.clear();
+                    trips.addAll(list);
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         }
+//        Log.d("TRIPS", "trips in initdataset");
+//        for (int i = 0; i < trips.size(); i++) {
+//            Log.d("TRIPS", trips.get(i).toString());
+//            //trips.add("This is element #" + i);
+//        }
     }
 
     @Override
@@ -204,8 +208,25 @@ public class NewOrdersFragment extends Fragment {
         mListItemClickListener = new OnListItemClickListener() {
             @Override
             public void onListItemClick(JSONObject trip) {
-                    Dialog_details dialog = new Dialog_details(getActivity());
-                    dialog.showDialog(getActivity());
+                String tripId = "";
+                String tripPrice = "";
+                String tripTo = "";
+                String tripFrom = "";
+                String tripAddInfo = "";
+                try {
+                    tripId = trip.getString("_id");
+                    tripPrice = trip.getString("cost");
+                    tripTo = trip.getString("to");
+                    tripFrom = trip.getString("from");
+                    tripAddInfo = trip.getString("addInfo");
+                } catch(JSONException e) {
+                    Log.e("onListItemClick", e.getMessage());
+                }
+                Log.d("onListItemClick", trip.toString());
+                Dialog_details dialog = new Dialog_details(getActivity());
+                Log.d("onListItemClick", "Open dialog with tripId: " + tripId);
+
+                dialog.showDialog(getActivity(), tripId, tripPrice, tripTo, tripFrom, tripAddInfo);
             }
         };
 
@@ -225,8 +246,22 @@ public class NewOrdersFragment extends Fragment {
     public interface OnListItemClickListener {
         void onListItemClick(JSONObject trip);
     }
-    void startOrder() {
+
+//    void startOrder() {
+//        Intent intent = new Intent(getContext(), DriverOrderActivity.class);
+//        startActivity(intent);
+//
+//    }
+    void startOrder(String tripId, String tripPrice, String tripTo) {
         Intent intent = new Intent(getContext(), DriverOrderActivity.class);
+        intent.putExtra("TRIP_ID", tripId);
+        intent.putExtra("TRIP_PRICE", tripPrice);
+        intent.putExtra("TRIP_TO", tripTo);
+//        intent.putExtra("TRIP_LAT", tripLat);
+//        intent.putExtra("TRIP_LAT", tripLng);
+        Log.d("startOrder", "Starting activity DriverOrderActivity with TRIP_ID: " + tripId);
+        Log.d("startOrder", "Starting activity DriverOrderActivity with TRIP_PRICE: " + tripPrice);
+        Log.d("startOrder", "Starting activity DriverOrderActivity with TRIP_TO: " + tripTo);
         startActivity(intent);
 
     }
@@ -236,14 +271,52 @@ public class NewOrdersFragment extends Fragment {
             super(a);
         }
 
-        public void showDialog(Activity activity){
+//        public void showDialog(Activity activity){
+//            final Dialog_details dialog = new Dialog_details(activity);
+//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            dialog.setCancelable(true);
+//            dialog.setContentView(R.layout.dialog_details);
+//
+//            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
+//            TextView text_accept = dialog.findViewById(R.id.text_accept);
+//            text_cancel.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(getContext(), "Заказ не беру.", Toast.LENGTH_SHORT).show();
+//                    dialog.dismiss();
+//                }
+//            });
+//            text_accept.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    Toast.makeText(getContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
+//                    startOrder();
+//                    dialog.dismiss();
+//                }
+//            });
+//            dialog.show();
+//        }
+        public void showDialog(Activity activity,
+                               final String tripId,
+                               final String tripPrice,
+                               final String tripTo,
+                               final String tripFrom,
+                               final String tripAddInfo){
+            Log.d("showDialog", tripFrom + " "  + tripTo + " " + tripPrice + " " + tripAddInfo);
             final Dialog_details dialog = new Dialog_details(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
             dialog.setContentView(R.layout.dialog_details);
-
+            TextView pointA = dialog.findViewById(R.id.dialogPointA);
+            pointA.setText(tripFrom);
+            TextView pointB = dialog.findViewById(R.id.dialogPointB);
+            pointB.setText(tripTo);
+            TextView price = dialog.findViewById(R.id.dialogPrice);
+            price.setText(tripPrice);
+            TextView details = dialog.findViewById(R.id.details);
+            details.setText(tripAddInfo);
             TextView text_cancel = dialog.findViewById(R.id.text_cancel);
             TextView text_accept = dialog.findViewById(R.id.text_accept);
+
             text_cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -254,7 +327,7 @@ public class NewOrdersFragment extends Fragment {
             text_accept.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
-                    startOrder();
+                    startOrder(tripId, tripPrice, tripTo);
                     dialog.dismiss();
                 }
             });

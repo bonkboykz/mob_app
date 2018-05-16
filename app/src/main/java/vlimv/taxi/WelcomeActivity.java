@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         // TODO sockets connection
-        // ServerSocket.getInstance(this).connect();
+        ServerSocket.getInstance(this.getApplicationContext()).connect();
 
         final MaskedEditText phone = findViewById(R.id.phone_input);
         next_btn = findViewById(R.id.button);
@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
 
         Log.d("check token on welcome", "welcome token:" + SharedPref.loadToken(this));
 
-        ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this);
+        ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this, 0);
 
         if (SharedPref.loadUserType(this).equals("driver")) {
             Intent i = new Intent(this, DriverMainActivity.class);
@@ -56,12 +56,15 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
                 String number = phone.getText().toString();
                 number = number.replaceAll("[^0-9]", "");
                 number = "+" + number;
-                SharedPref.saveNumber(view.getContext(), number);
-                next_btn.setVisibility(View.GONE);
-                progressBar.showNow();
-                //saveCode("4444");
-                ServerRequest.getInstance(getBaseContext()).signUp(number, view.getContext());
-
+                String regexStr = "^\\+77[04567][0-9]{8}$";
+                if (!number.matches(regexStr)) {
+                    Toast.makeText(WelcomeActivity.this, "Формат телефона неверен", Toast.LENGTH_SHORT).show();
+                } else {
+                    SharedPref.saveNumber(view.getContext(), number);
+                    next_btn.setVisibility(View.GONE);
+                    progressBar.showNow();
+                    ServerRequest.getInstance(view.getContext()).signUp(number, view.getContext());
+                }
             }
         });
 
@@ -99,9 +102,9 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
     public void saveCode (String code) {
         next_btn.setVisibility(View.VISIBLE);
         progressBar.hideNow();
-        String lname = SharedPref.loadUserSurname(this);
-        Log.d("saveCode", lname);
-        boolean isUserFilledInfo = !lname.isEmpty() && !lname.contains("default");
+//        String lname = SharedPref.loadUserSurname(this);
+//        Log.d("saveCode", lname);
+//        boolean isUserFilledInfo = !lname.isEmpty() && !lname.contains("default");
         Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
         intent.putExtra("CODE", code);
         startActivity(intent);

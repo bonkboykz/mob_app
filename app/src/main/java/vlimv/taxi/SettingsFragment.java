@@ -88,7 +88,7 @@ public class SettingsFragment extends Fragment {
         if (DriverOrderActivity.next_btn != null)
             DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
-        ServerRequest.getInstance(getContext()).getUser(SharedPref.loadToken(getContext()), getContext());
+        ServerRequest.getInstance(getContext()).getUser(SharedPref.loadToken(getContext()), getContext(), 0);
 
         name = view.findViewById(R.id.name);
         surname = view.findViewById(R.id.surname);
@@ -159,6 +159,7 @@ public class SettingsFragment extends Fragment {
         Intent intent = new Intent(context, WelcomeActivity.class);
         startActivity(intent);
     }
+
     class DialogLogOut extends android.app.Dialog {
         public DialogLogOut(Activity a) {
             super(a);

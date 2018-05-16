@@ -1,6 +1,7 @@
 package vlimv.taxi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.drm.DrmUtils;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,9 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
@@ -32,6 +35,8 @@ public class CabinetFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Button paymentButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,6 +90,15 @@ public class CabinetFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
         //mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+        paymentButton = view.findViewById(R.id.paymentButton);
+        paymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://oplata.qiwi.com/create?public_key=Fnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypc*******&amount=100&bill_id=893794793973&success_url=http%3A%2F%2Ftest.ru%3F&email=m@ya.ru";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
+        });
         return view;
     }
 
@@ -110,6 +124,16 @@ public class CabinetFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        View view = getView();
+        if (view != null) {
+            Log.d("onResume CabinetFgmnt", "invalidate view");
+            view.invalidate();
+        }
     }
 
     /**

@@ -5,25 +5,46 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -38,6 +59,7 @@ public class ServerRequest {
     private static String baseUrl = "http://95.46.114.18:8090";
     private NextActivity nextActivityInterface;
     private SaveCode saveCodeInterface;
+    private UpdateCarInfo updateCarInfo;
 
     private ServerRequest(Context context) {
         CookieHandler.setDefault(new CookieManager());
@@ -221,7 +243,8 @@ public class ServerRequest {
                             SharedPref.saveToken(mCtx, token);
                             addTokenCookie(token);
                             Toast.makeText(mCtx, token, Toast.LENGTH_SHORT).show();
-                            nextActivityInterface.goNext();
+                            getUser(token, context, 0);
+//                            nextActivityInterface.goNext();
                         } catch (JSONException e) {
                             nextActivityInterface.tryAgain();
                             Log.e("onerror verify", e.getMessage());
@@ -477,6 +500,71 @@ public class ServerRequest {
         mInstance.addToRequestQueue(stringRequest);
     }
 
+    public void updateCar(final String driverId, final String carName, final String carModel, final String carType,
+                          final String carNumber, final String carYear, Context context) {
+        if (context instanceof NextActivity) {
+            nextActivityInterface = (NextActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement NextActivityInterface");
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append("vehicleUpdateOne(record:{");
+        sb.append("name:\"" + carName + "\",");
+        sb.append("model:\"" + carModel + "\",");
+        sb.append("type:\"" + carType + "\",");
+        sb.append("gosNumber:\"" + carNumber + "\",");
+        sb.append("year:" + carYear);
+        sb.append("}");
+        sb.append(",filter:{");
+        sb.append("driverId: \"" + driverId + "\"");
+        sb.append("}");
+        sb.append(")");
+        sb.append("{");
+        sb.append("recordId");
+        sb.append("}");
+        sb.append("}");
+        final String currentToken = SharedPref.loadToken(context);
+        addTokenCookie(currentToken);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, sb.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response update car", response);
+                        JSONObject obj;
+                        try {
+                            obj = new JSONObject(response);
+                            if (obj.has("errors")) {
+                                throw new JSONException(obj.getJSONObject("errors").getString("message"));
+                            }
+                            nextActivityInterface.goNext();
+                        } catch (JSONException e) {
+                            nextActivityInterface.tryAgain();
+                            Log.e("error in update car", e.getMessage());
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                nextActivityInterface.tryAgain();
+                Log.e("error in update car", error.toString());
+                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                Log.d("set header", currentToken);
+                headers.put("x-user-token", currentToken);
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        mInstance.addToRequestQueue(stringRequest);
+    }
+
     public void createTrip(final String passengerId, final String from, final String to, final String cost,
                           final String addInfo, final boolean hasEscort, final boolean hasWheelchair, Context context) {
         if (context instanceof NextActivity) {
@@ -508,7 +596,8 @@ public class ServerRequest {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("response create trip", response);
+                        Log.d("response create " +
+                                "", response);
                         JSONObject obj;
                         try {
                             obj = new JSONObject(response);
@@ -552,15 +641,6 @@ public class ServerRequest {
             sb.append(key + ":\"");
             sb.append(value + "\",");
         }
-//        sb.setLength(sb.length() - 1);
-//        sb.append("from:\"" + from + "\",");
-//        sb.append("to:\"" + to + "\",");
-//        sb.append("step:" + 0 + ",");
-//        sb.append("cost:\"" + cost + "\",");
-//        sb.append("addInfo:\"" + addInfo + "\",");
-//        sb.append("passengerId:\"" + passengerId + "\",");
-//        sb.append("escort:" + hasEscort + ",");
-//        sb.append("wheelchair:" + hasWheelchair + "");
         sb.append("}");
         sb.append(")");
         sb.append("{");
@@ -605,7 +685,10 @@ public class ServerRequest {
         mInstance.addToRequestQueue(stringRequest);
     }
 
-    public void getUser(final String token, final Context context) {
+    public void getUser(final String token, final Context context, final int retries) {
+        if (context instanceof NextActivity) {
+            nextActivityInterface = (NextActivity) context;
+        }
         addTokenCookie(token);
         String mainUrl = baseUrl + "/main";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
@@ -618,12 +701,28 @@ public class ServerRequest {
                             obj = new JSONObject(response);
                             String id = obj.getString("_id");
                             String role = obj.getString("role");
-                            String lname = obj.getString("lname");
-                            String name = obj.getString("name");
+                            String lname = "";
+                            try {
+                                lname = obj.getString("lname");
+                            } catch (JSONException e) {
+                                Log.e("onerror in get user | lname", e.getMessage());
+
+                            }
+                            String name = "";
+                            try {
+                                name = obj.getString("name");
+                            } catch (JSONException e) {
+                                Log.e("onerror in get user | name", e.getMessage());
+                            }
                             SharedPref.saveUserName(context, name);
                             SharedPref.saveUserSurname(context, lname);
                             SharedPref.saveUserId(context, id);
                             SharedPref.saveUserType(context, role);
+                            SharedPref.saveIsReg(context, !(lname.isEmpty()));
+                            ServerSocket.getInstance(mCtx).getOnline();
+                            if (context instanceof RegistrationActivity || context instanceof DriverMainActivity) {
+                                nextActivityInterface.goNext();
+                            }
                             Log.d("id", id);
 //                            try {
 //
@@ -646,6 +745,96 @@ public class ServerRequest {
                 //Log.d("ASD", error.getMessage().toString());
 //                Log.d("error response", "token:" + token);
 //                Log.d("error response", "yiyi");
+                String message = null;
+                if (error instanceof NetworkError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                    if (retries < 10) getUser(token, context, retries + 1);
+                } else if (error instanceof ServerError) {
+                    message = "The server could not be found. Please try again after some time!!";
+                } else if (error instanceof AuthFailureError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (error instanceof ParseError) {
+                    message = "Parsing error! Please try again after some time!!";
+                } else if (error instanceof TimeoutError) {
+                    message = "Connection TimeOut! Please check your internet connection.";
+                }
+                Log.e("SR | getUser", message);
+                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Set-Cookie", "userToken=" + token);
+                Log.d("set header", token);
+                headers.put("x-user-token", token);
+                return headers;
+            }
+        };
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(5 * 1000,
+//                3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 5000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 3;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                Log.e("getUser | retry failed", error.getMessage() + "");
+            }
+        });
+        mInstance.addToRequestQueue(stringRequest);
+    }
+
+    public void getCar(final String driverId, final Context context) {
+        if (context instanceof UpdateCarInfo) {
+            updateCarInfo = (UpdateCarInfo) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement UpdateCarInfo");
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://95.46.114.18:8090/api?query={");
+        sb.append("vehicleByDriverId(");
+        sb.append("id: \"" + driverId + "\"");
+        sb.append(")");
+        sb.append("{");
+        sb.append("name, model, type, gosNumber, year");
+        sb.append("}");
+        sb.append("}");
+        final String token = SharedPref.loadToken(context);
+        addTokenCookie(token);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, sb.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response in get car", response);
+                        JSONObject obj = null;
+                        try {
+                            obj = new JSONObject(response).getJSONObject("data").getJSONObject("vehicleByDriverId");
+                            String name = obj.getString("name");
+                            String model = obj.getString("model");
+                            String type = obj.getString("type");
+                            String gosNumber = obj.getString("gosNumber");
+                            int year = obj.getInt("year");
+                            updateCarInfo.updateCarInfo(name, model, type, gosNumber, year);
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "Не удалось загрузить данные", Toast.LENGTH_LONG).show();
+                            Log.e("onerror in get car", e.getMessage());
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Не удалось загрузить данные. Проверьте доступ к интернету.", Toast.LENGTH_LONG).show();
                 Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -661,10 +850,10 @@ public class ServerRequest {
         mInstance.addToRequestQueue(stringRequest);
     }
 
-    public void getUserTrips(final String token, final String id, final Context context) {
+    public void getUserTrips(final String token, final String id) {
         addTokenCookie(token);
         String mainUrl = baseUrl + "/api?query={tripMany(filter:{";
-        mainUrl += "driverId : \"" + id + "\"}){";
+        mainUrl += "passengerId : \"" + id + "\"}){";
         mainUrl += "from, to, cost}}";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
                 new Response.Listener<String>() {
@@ -784,7 +973,6 @@ public class ServerRequest {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
                         Log.d("Check", response);
                         JSONObject obj = null;
                         try {
@@ -812,45 +1000,35 @@ public class ServerRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("CheckEResponce", error.toString());
+                Log.e("Error responce", error.toString());
                 Toast.makeText(mCtx, error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         mInstance.addToRequestQueue(stringRequest);
     }
 
-    public void getDriverTrips(final String id) {
-        String mainUrl = baseUrl + "/api";
-        StringBuilder sb = new StringBuilder();
-        sb.append(mainUrl);
-        sb.append("?query=mutation{");
-        sb.append("tripMany(filter:{");
-        sb.append("_id:\"" + id + "\",");
-        sb.append("}");
-        sb.append(")");
-        sb.append("{");
-        sb.append("from,");
-        sb.append("to,");
-        sb.append("step,");
-        sb.append("cost,");
-        sb.append("addInfo");
-        sb.append("}");
-        sb.append("}");
+    public void getDriverTrips(final String token, final String id) {
+        addTokenCookie(token);
+        String mainUrl = baseUrl + "/api?query={tripMany(filter:{";
+        mainUrl += "driverId : \"" + id + "\"}){";
+        mainUrl += "from, to, cost}}";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Log.d("onresponse manyrtips", response);
+                        Log.d("response in get trips", response);
                         JSONObject obj;
                         try {
                             obj = new JSONObject(response);
-                            JSONObject data = obj.getJSONObject("data");
-                            Log.d("Code", data.toString());
-                            // saveCodeInterface.saveCode(code);
-                            // Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
+                            JSONArray array = obj.getJSONObject("data").getJSONArray("tripMany");
+                            ArrayList<JSONObject> trips = new ArrayList<>();
+                            for (int i = 0; i < array.length(); i++) {
+                                trips.add(array.getJSONObject(i));
+                            }
+                            CompletedOrdersFragment.initArray(trips);
                         } catch (JSONException e) {
-                            Log.e("onerror manytrips", e.getMessage());
+                            Log.e("onerror in get trips", e.getMessage());
                         }
 
                     }
@@ -860,7 +1038,79 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Set-Cookie", "userToken=" + token);
+                Log.d("set header", token);
+                headers.put("x-user-token", token);
+                return headers;
+            }
+        };
+        mInstance.addToRequestQueue(stringRequest);;
+    }
+
+    public void uploadCert(final Context context, final byte[] multipartBody, final String token, final String mimeType) {
+        if (context instanceof NextActivity) {
+            nextActivityInterface = (NextActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement NextActivity");
+        }
+            Log.d("uploadCert", "start");
+        Log.d("request headers", mimeType);
+        addTokenCookie(token);
+        String mainUrl = baseUrl + "/cert";
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Set-Cookie", "userToken=" + token);
+        headers.put("x-user-token", token);
+        // headers.put("Content-Type", "multipart/form-data");
+        MultipartRequest multipartRequest = new MultipartRequest(mainUrl, headers, mimeType, multipartBody, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                Toast.makeText(mCtx, "Успешно загружено!", Toast.LENGTH_SHORT).show();
+                nextActivityInterface.goNext();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String message = null;
+                if (error instanceof NetworkError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+//                    if (retries < 10) getUser(token, context, retries + 1);
+                } else if (error instanceof ServerError) {
+                    message = "The server could not be found. Please try again after some time!!";
+                } else if (error instanceof AuthFailureError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (error instanceof ParseError) {
+                    message = "Parsing error! Please try again after some time!!";
+                } else if (error instanceof TimeoutError) {
+                    message = "Connection TimeOut! Please check your internet connection.";
+                }
+                Log.e("SR | uploadCert", message);
+                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                nextActivityInterface.tryAgain();
+            }
         });
+        multipartRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 30000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 3;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                Log.e("loadCert| retry failed", error.getMessage() + "");
+                nextActivityInterface.tryAgain();
+            }
+        });
+        mInstance.addToRequestQueue(multipartRequest);
     }
 
     public interface NextActivity {
@@ -870,5 +1120,61 @@ public class ServerRequest {
     public interface SaveCode {
         void saveCode(String code);
         void tryAgain();
+    }
+    public interface UpdateCarInfo {
+        void updateCarInfo(String name, String model, String type, String carNumber, int year);
+    }
+}
+
+class MultipartRequest extends Request<NetworkResponse> {
+    private final Response.Listener<NetworkResponse> mListener;
+    private final Response.ErrorListener mErrorListener;
+    private final Map<String, String> mHeaders;
+    private final String mMimeType;
+    private final byte[] mMultipartBody;
+
+    public MultipartRequest(String url, Map<String, String> headers, String mimeType, byte[] multipartBody, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, url, errorListener);
+        this.mListener = listener;
+        this.mErrorListener = errorListener;
+        this.mHeaders = headers;
+        this.mMimeType = mimeType;
+        this.mMultipartBody = multipartBody;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        return (mHeaders != null) ? mHeaders : super.getHeaders();
+    }
+
+    @Override
+    public String getBodyContentType() {
+        return mMimeType;
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        return mMultipartBody;
+    }
+
+    @Override
+    protected Response<NetworkResponse> parseNetworkResponse(NetworkResponse response) {
+        try {
+            return Response.success(
+                    response,
+                    HttpHeaderParser.parseCacheHeaders(response));
+        } catch (Exception e) {
+            return Response.error(new ParseError(e));
+        }
+    }
+
+    @Override
+    protected void deliverResponse(NetworkResponse response) {
+        mListener.onResponse(response);
+    }
+
+    @Override
+    public void deliverError(VolleyError error) {
+        mErrorListener.onErrorResponse(error);
     }
 }

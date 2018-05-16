@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/new_favorite"
+        android:id="@+id/add_favorite"
         android:layout_below="@id/main_recycler"
         android:layout_marginStart="@dimen/small_margin"
         android:layout_marginEnd="@dimen/small_margin">
@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_place"
-            android:layout_toRightOf="@+id/imageAdd"
+            android:textSize="@dimen/normal_text"
+            android:layout_toEndOf="@+id/imageAdd"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/small_margin"/>

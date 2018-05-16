@@ -150,7 +150,7 @@ public class DriverRegActivity extends AppCompatActivity implements ServerReques
                     Car car = new Car(carText, carModelText, carTypeText, carNumberText, Integer.parseInt(carYearText),
                             SharedPref.loadUserId(view.getContext()));
 
-                    ServerRequest.getInstance(getBaseContext()).updateDriver(SharedPref.loadUserId(view.getContext()),
+                    ServerRequest.getInstance(view.getContext()).updateDriver(SharedPref.loadUserId(view.getContext()),
                             nameText, surnameText, age, genderText, "driver", car, view.getContext());
                 }
 

@@ -20,8 +20,8 @@
         android:required="true" />
 
     <application
+        android:name=".TaxiApplication"
         android:allowBackup="true"
-        android:name="vlimv.taxi.TaxiApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -30,6 +30,7 @@
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -78,7 +79,8 @@
 
         <activity android:name=".OrderTaxiActivity" />
         <activity android:name=".DriverOrderActivity" />
-        <activity android:name=".RateActivity"></activity>
+        <activity android:name=".RateActivity" />
+        <activity android:name=".AddFavoritePlaceActivity"></activity>
     </application>
 
 </manifest>

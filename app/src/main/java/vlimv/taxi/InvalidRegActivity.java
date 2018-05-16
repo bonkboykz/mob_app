@@ -13,23 +13,35 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class InvalidRegActivity extends AppCompatActivity {
+public class InvalidRegActivity extends AppCompatActivity implements ServerRequest.NextActivity{
     private static final int PICK_FROM_GALLERY = 1;
     static final int REQUEST_IMAGE_CAPTURE = 0;
     String mCurrentPhotoPath;
     ImageView image;
+
+    // Server request related
+    private final String twoHyphens = "--";
+    private final String lineEnd = "\r\n";
+    private final String boundary = "apiclient-" + System.currentTimeMillis();
+    private final String mimeType = "multipart/form-data;boundary=" + boundary;
+    private byte[] multipartBody;
 
     //Buttons
     Button next_btn;
@@ -41,8 +53,11 @@ public class InvalidRegActivity extends AppCompatActivity {
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PassengerRegActivity.class);
-                startActivity(intent);
+                if (multipartBody.length < 0) {
+                    Toast.makeText(view.getContext(), "Пожалуйста, загрузите фотографию", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ServerRequest.getInstance(view.getContext()).uploadCert(view.getContext(), multipartBody, SharedPref.loadToken(view.getContext()), mimeType);
             }
         });
 
@@ -111,6 +126,26 @@ public class InvalidRegActivity extends AppCompatActivity {
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
                         image.setImageBitmap(bitmap);
+                        byte[] imageFile = getByteArrayImage(bitmap);
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        DataOutputStream dos = new DataOutputStream(bos);
+                        try {
+                            // generate filename
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String imageFileName = "JPEG_" + timeStamp + ".jpg";
+                            Log.d("Preparing image", imageFileName);
+                            // the first file
+                            buildPart(dos, imageFile, imageFileName);
+                            // the second file
+                            // buildPart(dos, fileData2, "ic_action_book.png");
+                            // send multipart form data necesssary after file data
+                            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                            // pass to multipart body
+                            multipartBody = bos.toByteArray();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } catch (FileNotFoundException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -120,21 +155,79 @@ public class InvalidRegActivity extends AppCompatActivity {
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
-                    Bitmap bitmap = null;
+                    Bitmap bitmap;
                     next_btn.setEnabled(true);
                     next_btn.setBackground(getDrawable(R.drawable.ripple_effect_square));
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        image.setImageBitmap(bitmap);
+                        byte[] imageFile = getByteArrayImage(bitmap);
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        DataOutputStream dos = new DataOutputStream(bos);
+                        try {
+                            // generate filename
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String imageFileName = "JPEG_" + timeStamp + ".jpg";
+                            // the first file
+                            buildPart(dos, imageFile, imageFileName);
+                            // the second file
+                            // buildPart(dos, fileData2, "ic_action_book.png");
+                            // send multipart form data necesssary after file data
+                            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                            // pass to multipart body
+                            multipartBody = bos.toByteArray();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    image.setImageBitmap(bitmap);
                 }
                 break;
         }
 
     }
+    private void buildPart(DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
+        dataOutputStream.writeBytes(twoHyphens + boundary + "\r\n");
+        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"certificate\"; filename=\""
+                + fileName + "\"" + "\r\n");
+        dataOutputStream.writeBytes("Content-Type: image/jpeg\r\n");
+        dataOutputStream.writeBytes("\r\n");
 
+        ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
+        int bytesAvailable = fileInputStream.available();
+
+        int maxBufferSize = 1024 * 1024;
+        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+        byte[] buffer = new byte[bufferSize];
+
+        // read file and write it into form...
+        int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+        while (bytesRead > 0) {
+            dataOutputStream.write(buffer, 0, bufferSize);
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        }
+
+        dataOutputStream.writeBytes("\r\n");
+    }
+    public byte[] getByteArrayImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return imageBytes;
+    }
+    // Convert bitmap to string to be sent to sever
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+
+    }
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -205,4 +298,14 @@ public class InvalidRegActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
+    @Override
+    public void goNext() {
+        Intent intent = new Intent(getApplicationContext(), PassengerMainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void tryAgain() {
+        Toast.makeText(this, "Произошла ошибка, попробуйте еще раз", Toast.LENGTH_SHORT).show();
+    }
 }

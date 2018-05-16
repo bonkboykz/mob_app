@@ -51,7 +51,9 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
     Geocoder geocoder;
     PlaceDetectionClient mPlaceDetectionClient;
     FusedLocationProviderClient mFusedLocationProviderClient;
-    private final LatLng mDefaultLocation = new LatLng(43.238949, 76.889709);
+    private final double DEF_LAT = 45.017711;
+    private final double DEF_LNG = 78.380442;
+    private final LatLng mDefaultLocation = new LatLng(DEF_LAT, DEF_LNG);
     private static final int DEFAULT_ZOOM = 17;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -161,9 +163,9 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-        map.setLatLngBoundsForCameraTarget(new LatLngBounds(
-                new LatLng(43.143121, 76.691608),
-                new LatLng(43.396356, 77.134495)));
+//        map.setLatLngBoundsForCameraTarget(new LatLngBounds(
+//                new LatLng(43.143121, 76.691608),
+//                new LatLng(43.396356, 77.134495)));
         map.setMinZoomPreference(12.0f);
 
         // Prompt the user for permission.
@@ -220,7 +222,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                                 Log.d("TAG", "Current location is null. Using defaults.");
                                 Log.e("TAG", "Exception: %s", task.getException());
                                 map.moveCamera(CameraUpdateFactory
-                                        .newLatLngZoom(new LatLng(43.238949, 76.889709), DEFAULT_ZOOM));
+                                        .newLatLngZoom(new LatLng(DEF_LAT, DEF_LNG), DEFAULT_ZOOM));
                                 map.getUiSettings().setMyLocationButtonEnabled(false);
                             }
                         }
@@ -306,7 +308,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                 public void onClick(View v) {
                     dialog.dismiss();
                     map.moveCamera(CameraUpdateFactory
-                            .newLatLngZoom(new LatLng(43.238949, 76.889709), DEFAULT_ZOOM));
+                            .newLatLngZoom(new LatLng(DEF_LAT, DEF_LNG), DEFAULT_ZOOM));
                 }
             });
             text_turn_on.setOnClickListener(new View.OnClickListener() {

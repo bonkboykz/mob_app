@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
@@ -18,7 +19,6 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ToAddressActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,20 +27,27 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
     Place placeTo;
     PlaceAutocompleteFragment autocompleteFragment;
 
-    final double DEF_LAT = 45.017711;
-    final double DEF_LNG = 78.380442;
+    private final double DEF_LAT = 45.017711;
+    private final double DEF_LNG = 78.380442;
     LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_from_address);
+        setContentView(R.layout.activity_choose_address);
 
         showOnMap = findViewById(R.id.showOnMap);
         showOnMap.setOnClickListener(this);
         favorites = findViewById(R.id.favorites);
         favorites.setOnClickListener(this);
         Button btn_next = findViewById(R.id.btn_next);
+        ImageButton btn_back = findViewById(R.id.back_button);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
@@ -112,7 +119,7 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.favorites:
                 Intent intentFav = new Intent (getApplicationContext(), AddressFromFavoritesActivity.class);
-                startActivity(intentFav);
+                startActivityForResult(intentFav, 2);
                 break;
             default:
                 break;
@@ -140,7 +147,25 @@ public class ToAddressActivity extends AppCompatActivity implements View.OnClick
             PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     latLng, 17));
             finish();
-        } else if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == 2) {
+            double lat = data.getDoubleExtra("LAT", DEF_LAT);
+            double lng = data.getDoubleExtra("LNG", DEF_LAT);
+            latLng = new LatLng(lat, lng);
+            addressText = data.getStringExtra("ADDRESS");
+            PassengerCityFragment.pointB.setText(addressText);
+            if (PassengerCityFragment.markerTo != null) {
+                PassengerCityFragment.markerTo.setPosition(latLng);
+            } else {
+                PassengerCityFragment.markerTo = PassengerCityFragment.map.
+                        addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title("Конечный адрес")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker)));
+            }
+            PassengerCityFragment.map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, 17));
+            finish();
+        }  else if (resultCode == Activity.RESULT_CANCELED) {
             // some stuff that will happen if there's no result
         }
     }
