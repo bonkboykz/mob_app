@@ -130,7 +130,9 @@ public class DriverRegActivity extends AppCompatActivity implements ServerReques
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isEmpty(name) || isEmpty(surname) || age == 0 || genderText == null || carText == null
+                if (age == 0) {
+                    Toast.makeText(view.getContext(), "Возраст не может быть меньше одного.", Toast.LENGTH_LONG).show();
+                } else if (isEmpty(name) || isEmpty(surname) || genderText == null || carText == null
                         || carModelText == null || carTypeText == null || isEmpty(carNumber) || isEmpty(carYear))
                     Toast.makeText(view.getContext(), "Заполните пустые поля.", Toast.LENGTH_LONG).show();
                 else {

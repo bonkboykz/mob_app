@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Taxi</string>
+    <string name="app_name">Asar Taxi</string>
     <string name="welcome">Добро пожаловать</string>
     <string name="next">Далее</string>
     <string name="loading">Идет загрузка...</string>
