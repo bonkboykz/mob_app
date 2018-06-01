@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_item"
+    android:layout_width="match_parent"
+    android:minWidth="360dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/normal_margin">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:id="@+id/imagePointA"
+            android:padding="@dimen/xxsmall_padding"
+            android:src="@drawable/ic_blue_marker"/>
+
+        <TextView
+            android:id="@+id/dialogPointA"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_toEndOf="@+id/imagePointA" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xxsmall_padding"
+            android:id="@+id/imagePointB"
+            android:src="@drawable/ic_green_marker"/>
+
+        <TextView
+            android:id="@+id/dialogPointB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_toEndOf="@+id/imagePointB" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="@dimen/normal_icon"
+            android:layout_height="@dimen/normal_icon"
+            android:padding="@dimen/xsmall_padding"
+            android:id="@+id/imageSum"
+            android:src="@drawable/ic_tenge"/>
+
+        <TextView
+            android:id="@+id/dialogPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:textColor="@color/black"
+            android:layout_toEndOf="@+id/imageSum" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/details"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_marginEnd="@dimen/normal_margin"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/small_margin">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_cancel"
+            android:text="@string/close"
+            android:background="?selectableItemBackground"
+            android:textColor="@android:color/darker_gray"
+            android:layout_alignParentEnd="true"
+            android:textAllCaps="true" />
+    </RelativeLayout>
+</LinearLayout>

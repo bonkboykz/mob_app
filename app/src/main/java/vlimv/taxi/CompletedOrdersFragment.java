@@ -164,8 +164,8 @@ public class CompletedOrdersFragment extends Fragment {
         void onListItemClick(JSONObject trip);
     }
     void startOrder() {
-        Intent intent = new Intent(getContext(), DriverOrderActivity.class);
-        startActivity(intent);
+        // Intent intent = new Intent(getContext(), DriverOrderActivity.class);
+        // startActivity(intent);
 
     }
 
@@ -178,7 +178,7 @@ public class CompletedOrdersFragment extends Fragment {
             final Dialog_details dialog = new Dialog_details(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
-            dialog.setContentView(R.layout.dialog_details);
+            dialog.setContentView(R.layout.dialog_order_details_completed);
 
             TextView pointA = dialog.findViewById(R.id.dialogPointA);
             TextView pointB = dialog.findViewById(R.id.dialogPointB);
@@ -200,18 +200,9 @@ public class CompletedOrdersFragment extends Fragment {
                 e.printStackTrace();
             }
             TextView text_cancel = dialog.findViewById(R.id.text_cancel);
-            TextView text_accept = dialog.findViewById(R.id.text_accept);
             text_cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Заказ не беру.", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            });
-            text_accept.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
-                    startOrder();
                     dialog.dismiss();
                 }
             });

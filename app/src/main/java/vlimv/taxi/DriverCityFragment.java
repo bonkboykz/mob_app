@@ -91,6 +91,7 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
     private String mTripId;
     private String mTripPrice;
     private String mTripTo;
+    private String mTripFrom;
     private String mTripLat;
     private String mTripLng;
 
@@ -137,6 +138,7 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
         mTripId = getArguments().getString("TRIP_ID");
         mTripPrice = getArguments().getString("TRIP_PRICE");
         mTripTo = getArguments().getString("TRIP_TO");
+        mTripFrom = getArguments().getString("TRIP_FROM");
         //mTripLat = getArguments().getString("TRIP_LAT");
         //mTripLng = getArguments().getString("TRIP_LNG");
         Log.d("DriverCityFragment", "tripId: " + mTripId);
@@ -211,7 +213,11 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
                     top_layout.setBackgroundResource(R.color.yellow);
                     cancel_order.setText("Начать поездку");
                     arrived.setText("Навигатор");
-                    time.setText(mTripPrice + " тг\n" + "до " + mTripTo);
+                    if (mTripPrice.matches("[0-9]+")) {
+                        time.setText(mTripPrice + " тг\n" + "до " + mTripTo);
+                    } else {
+                        time.setText(mTripPrice + "\n" + "до " + mTripTo);
+                    }
                     ServerSocket.getInstance(getActivity().getApplicationContext()).sendDriverCame(mTripId);
                     DriverOrderActivity.timer.cancel();
                 }
@@ -224,6 +230,8 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
             public void onClick(View view) {
                 DriverOrderActivity.timer.cancel();
                 if (cancel_order.getText().equals("Приехали!")) {
+                    DriverOrderActivity activity = (DriverOrderActivity) getActivity();
+                    activity.unlockDrawer();
                     DriverOrderActivity.orderState = "new";
                     ServerSocket.getInstance(getActivity().getApplicationContext()).sendEndTrip(mTripId);
                     Intent intent = new Intent(view.getContext(), DriverMainActivity.class);
@@ -241,6 +249,8 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
                     ServerSocket.getInstance(getActivity().getApplicationContext()).sendDriverStart(mTripId);
                 }
                 if (cancel_order.getText().equals("Отмена")) {
+                    DriverOrderActivity activity = (DriverOrderActivity) getActivity();
+                    activity.unlockDrawer();
                     DriverOrderActivity.orderState = "new";
                     ServerSocket.getInstance(view.getContext()).sendCancelTrip(mTripId);
                     Toast.makeText(view.getContext(), "Отмена", Toast.LENGTH_SHORT).show();
@@ -272,6 +282,10 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
         DriverOrderActivity.startTimer(timeInMillis);
         DriverOrderActivity.orderState = "arriving";
         sendTripAccepted(mTripId, SharedPref.loadUserId(getContext()), "", timeInMillis + "");
+        TextView pointA = showAddress.findViewById(R.id.pointA);
+        TextView pointB = showAddress.findViewById(R.id.pointB);
+        pointA.setText(mTripFrom);
+        pointB.setText(mTripTo);
         textLayout.setVisibility(View.VISIBLE);
         showAddress.setVisibility(View.VISIBLE);
         chooseTime.setVisibility(View.GONE);
@@ -319,6 +333,8 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
 //            Log.e("sendTripAccepted", e.getMessage());
 //        }
 //        mSocket.emit("trip_accepted", tripAcceptedObj);
+        DriverOrderActivity activity = (DriverOrderActivity) getActivity();
+        activity.lockDrawer();
         ServerSocket.getInstance(getActivity().getApplicationContext()).sendTripAccepted(tripId, driverId, vehicleId, expTime);
     }
     // TODO: Rename method, update argument and hook method into UI event

@@ -40,6 +40,7 @@ public class DriverOrderActivity extends AppCompatActivity implements
     private String mTripId;
     private String mTripPrice;
     private String mTripTo;
+    private String mTripFrom;
 
     static String orderState = "new";
     @Override
@@ -51,6 +52,7 @@ public class DriverOrderActivity extends AppCompatActivity implements
         mTripId = extras.getString("TRIP_ID");
         mTripPrice = extras.getString("TRIP_PRICE");
         mTripTo = extras.getString("TRIP_TO");
+        mTripFrom = extras.getString("TRIP_FROM");
 //        if (savedInstanceState != null) mTripId = savedInstanceState.getString("TRIP_ID");
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,6 +104,13 @@ public class DriverOrderActivity extends AppCompatActivity implements
         //you can leave it empty
     }
 
+    public void lockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+    public void unlockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
     private void displaySelectedScreen(int itemId) {
 
         //creating fragment object
@@ -114,6 +123,7 @@ public class DriverOrderActivity extends AppCompatActivity implements
                 bundle.putString("TRIP_ID", mTripId);
                 bundle.putString("TRIP_PRICE", mTripPrice);
                 bundle.putString("TRIP_TO", mTripTo);
+                bundle.putString("TRIP_FROM", mTripFrom);
                 Log.d("DriverOrderActivity", "tripId: " + mTripId);
                 Log.d("DriverOrderActivity", "tripPrice: " + mTripPrice);
                 Log.d("DriverOrderActivity", "tripTo: " + mTripTo);

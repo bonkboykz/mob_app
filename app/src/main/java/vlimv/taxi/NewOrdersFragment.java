@@ -54,6 +54,10 @@ public class NewOrdersFragment extends Fragment {
 
 //    private Socket mSocket;
 
+    public static List<JSONObject> getTrips() {
+        return trips;
+    }
+
     private TextView emptyTV;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -247,16 +251,12 @@ public class NewOrdersFragment extends Fragment {
         void onListItemClick(JSONObject trip);
     }
 
-//    void startOrder() {
-//        Intent intent = new Intent(getContext(), DriverOrderActivity.class);
-//        startActivity(intent);
-//
-//    }
-    void startOrder(String tripId, String tripPrice, String tripTo) {
+    void startOrder(String tripId, String tripPrice, String tripTo, String tripFrom) {
         Intent intent = new Intent(getContext(), DriverOrderActivity.class);
         intent.putExtra("TRIP_ID", tripId);
         intent.putExtra("TRIP_PRICE", tripPrice);
         intent.putExtra("TRIP_TO", tripTo);
+        intent.putExtra("TRIP_FROM", tripFrom);
 //        intent.putExtra("TRIP_LAT", tripLat);
 //        intent.putExtra("TRIP_LAT", tripLng);
         Log.d("startOrder", "Starting activity DriverOrderActivity with TRIP_ID: " + tripId);
@@ -271,30 +271,6 @@ public class NewOrdersFragment extends Fragment {
             super(a);
         }
 
-//        public void showDialog(Activity activity){
-//            final Dialog_details dialog = new Dialog_details(activity);
-//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            dialog.setCancelable(true);
-//            dialog.setContentView(R.layout.dialog_details);
-//
-//            TextView text_cancel = dialog.findViewById(R.id.text_cancel);
-//            TextView text_accept = dialog.findViewById(R.id.text_accept);
-//            text_cancel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(getContext(), "Заказ не беру.", Toast.LENGTH_SHORT).show();
-//                    dialog.dismiss();
-//                }
-//            });
-//            text_accept.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    Toast.makeText(getContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
-//                    startOrder();
-//                    dialog.dismiss();
-//                }
-//            });
-//            dialog.show();
-//        }
         public void showDialog(Activity activity,
                                final String tripId,
                                final String tripPrice,
@@ -327,7 +303,7 @@ public class NewOrdersFragment extends Fragment {
             text_accept.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "Заказ принят.", Toast.LENGTH_SHORT).show();
-                    startOrder(tripId, tripPrice, tripTo);
+                    startOrder(tripId, tripPrice, tripTo, tripFrom);
                     dialog.dismiss();
                 }
             });

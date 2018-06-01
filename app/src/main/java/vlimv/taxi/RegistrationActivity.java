@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
-public class RegistrationActivity extends Activity implements ServerRequest.NextActivity {
+public class RegistrationActivity extends Activity implements ServerRequest.NextActivity, ServerRequest.SaveCode {
 
     DilatingDotsProgressBar progressBar;
     Button btn;
@@ -89,6 +89,11 @@ public class RegistrationActivity extends Activity implements ServerRequest.Next
             Intent intent = new Intent(getApplicationContext(), AccountTypeActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void saveCode(String code) {
+
     }
 
     @Override

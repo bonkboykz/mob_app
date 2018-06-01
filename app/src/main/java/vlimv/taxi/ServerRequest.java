@@ -131,11 +131,29 @@ public class ServerRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                String message = null;
+                if (error instanceof NetworkError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (error instanceof ServerError) {
+                    message = "The server could not be found. Please try again after some time!!";
+                    signIn(phone, (Context) saveCodeInterface);
+                    return;
+                } else if (error instanceof AuthFailureError) {
+                    message = "Cannot connect to Internet...Please check your connection!";
+                } else if (error instanceof ParseError) {
+                    message = "Parsing error! Please try again after some time!!";
+                } else if (error instanceof TimeoutError) {
+                    message = "Connection TimeOut! Please check your internet connection.";
+                }
+                Log.e("SR | signUp", message);
                 saveCodeInterface.tryAgain();
                 Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
+//            public String getBodyContentType() {
+//                return "application/json; charset=utf-8";
+//            }
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
@@ -149,6 +167,14 @@ public class ServerRequest {
                     VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
                     return null;
                 }
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+//                headers.put("Content-Type","application/x-www-form-urlencoded");
+                headers.put("Content-Type","application/json");
+                return super.getHeaders();
             }
         };
         mInstance.addToRequestQueue(stringRequest);
@@ -702,6 +728,7 @@ public class ServerRequest {
                             String id = obj.getString("_id");
                             String role = obj.getString("role");
                             String lname = "";
+
                             try {
                                 lname = obj.getString("lname");
                             } catch (JSONException e) {
@@ -720,6 +747,8 @@ public class ServerRequest {
                             SharedPref.saveUserType(context, role);
                             SharedPref.saveIsReg(context, !(lname.isEmpty()));
                             ServerSocket.getInstance(mCtx).getOnline();
+                            DriverMainActivity.setName(name, lname);
+                            PassengerMainActivity.setName(name, lname);
                             if (context instanceof RegistrationActivity || context instanceof DriverMainActivity) {
                                 nextActivityInterface.goNext();
                             }

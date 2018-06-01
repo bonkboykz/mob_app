@@ -292,6 +292,8 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
             @Override
             public void run() {
                 mTripId = tripId;
+                PassengerMainActivity activity = (PassengerMainActivity)mFragment.getActivity();
+                activity.lockDrawer();
                 mFragment.searchDriver();
             }
         });
@@ -350,6 +352,8 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
             mFragment.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    PassengerMainActivity activity = (PassengerMainActivity)mFragment.getActivity();
+                    activity.unlockDrawer();
                     Intent rateIntent = new Intent(mFragment.getContext(), RateActivity.class);
                     rateIntent.putExtra("TRIP_ID", tripId);
                     mFragment.getActivity().startActivity(rateIntent);
@@ -385,17 +389,17 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
         progressBar.hideNow();
         LayoutInflater inflater = getLayoutInflater();
         topLayout = inflater.inflate(R.layout.top_layout, mainLayout, false);
-        topLayout.setBackground(getResources().getDrawable(R.drawable.gradient_vertical));
+        topLayout.setBackgroundColor(getResources().getColor(R.color.yellow));
         addressLayout = inflater.inflate(R.layout.address_layout, mainLayout, false);
 
         finalPrice = topLayout.findViewById(R.id.final_price);
         finalPrice.setText(PassengerCityFragment.price.getText());
         finalPrice.setTextSize(36.0f);
 
-        TextView pointA = addressLayout.findViewById(R.id.pointA);
-        TextView pointB = addressLayout.findViewById(R.id.pointB);
-        pointA.setText(addressFrom);
-        pointB.setText(addressTo);
+        TextView layoutPointA = addressLayout.findViewById(R.id.pointA);
+        TextView layoutPointB = addressLayout.findViewById(R.id.pointB);
+        layoutPointA.setText(PassengerCityFragment.pointA.getText());
+        layoutPointB.setText(PassengerCityFragment.pointB.getText());
 
         DilatingDotsProgressBar progressBar = topLayout.findViewById(R.id.progress);
         progressBar.showNow();
@@ -405,6 +409,8 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 if (leftBtn.getText().equals("Отмена")) {
+                    PassengerMainActivity activity = (PassengerMainActivity) getActivity();
+                    activity.unlockDrawer();
                     ServerSocket.getInstance(view.getContext()).sendCancelTrip(mTripId);
                     Toast.makeText(view.getContext(), "Заказ был отменен", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(view.getContext(), PassengerMainActivity.class);
@@ -413,13 +419,17 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
             }
         });
         rightBtn = topLayout.findViewById(R.id.right_btn);
-        rightBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                d = new DialogPrice(getActivity());
-                d.showDialog(getActivity());
-            }
-        });
+        if (isInvalid) {
+            rightBtn.setVisibility(View.GONE);
+        } else {
+            rightBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    d = new DialogPrice(getActivity());
+                    d.showDialog(getActivity());
+                }
+            });
+        }
 
 //        leftBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -432,8 +442,8 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
         mainLayout.addView(topLayout);
         mainLayout.addView(addressLayout);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(getResources()
-                .getDrawable(R.drawable.gradient_vertical));
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
+                Color.parseColor("#f7ce68")));
         Spannable text = new SpannableString("Ищем водителя");
         text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(text);
@@ -550,6 +560,8 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                rightBtn.setVisibility(View.INVISIBLE);
+                rightBtn.setEnabled(false);
                 ServerSocket.getInstance(getActivity().getApplicationContext()).sendClientReady(tripId);
             }
         });

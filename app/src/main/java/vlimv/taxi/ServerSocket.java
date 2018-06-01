@@ -15,8 +15,14 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.sql.Driver;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by HP on 11-Apr-18.
@@ -182,6 +188,7 @@ public class ServerSocket {
         } catch (JSONException e) {
             Log.e("sendReportTrip", e.getMessage());
         }
+        Log.d("sendReportTrip", tripId + " " + comment + " " + stars);
         mSocket.emit("report_trip", reportTripObj);
     }
 
@@ -219,7 +226,65 @@ public class ServerSocket {
                     // Log.d("onActiveTripsList", arr.getJSONObject(i).toString());
                     list.add(arr.getJSONObject(i));
                 }
-                Collections.reverse(list);
+                Collections.sort(list, new Comparator<JSONObject>() {
+                    @Override
+                    public int compare(JSONObject jsonObject, JSONObject t1) {
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        try {
+                            String costA = jsonObject.getString("cost");
+                            String costB = t1.getString("cost");
+                            boolean costAVol = costA.equals("Волонтерская поездка");
+                            boolean costBVol = costB.equals("Волонтерская поездка");
+//                            Log.d("compare", costA);
+//                            Log.d("compare", costB);
+//                            Log.d("compare", costAVol + "");
+//                            Log.d("compare", costAVol + "");
+
+                            if (costAVol || costBVol) {
+                                if (costAVol && costBVol) {
+                                    //
+                                } else {
+                                    return (costAVol) ? -1 : 1;
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("compare", e.getMessage());
+                        }
+                        try {
+                            Date dateA = df.parse(jsonObject.getString("createdAt"));
+                            Date dateB = df.parse(t1.getString("createdAt"));
+                            // Log.d("compare", dateA.toString());
+                            // Log.d("compare", dateB.toString());
+                            // Log.d("compare", Integer.toString(dateA.compareTo(dateB)));
+                            return (-1) * dateA.compareTo(dateB);
+                        } catch (Exception e) {
+                            Log.e("compare", e.getMessage());
+                        }
+
+                            // "cost":"Волонтерская поездка"
+                        return 0;
+                    }
+                });
+                if (DriverMainActivity.status != null) {
+                    if (DriverMainActivity.status.equals("busy")) {
+                        final ArrayList<JSONObject> listCur = new ArrayList<>();
+                        for (JSONObject obj: list) {
+                            try {
+                                String cost = obj.getString("cost");
+                                boolean costVol = cost.equals("Волонтерская поездка");
+                                if (costVol) {
+                                    listCur.add(obj);
+                                }
+                            } catch (Exception e) {
+                                Log.e("busy filter", e.getMessage());
+                            }
+                        }
+                        list.clear();
+                        list.addAll(listCur);
+                    }
+                }
+//                Collections.reverse(list);
                 // TODO pass active trips to trips view
                 NewOrdersFragment.initDataset(list);
             } catch (JSONException e) {
@@ -245,23 +310,22 @@ public class ServerSocket {
                 obj = new JSONObject(args[0].toString());
                 expTime = obj.getInt("expTime");
                 driverInfoObj = obj.getJSONObject("driverId");
-                vehicleInfoObj = obj.getJSONObject("vehicleId");
                 driverLastname = driverInfoObj.getString("lname");
                 driverPhone = driverInfoObj.getString("phone");
                 driverName = driverInfoObj.getString("name");
-                vehicleName = vehicleInfoObj.getString("name");
-                vehicleModel = vehicleInfoObj.getString("model");
-                vehicleNumber = vehicleInfoObj.getString("gosNumber");
+                driverRating = driverInfoObj.getString("rating");
                 from = obj.getString("from");
                 to = obj.getString("to");
             } catch (JSONException e) {
                 Log.e("onTripAccepted", e.getMessage());
             }
             try {
-                driverRating = obj.getString("rating");
+                vehicleInfoObj = obj.getJSONObject("vehicleId");
+                vehicleName = vehicleInfoObj.getString("name");
+                vehicleModel = vehicleInfoObj.getString("model");
+                vehicleNumber = vehicleInfoObj.getString("gosNumber");
             } catch (JSONException e) {
-                driverRating = "0.0";
-                Log.e("onTripAccepted", "dRating no set. Reason: " + e.getMessage());
+                Log.e("onTripAccepted", e.getMessage());
             }
             // TODO trigger update client view
             PassengerCityFragment.tripAcceptedPassenger(from, to, driverName, driverPhone, vehicleName, vehicleModel, vehicleNumber, expTime, driverRating);
@@ -358,6 +422,7 @@ public class ServerSocket {
             PassengerCityFragment.tripCanceledPassenger();
             // TODO trigger update view on passenger
             DriverCityFragment.tripCanceledDriver();
+            getActiveTrips();
         }
     };
 }

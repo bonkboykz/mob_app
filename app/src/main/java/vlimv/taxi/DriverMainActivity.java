@@ -31,6 +31,8 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -41,13 +43,14 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         ServerRequest.NextActivity {
     private DrawerLayout mDrawerLayout;
     public static Toolbar toolbar;
-    private NavigationView nvDrawer;
+    private static NavigationView nvDrawer;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     static DilatingDotsProgressBar progressBar;
 
+    private static Activity mActivity;
     public static Button next_btn;
     public static TextView free, busy;
-    String status;
+    public static String status;
 //    private Socket mSocket;
     Fragment fragment;
 
@@ -61,10 +64,12 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
 //        mSocket = app.getSocket();
 //        mSocket.on("hello", onHello);
 //        mSocket.connect();
+        mActivity = this;
         setContentView(R.layout.activity_driver_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this, 0);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -96,6 +101,26 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
 //        Log.d("getActiveTrips", "Emitting active_trips");
 //        mSocket.emit("active_trips");
         ServerSocket.getInstance(getApplicationContext()).getActiveTrips();
+    }
+
+    public void lockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+    public void unlockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public static void setName(final String name, final String lname) {
+        if (mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View navHeader = nvDrawer.getHeaderView(0);
+                    TextView fullName = navHeader.findViewById(R.id.name);
+                    fullName.setText(name + " " + lname);
+                }
+            });
+        }
     }
 
 //    public void getOnline() {
@@ -196,17 +221,31 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
                 busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white_stroke));
                 busy.setTextColor(Color.parseColor("#000000"));
                 busy.setElevation(0.0f);
-                Toast.makeText(this, status, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Вам будут приходить все поездки", Toast.LENGTH_LONG).show();
+                getActiveTrips();
                 break;
             case R.id.busy:
                 status = "busy";
                 free.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_white_stroke));
                 free.setTextColor(Color.parseColor("#000000"));
                 free.setElevation(0.0f);
-                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square));
+                busy.setBackground(getResources().getDrawable(R.drawable.ripple_effect_square_red));
                 busy.setTextColor(Color.parseColor("#ffffff"));
                 busy.setElevation(5.0f);
-                Toast.makeText(this, status, Toast.LENGTH_LONG).show();
+                final ArrayList<JSONObject> listCur = new ArrayList<>();
+                for (JSONObject obj: NewOrdersFragment.getTrips()) {
+                    try {
+                        String cost = obj.getString("cost");
+                        boolean costVol = cost.equals("Волонтерская поездка");
+                        if (costVol) {
+                            listCur.add(obj);
+                        }
+                    } catch (Exception e) {
+                        Log.e("busy filter", e.getMessage());
+                    }
+                }
+                NewOrdersFragment.initDataset(listCur);
+                Toast.makeText(this, "Вам будут приходить только Волонтерские поездки", Toast.LENGTH_LONG).show();
                 break;
         }
     }

@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -26,7 +27,10 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        // TODO sockets connection
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         ServerSocket.getInstance(this.getApplicationContext()).connect();
 
         final MaskedEditText phone = findViewById(R.id.phone_input);
@@ -53,6 +57,8 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 String number = phone.getText().toString();
                 number = number.replaceAll("[^0-9]", "");
                 number = "+" + number;

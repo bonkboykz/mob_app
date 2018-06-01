@@ -92,6 +92,14 @@ public class FavoritesFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.setOnItemTapListener(mListItemClickListener);
 
+//        if (list != null) {
+//            adapter = new FavoritePlacesAdapter(list);
+//            recyclerView.setAdapter(adapter);
+//            adapter.setOnItemTapListener(mListItemClickListener);
+//        } else {
+//            Toast.makeText(getContext(), getResources().getString(R.string.empty), Toast.LENGTH_LONG).show();
+//        }
+
         RelativeLayout addFavorite = view.findViewById(R.id.add_favorite);
         addFavorite.setOnClickListener(new View.OnClickListener() {
             @Override

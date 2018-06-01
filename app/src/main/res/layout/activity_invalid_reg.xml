@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="vlimv.taxi.InvalidRegActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,6 +92,20 @@
                 android:clickable="true"/>
         </LinearLayout>
     </LinearLayout>
+    <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:radius="5dp"
+        android:color="@color/colorPrimary"
+        app:dd_numDots="3"
+        android:layout_marginBottom="@dimen/small_margin"
+        app:dd_scaleMultiplier="1.5"
+        app:dd_animationDuration="500"
+        app:dd_horizontalSpacing="@dimen/small_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/button"
         android:background="@android:color/darker_gray"

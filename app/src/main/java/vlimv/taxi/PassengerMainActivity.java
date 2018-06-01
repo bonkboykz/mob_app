@@ -1,5 +1,6 @@
 package vlimv.taxi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.PersistableBundle;
@@ -26,15 +27,17 @@ public class PassengerMainActivity extends AppCompatActivity implements
         SupportFragment.OnFragmentInteractionListener, ServerRequest.NextActivity {
 
     //drawer variables
+    private static Activity mActivity;
     private DrawerLayout mDrawerLayout;
     public static Toolbar toolbar;
-    private NavigationView nvDrawer;
+    private static NavigationView nvDrawer;
     static ActionBarDrawerToggle mActionBarDrawerToggle;
     Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             Log.d("Activity load fragment", "");
@@ -44,6 +47,7 @@ public class PassengerMainActivity extends AppCompatActivity implements
         //toolbar and nav drawer
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ServerRequest.getInstance(this).getUser(SharedPref.loadToken(this), this, 0);
         getSupportActionBar().setTitle("");
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -63,6 +67,19 @@ public class PassengerMainActivity extends AppCompatActivity implements
 
         displaySelectedScreen(R.id.nav_city);
 
+    }
+
+    public static void setName(final String name, final String lname) {
+        if (mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View navHeader = nvDrawer.getHeaderView(0);
+                    TextView fullName = navHeader.findViewById(R.id.name);
+                    fullName.setText(name + " " + lname);
+                }
+            });
+        }
     }
 
 
@@ -106,6 +123,12 @@ public class PassengerMainActivity extends AppCompatActivity implements
         }
     }
 
+    public void lockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+    public void unlockDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

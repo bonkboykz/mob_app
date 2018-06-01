@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.gson.Gson;
@@ -130,13 +131,17 @@ public class SharedPref {
         String json = sharedPreferences.getString(tagFavorites, "");
         ArrayList<LinkedTreeMap> places = gson.fromJson(json, ArrayList.class);
         ArrayList<Address> addresses = new ArrayList<>();
-        for (LinkedTreeMap o: places) {
-            double lat = Double.parseDouble(o.get("lat").toString());
-            double lng = Double.parseDouble(o.get("lng").toString());
-            String name = o.get("name").toString();
-            String address = o.get("address").toString();
-            Address addressEntity = new Address(lat, lng, name, address);
-            addresses.add(addressEntity);
+        if (places == null) {
+            return addresses;
+        } else {
+            for (LinkedTreeMap o: places) {
+                double lat = Double.parseDouble(o.get("lat").toString());
+                double lng = Double.parseDouble(o.get("lng").toString());
+                String name = o.get("name").toString();
+                String address = o.get("address").toString();
+                Address addressEntity = new Address(lat, lng, name, address);
+                addresses.add(addressEntity);
+            }
         }
         return addresses;
     }

@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -35,6 +37,7 @@ public class InvalidRegActivity extends AppCompatActivity implements ServerReque
     static final int REQUEST_IMAGE_CAPTURE = 0;
     String mCurrentPhotoPath;
     ImageView image;
+    DilatingDotsProgressBar progressBar;
 
     // Server request related
     private final String twoHyphens = "--";
@@ -49,6 +52,9 @@ public class InvalidRegActivity extends AppCompatActivity implements ServerReque
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invalid_reg);
+
+        progressBar = findViewById(R.id.progress);
+
         next_btn = findViewById(R.id.button);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,8 +62,11 @@ public class InvalidRegActivity extends AppCompatActivity implements ServerReque
                 if (multipartBody.length < 0) {
                     Toast.makeText(view.getContext(), "Пожалуйста, загрузите фотографию", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    next_btn.setVisibility(View.GONE);
+                    progressBar.showNow();
+                    ServerRequest.getInstance(view.getContext()).uploadCert(view.getContext(), multipartBody, SharedPref.loadToken(view.getContext()), mimeType);
                 }
-                ServerRequest.getInstance(view.getContext()).uploadCert(view.getContext(), multipartBody, SharedPref.loadToken(view.getContext()), mimeType);
             }
         });
 
@@ -306,6 +315,8 @@ public class InvalidRegActivity extends AppCompatActivity implements ServerReque
 
     @Override
     public void tryAgain() {
+        progressBar.hideNow();
+        next_btn.setVisibility(View.VISIBLE);
         Toast.makeText(this, "Произошла ошибка, попробуйте еще раз", Toast.LENGTH_SHORT).show();
     }
 }

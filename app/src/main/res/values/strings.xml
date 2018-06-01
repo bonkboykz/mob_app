@@ -4,6 +4,7 @@
     <string name="next">Далее</string>
     <string name="loading">Идет загрузка...</string>
     <string name="empty">Здесь ничего нет.</string>
+    <string name="close">Закрыть</string>
 
     <string name="submit">Подтвердить</string>
     <string name="ready">Готово</string>
