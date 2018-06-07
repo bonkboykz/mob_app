@@ -72,7 +72,6 @@ public class DriverTakeOrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_driver_take_order, container, false);
 
-        DriverMainActivity.next_btn.setVisibility(View.GONE);
         DriverMainActivity.free.setVisibility(View.VISIBLE);
         DriverMainActivity.busy.setVisibility(View.VISIBLE);
 

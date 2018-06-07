@@ -77,14 +77,10 @@ public class CabinetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cabinet, container, false);
 
-        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
-            DriverMainActivity.next_btn.setVisibility(View.GONE);
+        if (DriverMainActivity.free != null && DriverMainActivity.busy != null) {
             DriverMainActivity.free.setVisibility(View.GONE);
             DriverMainActivity.busy.setVisibility(View.GONE);
         }
-
-        if (DriverOrderActivity.next_btn != null)
-            DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.cabinet);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(

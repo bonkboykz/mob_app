@@ -79,14 +79,10 @@ public class SettingsFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
-        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
-            DriverMainActivity.next_btn.setVisibility(View.GONE);
+        if (DriverMainActivity.free != null && DriverMainActivity.busy != null) {
             DriverMainActivity.free.setVisibility(View.GONE);
             DriverMainActivity.busy.setVisibility(View.GONE);
         }
-
-        if (DriverOrderActivity.next_btn != null)
-            DriverOrderActivity.next_btn.setVisibility(View.GONE);
 
         ServerRequest.getInstance(getContext()).getUser(SharedPref.loadToken(getContext()), getContext(), 0);
 

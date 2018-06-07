@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
 
@@ -31,7 +32,7 @@ import static vlimv.taxi.DriverOrderActivity.mActionBarDrawerToggle;
  * Use the {@link CarOptionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CarOptionsFragment extends Fragment{
+public class CarOptionsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,6 +44,9 @@ public class CarOptionsFragment extends Fragment{
     String carName, carModel, carType;
     MaterialBetterSpinner spinner_car, spinner_car_model, spinner_car_type;
     EditText numberEditText, yearEditText;
+
+    DilatingDotsProgressBar progressBar;
+    Button next_btn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,20 +90,13 @@ public class CarOptionsFragment extends Fragment{
         ServerRequest.getInstance(getContext()).getCar(SharedPref.loadUserId(getContext()), getContext());
         DriverMainActivity.free.setVisibility(View.GONE);
         DriverMainActivity.busy.setVisibility(View.GONE);
-        if (DriverOrderActivity.next_btn != null) {
-            DriverOrderActivity.next_btn.setVisibility(View.VISIBLE);
-            DriverOrderActivity.next_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), DriverOrderActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.car_options);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                 Color.parseColor("#ffffff")));
         //        mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
+
+        progressBar = view.findViewById(R.id.progress);
 
         spinner_car = view.findViewById(R.id.car);
         spinner_car.setEnabled(false);
@@ -143,19 +140,21 @@ public class CarOptionsFragment extends Fragment{
         numberEditText = view.findViewById(R.id.car_number);
         yearEditText = view.findViewById(R.id.car_year);
 
-        DriverMainActivity.next_btn.setVisibility(View.VISIBLE);
-        DriverMainActivity.next_btn.setOnClickListener(new View.OnClickListener() {
+        next_btn = view.findViewById(R.id.next_button);
+        next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DriverMainActivity.progressBar.showNow();
-                DriverMainActivity.next_btn.setVisibility(View.GONE);
+                progressBar.showNow();
+                next_btn.setVisibility(View.GONE);
                 String driverId = SharedPref.loadUserId(view.getContext());
                 String carNumber = numberEditText.getText().toString();
                 String carYear = yearEditText.getText().toString();
+                carName = spinner_car.getText().toString();
+                carModel = spinner_car_model.getText().toString();
+                carType = spinner_car_type.getText().toString();
+
                 ServerRequest.getInstance(view.getContext()).updateCar(driverId, carName, carModel, carType,
                         carNumber, carYear, view.getContext());
-//                Intent intent = new Intent(getActivity().getApplicationContext(), DriverMainActivity.class);
-//                startActivity(intent);
             }
         });
 

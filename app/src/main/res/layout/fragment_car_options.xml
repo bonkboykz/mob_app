@@ -5,74 +5,95 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="vlimv.taxi.CarOptionsFragment">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/small_margin">
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Марка машины"
+            android:layout_marginStart="@dimen/xsmall_margin"
+            android:textColorHint="@android:color/darker_gray"
+            app:met_floatingLabel="normal"/>
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/car_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Модель машины"
+            android:layout_marginStart="@dimen/xsmall_margin"
+            android:textColorHint="@android:color/darker_gray"
+            app:met_floatingLabel="normal"/>
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/car_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Тип машины"
+            android:layout_marginStart="@dimen/xsmall_margin"
+            android:textColorHint="@android:color/darker_gray"
+            app:met_floatingLabel="normal"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/normal_margin"
-            android:layout_marginRight="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/small_margin">
+            android:orientation="horizontal">
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/car"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Марка машины"
-                android:layout_marginStart="@dimen/xsmall_margin"
-                android:textColorHint="@android:color/darker_gray"
-                app:met_floatingLabel="normal"/>
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/car_model"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Модель машины"
-                android:layout_marginStart="@dimen/xsmall_margin"
-                android:textColorHint="@android:color/darker_gray"
-                app:met_floatingLabel="normal"/>
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/car_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Тип машины"
-                android:layout_marginStart="@dimen/xsmall_margin"
-                android:textColorHint="@android:color/darker_gray"
-                app:met_floatingLabel="normal"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/car_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                    <EditText
-                        android:id="@+id/car_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="Номер машины"
-                        android:inputType="textPersonName" />
-                </android.support.design.widget.TextInputLayout>
+                    android:ems="10"
+                    android:hint="Номер машины"
+                    android:inputType="textPersonName" />
+            </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/car_year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                    <EditText
-                        android:id="@+id/car_year"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="4"
-                        android:hint="Год выпуска"
-                        android:inputType="number" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+                    android:layout_weight="1"
+                    android:ems="4"
+                    android:hint="Год выпуска"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
-    </RelativeLayout>
+
+        <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:radius="5dp"
+            android:color="@color/colorPrimary"
+            app:dd_numDots="3"
+            app:dd_scaleMultiplier="1.5"
+            app:dd_animationDuration="500"
+            app:dd_horizontalSpacing="@dimen/small_margin" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ripple_effect_square"
+            android:text="@string/ready"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/normal_text" />
+    </LinearLayout>
 </FrameLayout>

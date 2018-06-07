@@ -64,31 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_above="@id/button"
                     android:layout_height="match_parent"/>
-                <Button
-                    android:id="@+id/button"
-                    android:background="@drawable/ripple_effect_square"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ready"
-                    android:layout_alignParentBottom="true"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/normal_text"
-                    android:textColor="@android:color/white"/>
-                <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
-                    android:id="@+id/progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/normal_margin"
-                    android:visibility="gone"
-                    android:radius="5dp"
-                    android:color="@color/colorPrimary"
-                    app:dd_numDots="3"
-                    app:dd_scaleMultiplier="1.5"
-                    app:dd_animationDuration="500"
-                    app:dd_horizontalSpacing="@dimen/small_margin"
-                    />
             </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 

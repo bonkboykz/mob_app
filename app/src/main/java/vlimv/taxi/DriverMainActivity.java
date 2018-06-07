@@ -45,10 +45,8 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
     public static Toolbar toolbar;
     private static NavigationView nvDrawer;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-    static DilatingDotsProgressBar progressBar;
 
     private static Activity mActivity;
-    public static Button next_btn;
     public static TextView free, busy;
     public static String status;
 //    private Socket mSocket;
@@ -85,9 +83,6 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         String nameText = SharedPref.loadUserName(this) + " " + SharedPref.loadUserSurname(this);
         name.setText(nameText);
 
-        progressBar = findViewById(R.id.progress);
-        next_btn = findViewById(R.id.button);
-        next_btn.setVisibility(View.GONE);
         free = findViewById(R.id.free);
         free.setVisibility(View.VISIBLE);
         busy = findViewById(R.id.busy);
@@ -266,15 +261,25 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
     @Override
     public void goNext() {
         Toast.makeText(this, "Информация успешно обновлена.", Toast.LENGTH_LONG).show();
-//        progressBar.hideNow();
-//        next_btn.setVisibility(View.VISIBLE);
+        try {
+            CarOptionsFragment fr = (CarOptionsFragment) fragment;
+            fr.progressBar.hideNow();
+            fr.next_btn.setVisibility(View.VISIBLE);
+        } catch (ClassCastException e) {
+            Log.e("goNext", "Oops");
+        }
     }
 
     @Override
     public void tryAgain() {
-        Toast.makeText(this, "Прроизошла ошибка. Повторите попытку.", Toast.LENGTH_LONG).show();
-        progressBar.hideNow();
-        next_btn.setVisibility(View.VISIBLE);
+        Toast.makeText(this, "Произошла ошибка. Повторите попытку.", Toast.LENGTH_LONG).show();
+        try {
+            CarOptionsFragment fr = (CarOptionsFragment) fragment;
+            fr.progressBar.hideNow();
+            fr.next_btn.setVisibility(View.VISIBLE);
+        } catch (ClassCastException e) {
+            Log.e("goNext", "Oops");
+        }
     }
 
 }

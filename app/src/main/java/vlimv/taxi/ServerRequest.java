@@ -120,7 +120,7 @@ public class ServerRequest {
                             String code = obj.getString("code");
                             Log.d("Code", code);
                             saveCodeInterface.saveCode(code);
-                            Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             saveCodeInterface.tryAgain();
                             Log.e("onerror signup", e.getMessage());
@@ -207,7 +207,7 @@ public class ServerRequest {
                             String code = obj.getString("code");
                             Log.d("Code", code);
                             saveCodeInterface.saveCode(code);
-                            Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             saveCodeInterface.tryAgain();
                             Log.e("onerror signin", e.getMessage());
@@ -268,7 +268,7 @@ public class ServerRequest {
                             Log.d("Token", token);
                             SharedPref.saveToken(mCtx, token);
                             addTokenCookie(token);
-                            Toast.makeText(mCtx, token, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mCtx, token, Toast.LENGTH_SHORT).show();
                             getUser(token, context, 0);
 //                            nextActivityInterface.goNext();
                         } catch (JSONException e) {

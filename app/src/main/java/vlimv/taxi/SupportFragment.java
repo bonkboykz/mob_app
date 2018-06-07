@@ -95,14 +95,9 @@ public class SupportFragment extends Fragment {
 //         mActionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimary));
 
 
-        if (DriverMainActivity.next_btn != null && DriverMainActivity.free != null && DriverMainActivity.busy != null) {
-            DriverMainActivity.next_btn.setVisibility(View.GONE);
+        if (DriverMainActivity.free != null && DriverMainActivity.busy != null) {
             DriverMainActivity.free.setVisibility(View.GONE);
             DriverMainActivity.busy.setVisibility(View.GONE);
-        }
-
-        if (DriverOrderActivity.next_btn != null) {
-            DriverOrderActivity.next_btn.setVisibility(View.GONE);
         }
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.support);

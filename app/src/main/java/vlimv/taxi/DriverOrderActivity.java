@@ -25,22 +25,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DriverOrderActivity extends AppCompatActivity implements
         DriverCityFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
         CarOptionsFragment.OnFragmentInteractionListener, CabinetFragment.OnFragmentInteractionListener,
-        SupportFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+        SupportFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener,
+        ServerRequest.NextActivity, ServerRequest.UpdateCarInfo {
     private DrawerLayout mDrawerLayout;
-    public static Button next_btn;
     public static Toolbar toolbar;
     static CountDownTimer timer;
     private NavigationView nvDrawer;
     static ActionBarDrawerToggle mActionBarDrawerToggle;
 
-    private String mTripId;
-    private String mTripPrice;
-    private String mTripTo;
-    private String mTripFrom;
+    Fragment fragment;
+
+    private String mTripId, mTripPrice, mTripTo, mTripFrom;
 
     static String orderState = "new";
     @Override
@@ -80,8 +80,6 @@ public class DriverOrderActivity extends AppCompatActivity implements
         TextView name = navHeader.findViewById(R.id.name);
         //name.setText(Driver.name + " "  + Driver.surname);
 
-        next_btn = findViewById(R.id.button);
-        next_btn.setVisibility(View.GONE);
         displaySelectedScreen(R.id.nav_city);
     }
 
@@ -112,9 +110,7 @@ public class DriverOrderActivity extends AppCompatActivity implements
     }
 
     private void displaySelectedScreen(int itemId) {
-
-        //creating fragment object
-        Fragment fragment = null;
+        fragment = null;
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_city:
@@ -176,5 +172,42 @@ public class DriverOrderActivity extends AppCompatActivity implements
                 DriverCityFragment.time.setText("done!");
             }
         }.start();
+    }
+
+    @Override
+    public void updateCarInfo(String name, String model, String type, String gosNumber, int year) {
+        CarOptionsFragment fr = (CarOptionsFragment) fragment;
+        fr.spinner_car.setText(name);
+        fr.spinner_car_model.setText(model);
+        fr.spinner_car_type.setText(type);
+        fr.numberEditText.setText(gosNumber);
+        fr.yearEditText.setText(year + "");
+//        fr.spinner_car.setEnabled(true);
+//        fr.spinner_car_model.setEnabled(true);
+//        fr.spinner_car_type.setEnabled(true);
+    }
+
+    @Override
+    public void goNext() {
+        Toast.makeText(this, "Информация успешно обновлена.", Toast.LENGTH_LONG).show();
+        try {
+            CarOptionsFragment fr = (CarOptionsFragment) fragment;
+            fr.progressBar.hideNow();
+            fr.next_btn.setVisibility(View.VISIBLE);
+        } catch (ClassCastException e) {
+            Log.e("goNext", "Oops");
+        }
+    }
+
+    @Override
+    public void tryAgain() {
+        Toast.makeText(this, "Произошла ошибка. Повторите попытку.", Toast.LENGTH_LONG).show();
+        try {
+            CarOptionsFragment fr = (CarOptionsFragment) fragment;
+            fr.progressBar.hideNow();
+            fr.next_btn.setVisibility(View.VISIBLE);
+        } catch (ClassCastException e) {
+            Log.e("goNext", "Oops");
+        }
     }
 }

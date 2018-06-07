@@ -175,10 +175,6 @@ public class DriverCityFragment extends Fragment implements View.OnClickListener
         min_20.setOnClickListener(this);
         time = view.findViewById(R.id.time);
 
-        if (DriverOrderActivity.next_btn != null) {
-            DriverOrderActivity.next_btn.setVisibility(View.GONE);
-        }
-
         if (DriverOrderActivity.orderState.equals("new")) {
             ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(
                     Color.parseColor("#08aeea")));
