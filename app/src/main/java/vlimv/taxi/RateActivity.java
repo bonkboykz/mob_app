@@ -27,10 +27,10 @@ public class RateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ServerSocket.getInstance(view.getContext()).sendReportTrip(tripId, writeComment.getText().toString(), ratingBar.getRating());
-                Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RateActivity.this, PassengerMainActivity.class);
                 startActivity(intent);
-                Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "" + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
             }
         });
 

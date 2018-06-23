@@ -84,6 +84,16 @@ public class SettingsFragment extends Fragment {
             DriverMainActivity.busy.setVisibility(View.GONE);
         }
 
+        TextView privacyPolicy = view.findViewById(R.id.privacy_policy);
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://sites.google.com/view/asarprivacypolicy");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
         ServerRequest.getInstance(getContext()).getUser(SharedPref.loadToken(getContext()), getContext(), 0);
 
         name = view.findViewById(R.id.name);

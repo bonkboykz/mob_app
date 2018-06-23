@@ -58,6 +58,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
     private Location mLastKnownLocation;
+    private static boolean mLocationPermissionResolved = true;
 
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -139,7 +140,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                 setResult(Activity.RESULT_OK, intent);
                 finish();
 
-                Toast.makeText(getApplicationContext(), address_text, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), address_text, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -195,7 +196,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
 
                 btn_ready.setBackground(getDrawable(R.drawable.ripple_effect_square));
                 btn_ready.setEnabled(true);
-                Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), address, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -235,7 +236,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
         else {
             DialogLocation d = new DialogLocation(this);
             d.showDialog(this);
-            Toast.makeText(this, "location service disabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Услуги геолокации отключены.", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -251,9 +252,12 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
         } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            if (!mLocationPermissionResolved) {
+                mLocationPermissionResolved = false;
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
         }
     }
     @Override
@@ -261,6 +265,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
+        mLocationPermissionResolved = true;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.

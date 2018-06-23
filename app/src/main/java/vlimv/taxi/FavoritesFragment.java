@@ -144,7 +144,7 @@ public class FavoritesFragment extends Fragment {
         mListItemClickListener = new OnListItemClickListener() {
             @Override
             public void onListItemClick(Address address) {
-                Toast.makeText(getView().getContext(), address.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getView().getContext(), address.toString(), Toast.LENGTH_SHORT).show();
             }
         };
 //        try {

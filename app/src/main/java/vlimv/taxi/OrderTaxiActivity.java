@@ -46,8 +46,8 @@ public class OrderTaxiActivity extends AppCompatActivity implements AdapterView.
         });
     }
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Toast.makeText (getApplicationContext(), "Selected: " +
-                parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText (getApplicationContext(), "Selected: " +
+//                parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
         String car_type = parent.getItemAtPosition(pos).toString();
     }
     public void onNothingSelected(AdapterView<?> parent) {

@@ -786,7 +786,7 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
         else {
             DialogLocation d = new DialogLocation(getActivity());
             d.showDialog(getActivity());
-            Toast.makeText(getContext(), "location service disabled", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "location service disabled", Toast.LENGTH_SHORT).show();
         }
 
 

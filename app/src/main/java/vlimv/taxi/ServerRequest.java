@@ -147,7 +147,7 @@ public class ServerRequest {
                 }
                 Log.e("SR | signUp", message);
                 saveCodeInterface.tryAgain();
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -219,7 +219,7 @@ public class ServerRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 saveCodeInterface.tryAgain();
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -282,7 +282,7 @@ public class ServerRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -371,7 +371,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in update user", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -451,7 +451,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in update user", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -511,7 +511,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in create car", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -576,7 +576,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in update car", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -642,7 +642,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in create trip", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -696,7 +696,7 @@ public class ServerRequest {
             public void onErrorResponse(VolleyError error) {
                 nextActivityInterface.tryAgain();
                 Log.e("error in update trip", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -788,7 +788,7 @@ public class ServerRequest {
                     message = "Connection TimeOut! Please check your internet connection.";
                 }
                 Log.e("SR | getUser", message);
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -864,7 +864,7 @@ public class ServerRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Не удалось загрузить данные. Проверьте доступ к интернету.", Toast.LENGTH_LONG).show();
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -907,7 +907,7 @@ public class ServerRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -956,7 +956,7 @@ public class ServerRequest {
                             JSONObject data = obj.getJSONObject("data").getJSONObject("vehicleCreateOne");
 
                             String carId = data.getString("recordId");
-                            Toast.makeText(mCtx, carId, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mCtx, carId, Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             Toast.makeText(mCtx, "Не удалось создать авто", Toast.LENGTH_SHORT).show();
@@ -968,7 +968,7 @@ public class ServerRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("CheckEResponce", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         mInstance.addToRequestQueue(stringRequest);
@@ -1018,7 +1018,7 @@ public class ServerRequest {
 
                             nextActivityInterface.goNext();
                             String id = data.getString("recordId");
-                            Toast.makeText(mCtx, id, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mCtx, id, Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             Toast.makeText(mCtx, "Не удалось создать пользователя", Toast.LENGTH_SHORT).show();
@@ -1030,7 +1030,7 @@ public class ServerRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error responce", error.toString());
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         mInstance.addToRequestQueue(stringRequest);
@@ -1065,7 +1065,7 @@ public class ServerRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -1118,7 +1118,7 @@ public class ServerRequest {
                     message = "Connection TimeOut! Please check your internet connection.";
                 }
                 Log.e("SR | uploadCert", message);
-                Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mCtx, error.toString(), Toast.LENGTH_SHORT).show();
                 nextActivityInterface.tryAgain();
             }
         });

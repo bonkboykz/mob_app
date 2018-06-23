@@ -190,7 +190,7 @@ class SupportAdapter extends BaseAdapter implements ListAdapter {
         listItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, itemText.getText().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, itemText.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

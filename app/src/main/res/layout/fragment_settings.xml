@@ -70,6 +70,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/privacy_policy"
             android:text="@string/politics"
             android:paddingTop="@dimen/small_padding"
             android:paddingBottom="@dimen/small_padding"
