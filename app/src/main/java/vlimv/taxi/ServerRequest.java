@@ -55,8 +55,8 @@ public class ServerRequest {
     private static ServerRequest mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
-    private static String domainUrl = "http://95.46.114.18";
-    private static String baseUrl = "http://95.46.114.18:8090";
+    private static String domainUrl = "http://31.148.99.183";
+    private static String baseUrl = "http://31.148.99.183:8090/";
     private NextActivity nextActivityInterface;
     private SaveCode saveCodeInterface;
     private UpdateCarInfo updateCarInfo;
@@ -94,7 +94,7 @@ public class ServerRequest {
             throw new RuntimeException(context.toString()
                     + " must implement SaveCodeInterface");
         }
-        String signUpUrl = baseUrl + "/auth/signup";
+        String signUpUrl = baseUrl + "auth/signup";
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("phone", phone);
@@ -187,7 +187,7 @@ public class ServerRequest {
             throw new RuntimeException(context.toString()
                     + " must implement SaveCodeInterface");
         }
-        String signInUrl = baseUrl + "/auth/login";
+        String signInUrl = baseUrl + "auth/login";
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("phone", phone);
@@ -248,7 +248,7 @@ public class ServerRequest {
             throw new RuntimeException(context.toString()
                     + " must implement NextActivity");
         }
-        String verifyUrl = baseUrl + "/auth/verify";
+        String verifyUrl = baseUrl + "auth/verify";
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("code", code);
@@ -332,7 +332,8 @@ public class ServerRequest {
 //        }
 //        final String requestBody = jsonBody.toString();
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("userUpdateById(record:{");
         sb.append("name:\"" + name + "\",");
         sb.append("lname:\"" + surname + "\",");
@@ -411,7 +412,8 @@ public class ServerRequest {
                     + " must implement NextActivity");
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("userUpdateById(record:{");
         sb.append("name:\"" + name + "\",");
         sb.append("lname:\"" + surname + "\",");
@@ -472,7 +474,8 @@ public class ServerRequest {
                           final String carNumber, final int carYear, Context context,
                           final NextActivity nextActivityInterface) {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("vehicleCreateOne(record:{");
         sb.append("name:\"" + carName + "\",");
         sb.append("model:\"" + carModel + "\",");
@@ -535,7 +538,8 @@ public class ServerRequest {
                     + " must implement NextActivityInterface");
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("vehicleUpdateOne(record:{");
         sb.append("name:\"" + carName + "\",");
         sb.append("model:\"" + carModel + "\",");
@@ -600,7 +604,8 @@ public class ServerRequest {
                     + " must implement NextActivityInterface");
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("tripCreateOne(record:{");
         sb.append("from:\"" + from + "\",");
         sb.append("to:\"" + to + "\",");
@@ -659,7 +664,8 @@ public class ServerRequest {
 
     public void updateTrip(final HashMap<String, String> map, Context context) {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("api?query=mutation{");
         sb.append("tripUpdateOne(record:{");
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String key = entry.getKey();
@@ -716,7 +722,7 @@ public class ServerRequest {
             nextActivityInterface = (NextActivity) context;
         }
         addTokenCookie(token);
-        String mainUrl = baseUrl + "/main";
+        String mainUrl = baseUrl + "main";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -829,7 +835,8 @@ public class ServerRequest {
                     + " must implement UpdateCarInfo");
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("http://95.46.114.18:8090/api?query={");
+        sb.append(baseUrl);
+        sb.append("api?query={");
         sb.append("vehicleByDriverId(");
         sb.append("id: \"" + driverId + "\"");
         sb.append(")");
@@ -881,7 +888,7 @@ public class ServerRequest {
 
     public void getUserTrips(final String token, final String id) {
         addTokenCookie(token);
-        String mainUrl = baseUrl + "/api?query={tripMany(filter:{";
+        String mainUrl = baseUrl + "api?query={tripMany(filter:{";
         mainUrl += "passengerId : \"" + id + "\"}){";
         mainUrl += "from, to, cost}}";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
@@ -924,8 +931,8 @@ public class ServerRequest {
 
     public void createCar(Car car, final String driverId) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("http://95.46.114.18:8090/?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("?query=mutation{");
         sb.append("vehicleCreateOne(record:{");
         sb.append("name:\"" + car.name + "\",");
         sb.append("model:\"" + car.model + "\",");
@@ -977,8 +984,8 @@ public class ServerRequest {
     public void createPassenger(final String name, final String surname, final int age,
                              final String sex, final String role, final String phone, Context context) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("http://95.46.114.18:8090/?query=mutation{");
+        sb.append(baseUrl);
+        sb.append("?query=mutation{");
         sb.append("userCreateOne(record:{");
         sb.append("name:\"" + name + "\",");
         sb.append("lname:\"" + surname + "\",");
@@ -1038,7 +1045,7 @@ public class ServerRequest {
 
     public void getDriverTrips(final String token, final String id) {
         addTokenCookie(token);
-        String mainUrl = baseUrl + "/api?query={tripMany(filter:{";
+        String mainUrl = baseUrl + "api?query={tripMany(filter:{";
         mainUrl += "driverId : \"" + id + "\"}){";
         mainUrl += "from, to, cost}}";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, mainUrl,
@@ -1090,7 +1097,7 @@ public class ServerRequest {
             Log.d("uploadCert", "start");
         Log.d("request headers", mimeType);
         addTokenCookie(token);
-        String mainUrl = baseUrl + "/cert";
+        String mainUrl = baseUrl + "cert";
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Set-Cookie", "userToken=" + token);
         headers.put("x-user-token", token);

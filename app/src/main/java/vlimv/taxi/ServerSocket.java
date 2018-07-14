@@ -30,7 +30,7 @@ import java.util.TimeZone;
 
 public class ServerSocket {
     private static ServerSocket mInstance;
-    private static final String BASE_URL = "http://95.46.114.18:8090";
+    private static final String BASE_URL = "http://31.148.99.183:8090/";
 
     private ServerSocket(Context context) {
         mCtx = context;
