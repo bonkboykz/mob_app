@@ -105,14 +105,13 @@ public class WelcomeActivity extends AppCompatActivity implements ServerRequest.
     }
 
     @Override
-    public void saveCode (String code) {
+    public void saveCode (String messageId) {
         next_btn.setVisibility(View.VISIBLE);
         progressBar.hideNow();
 //        String lname = SharedPref.loadUserSurname(this);
 //        Log.d("saveCode", lname);
 //        boolean isUserFilledInfo = !lname.isEmpty() && !lname.contains("default");
         Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-        intent.putExtra("CODE", code);
         startActivity(intent);
 //        if (!isUserFilledInfo) {
 //

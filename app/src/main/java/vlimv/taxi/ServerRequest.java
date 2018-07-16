@@ -117,9 +117,9 @@ public class ServerRequest {
                         JSONObject obj;
                         try {
                             obj = new JSONObject(response);
-                            String code = obj.getString("code");
-                            Log.d("Code", code);
-                            saveCodeInterface.saveCode(code);
+                            String messageId = obj.getString("messageId");
+                            Log.d("messageId", messageId);
+                            saveCodeInterface.saveCode(messageId);
                             //Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             saveCodeInterface.tryAgain();
@@ -204,9 +204,9 @@ public class ServerRequest {
                         JSONObject obj;
                         try {
                             obj = new JSONObject(response);
-                            String code = obj.getString("code");
-                            Log.d("Code", code);
-                            saveCodeInterface.saveCode(code);
+                            String messageId = obj.getString("messageId");
+                            Log.d("messageId", messageId);
+                            saveCodeInterface.saveCode(messageId);
                             //Toast.makeText(mCtx, code, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             saveCodeInterface.tryAgain();

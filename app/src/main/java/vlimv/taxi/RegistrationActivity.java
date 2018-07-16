@@ -28,9 +28,6 @@ public class RegistrationActivity extends Activity implements ServerRequest.Next
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-        Bundle bundle = getIntent().getExtras();
-        final String code = bundle.getString("CODE");
-
         final EditText editTextCode = findViewById(R.id.code);
 
         TextView tryAgain = findViewById(R.id.try_again);
@@ -51,13 +48,17 @@ public class RegistrationActivity extends Activity implements ServerRequest.Next
             public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                if (editTextCode.getText().toString().equals(code)) {
-                    ServerRequest.getInstance(view.getContext()).verify(code, view.getContext());
-                    btn.setVisibility(View.GONE);
-                    progressBar.showNow();
-                } else {
-                    Toast.makeText(view.getContext(), "Неправильный код.", Toast.LENGTH_LONG).show();
-                }
+                String code = editTextCode.getText().toString();
+                ServerRequest.getInstance(view.getContext()).verify(code, view.getContext());
+                btn.setVisibility(View.GONE);
+                progressBar.showNow();
+//                if (editTextCode.getText().toString().equals(code)) {
+//                    ServerRequest.getInstance(view.getContext()).verify(code, view.getContext());
+//                    btn.setVisibility(View.GONE);
+//                    progressBar.showNow();
+//                } else {
+//                    Toast.makeText(view.getContext(), "Неправильный код.", Toast.LENGTH_LONG).show();
+//                }
             }
         });
     }
