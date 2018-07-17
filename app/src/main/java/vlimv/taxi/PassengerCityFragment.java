@@ -240,14 +240,22 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
                 String b = pointB.getText().toString();
                 String p = price.getText().toString();
 
-                progressBar.showNow();
-                order_btn.setVisibility(View.INVISIBLE);
-                order_btn.setClickable(false);
 //                createNewTrip(a, b, p, "no", id, "any",
 //                        false, false);
 //                ServerRequest.getInstance(view.getContext()).createTrip(id, a, b,
 //                        p, "Нету", false, false, view.getContext());
-                createNewTrip(a, b, p, "Нет", id, "", false, false);
+                if (a.equals("") || a == null) {
+                    Toast.makeText(view.getContext(), "Введите начальный адрес.", Toast.LENGTH_LONG).show();
+                } else if (b.equals("") || b == null) {
+                    Toast.makeText(view.getContext(), "Введите конечный адрес.", Toast.LENGTH_LONG).show();
+                } else if (p.equals("") || p == null) {
+                    Toast.makeText(view.getContext(), "Введите цену.", Toast.LENGTH_LONG).show();
+                } else {
+                    progressBar.showNow();
+                    order_btn.setVisibility(View.INVISIBLE);
+                    order_btn.setClickable(false);
+                    createNewTrip(a, b, p, "Нет", id, "", false, false);
+                }
 //                if (isInvalid) {
 //                    Intent intentInvalid = new Intent(getActivity(), OrderTaxiActivity.class);
 //                    String address = pointA.getText().toString() + " – " + pointB.getText().toString();
@@ -766,9 +774,11 @@ public class PassengerCityFragment extends Fragment implements OnMapReadyCallbac
                             if (task.isSuccessful()) {
                                 // Set the map's camera position to the current location of the device.
                                 mLastKnownLocation = task.getResult();
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if (mLastKnownLocation != null) {
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                }
                             } else {
                                 Log.d("TAG", "Current location is null. Using defaults.");
                                 Log.e("TAG", "Exception: %s", task.getException());

@@ -216,9 +216,11 @@ public class AddressFromMapActivity extends AppCompatActivity implements OnMapRe
                             if (task.isSuccessful()) {
                                 // Set the map's camera position to the current location of the device.
                                 mLastKnownLocation = task.getResult();
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if (mLastKnownLocation != null) {
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                }
                             } else {
                                 Log.d("TAG", "Current location is null. Using defaults.");
                                 Log.e("TAG", "Exception: %s", task.getException());
